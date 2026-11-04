@@ -127,11 +127,20 @@
   },
   {
     "slug": "s2read",
-    "name": "legacy image hosts and underscore chapter in native DOM",
+    "name": "legacy CDN normalization and underscore chapter in native DOM",
     "method": "pages",
     "args": ["https://s2read.com/manga/fixture/chapter-116_1/"],
     "responses": [{"bodyFile": "s2read-pages-legacy.html"}],
-    "expect": {"count": 2, "referer": "https://s2read.com/"}
+    "expect": {
+      "count": 4,
+      "referer": "https://s2read.com/",
+      "urls": [
+        "https://cdn2.s2read.com/page.jpg",
+        "https://vps1.s2read.com/page.jpg",
+        "https://cdn.s2read.com/page%20one.jpg?size=full&v=1",
+        "https://cdn.s2read.com/page%20one.jpg?size=full&v=1"
+      ]
+    }
   },
   {
     "slug": "s2read",

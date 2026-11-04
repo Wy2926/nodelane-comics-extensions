@@ -69,14 +69,18 @@ test('chapter deduplication never hides foreign works or unsafe path variants',a
  const wrongNavigation=await runtime(pages.replace('value="chapter-0"','value="chapter-0.5"'));
  await assert.rejects(wrongNavigation.plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:chapter-navigation/);
 });
-test('legacy same-site image hosts are supported without accepting host lookalikes',async()=>{
- for(const host of ['cdn-1.s2read.com','cdn2.s2read.com','vps1.s2read.com']) {
-  const {plugin}=await runtime(pages.replaceAll('cdn-1.s2read.com',host));
+test('verified image hosts normalize the legacy HTTP CDN without accepting other origins',async()=>{
+ for(const origin of ['https://s2read.com','https://cdn.s2read.com','http://cdn.s2read.com','https://cdn-1.s2read.com','https://cdn2.s2read.com','https://vps1.s2read.com']) {
+  const {plugin}=await runtime(pages.replaceAll('https://cdn-1.s2read.com/page.jpg',origin+'/page%20one.jpg?size=full&v=1'));
   const result=await plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/');
-  assert.equal(result.length,2);assert.ok(result[0].url.startsWith('https://'+host+'/'));
+  assert.equal(result.length,2);
+  assert.deepEqual(Array.from(result,p=>p.url),Array(2).fill(origin.replace('http:','https:')+'/page%20one.jpg?size=full&v=1'));
+  assert.equal(result[0].headers.Referer,'https://s2read.com/');
+  const cover=await runtime(card(1).replace('https://cdn-1.s2read.com',origin)+'<div class="no-posts"></div>');
+  assert.equal((await cover.plugin.search('x',1)).list[0].imageUrl,origin.replace('http:','https:')+'/cover-1.jpg');
  }
- for(const host of ['cdn2.s2read.com.evil.test','vps1.s2read.com@evil.test','evil.test','unknown.s2read.com']) {
-  const {plugin}=await runtime(pages.replaceAll('cdn-1.s2read.com',host));
+ for(const origin of ['https://cdn2.s2read.com.evil.test','https://vps1.s2read.com@evil.test','https://evil.test','https://unknown.s2read.com','http://cdn.s2read.com.evil.test','http://cdn.s2read.com@evil.test','http://cdn-1.s2read.com','https://cdn.s2read.com:444','//cdn.s2read.com','file://cdn.s2read.com']) {
+  const {plugin}=await runtime(pages.replaceAll('https://cdn-1.s2read.com',origin));
   await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:image-url/);
  }
 });
