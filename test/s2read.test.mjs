@@ -4,6 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {loadPlugin} from '../scripts/runtime.mjs';
 const detail=await readFile(new URL('./fixtures/s2read-detail.html',import.meta.url),'utf8');
 const pages=await readFile(new URL('./fixtures/s2read-pages.html',import.meta.url),'utf8');
+const variants=await readFile(new URL('./fixtures/s2read-chapter-variants.html',import.meta.url),'utf8');
 function card(id) {return `<div class="c-tabs-item__content"><div class="post-title"><a href="https://s2read.com/manga/book-${id}/">Book ${id}</a></div><div class="tab-thumb"><img src="https://cdn-1.s2read.com/cover-${id}.jpg"></div></div>`;}
 async function runtime(body,statusCode=200) {
  const requests=[]; const plugin=await loadPlugin('s2read', class {
@@ -46,4 +47,40 @@ test('chapter navigation, page order and duplicate image slots are preserved',as
  for(const broken of [pages.replace('image-1','image-3'),pages.replace('value="chapter-0"','value="chapter-1"'),pages.replace('cdn-1.s2read.com','foreign.test')]) {
   const {plugin}=await runtime(broken);await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'));
  }
+});
+test('real-site chapter slug variants and repeated links retain distinct page identities',async()=>{
+ const {plugin}=await runtime(variants);
+ const result=await plugin.getDetail('https://s2read.com/manga/fixture/');
+ assert.deepEqual(Array.from(result.chapters,c=>c.url.split('/').at(-2)),['chapter-116_1','chapter-116-1','chapter-45.5']);
+ for(const chapter of ['chapter-45.5','chapter-64.20','chapter-116_1']) {
+  const {plugin}=await runtime(pages.replaceAll('chapter-0',chapter));
+  assert.equal((await plugin.getPageList('https://s2read.com/manga/fixture/'+chapter+'/')).length,2);
+ }
+});
+test('chapter deduplication never hides foreign works or unsafe path variants',async()=>{
+ const foreign=await runtime(variants.replace('/manga/fixture/chapter-116-1/','/manga/other/chapter-116-1/'));
+ await assert.rejects(foreign.plugin.getDetail('https://s2read.com/manga/fixture/'),/S2:chapter-owner/);
+ for(const suffix of ['../','%2e%2e/','chapter-1%2fother/','chapter-1/extra/','chapter-1/?redirect=https://foreign.test/']) {
+  const r=await runtime(variants.replace('chapter-45.5/',suffix));
+  await assert.rejects(r.plugin.getDetail('https://s2read.com/manga/fixture/'),/S2:chapter-url/);
+ }
+ const otherHost=await runtime(variants.replace('https://s2read.com/manga','https://s2read.com.evil.test/manga'));
+ await assert.rejects(otherHost.plugin.getDetail('https://s2read.com/manga/fixture/'),/S2:work-url/);
+ const wrongNavigation=await runtime(pages.replace('value="chapter-0"','value="chapter-0.5"'));
+ await assert.rejects(wrongNavigation.plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:chapter-navigation/);
+});
+test('legacy same-site image hosts are supported without accepting host lookalikes',async()=>{
+ for(const host of ['cdn-1.s2read.com','cdn2.s2read.com','vps1.s2read.com']) {
+  const {plugin}=await runtime(pages.replaceAll('cdn-1.s2read.com',host));
+  const result=await plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/');
+  assert.equal(result.length,2);assert.ok(result[0].url.startsWith('https://'+host+'/'));
+ }
+ for(const host of ['cdn2.s2read.com.evil.test','vps1.s2read.com@evil.test','evil.test','unknown.s2read.com']) {
+  const {plugin}=await runtime(pages.replaceAll('cdn-1.s2read.com',host));
+  await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:image-url/);
+ }
+});
+test('a verified chapter with no image slots is reported as empty source content',async()=>{
+ const {plugin}=await runtime(pages.replace(/<div class="page-break">.*?<\/div>/g,''));
+ await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:chapter-empty/);
 });

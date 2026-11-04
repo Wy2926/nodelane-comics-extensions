@@ -107,6 +107,22 @@
   },
   {
     "slug": "s2read",
+    "name": "decimal and underscore chapters deduplicate by URL only",
+    "method": "detail",
+    "args": ["https://s2read.com/manga/fixture/"],
+    "responses": [{"bodyFile": "s2read-chapter-variants.html"}],
+    "expect": {"count": 3, "name": "Chapter variants"}
+  },
+  {
+    "slug": "s2read",
+    "name": "legacy image hosts and underscore chapter in native DOM",
+    "method": "pages",
+    "args": ["https://s2read.com/manga/fixture/chapter-116_1/"],
+    "responses": [{"bodyFile": "s2read-pages-legacy.html"}],
+    "expect": {"count": 2, "referer": "https://s2read.com/"}
+  },
+  {
+    "slug": "s2read",
     "name": "duplicate image slots retain page positions",
     "method": "pages",
     "args": [
