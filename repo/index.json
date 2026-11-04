@@ -1,0 +1,80 @@
+[
+  {
+    "id": 86001001,
+    "name": "Comix",
+    "baseUrl": "https://comix.to",
+    "apiUrl": "https://comix.to/api/v1",
+    "lang": "en",
+    "typeSource": "single",
+    "iconUrl": "",
+    "dateFormat": "",
+    "dateFormatLocale": "",
+    "isNsfw": false,
+    "isFullData": false,
+    "hasCloudflare": true,
+    "version": "0.2.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.9.9",
+    "notes": "需要网站验证时在来源网页完成后重试。支持普通图片及已知网格还原协议。",
+    "sourceCodeUrl": "packages/comix/0.2.0.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "comix",
+      "sha256": "d704acafe1d78534fec4c77416bbde2d4f86e1a48697c4f24e305d7b0717dca6",
+      "size": 24198,
+      "requestHosts": [
+        "comix.to"
+      ],
+      "requires": [
+        "image.tile-shuffle.v1"
+      ],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001002,
+    "name": "S2READ",
+    "baseUrl": "https://s2read.com",
+    "apiUrl": "",
+    "lang": "en",
+    "version": "0.1.1",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.9.9",
+    "isNsfw": false,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "",
+    "notes": "S2READ 英语 Madara 站点；只支持已核验的静态目录和图片正文。",
+    "sourceCodeUrl": "packages/s2read/0.1.1.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "s2read",
+      "sha256": "641575ab8b507678117393960ff5f9faaf54bcd3a2e123546cd8392f475ef73f",
+      "size": 7074,
+      "requestHosts": [
+        "s2read.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  }
+]

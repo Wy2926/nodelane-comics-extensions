@@ -1,0 +1,37 @@
+{
+  "id": 86001002,
+  "name": "S2READ",
+  "baseUrl": "https://s2read.com",
+  "apiUrl": "",
+  "lang": "en",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.9.9",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "",
+  "notes": "S2READ 英语 Madara 站点；只支持已核验的静态目录和图片正文。",
+  "sourceCodeUrl": "packages/s2read/0.1.0.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "s2read",
+    "sha256": "ccf260df2a3a433f56c3048ccc449dbe3df47b874ef04b9f90704ecf4c5f9989",
+    "size": 6891,
+    "requestHosts": [
+      "s2read.com"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}

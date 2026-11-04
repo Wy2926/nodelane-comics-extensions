@@ -1,0 +1,8 @@
+{
+  "id": "net.nodelane.extensions",
+  "name": "NodeLane 官方",
+  "sourceIds": {
+    "comix": 86001001,
+    "s2read": 86001002
+  }
+}

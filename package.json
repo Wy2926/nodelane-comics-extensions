@@ -1,0 +1,22 @@
+{
+  "name": "nodelane-comics-extensions",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node build.mjs && node --test test/*.test.mjs",
+    "release": "node scripts/release.mjs",
+    "serve": "node scripts/serve.mjs",
+    "new-source": "node scripts/new-source.mjs",
+    "test:app": "node scripts/test-app.mjs",
+    "verify:live": "node verify-live.mjs",
+    "rollback": "node scripts/rollback.mjs"
+  },
+  "devDependencies": {
+    "linkedom": "0.18.12"
+  }
+}
