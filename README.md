@@ -26,6 +26,7 @@ App 默认读取 `http://127.0.0.1:8787/index.json`，该入口兼容原本地�
 
 | 入口 | 用途 |
 | --- | --- |
+| [开发约定](AGENTS.md) | 代码边界、提交前清理与文档维护规则 |
 | [维护与发布](docs/MAINTENANCE.md) | 新增插件、永久身份、构建、测试、更新与恢复 |
 | [插件契约](docs/CONTRACT.md) | MProvider、分发元数据、HTTP、CF 与图片处理边界 |
 | [来源与许可](THIRD_PARTY.md) | 迁移来源、固定提交、摘要和第三方声明 |
