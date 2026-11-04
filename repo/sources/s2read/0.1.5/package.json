@@ -1,0 +1,37 @@
+{
+  "id": 86001002,
+  "name": "S2READ",
+  "baseUrl": "https://s2read.com",
+  "apiUrl": "",
+  "lang": "en",
+  "version": "0.1.5",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.9.9",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://s2read.com/wp-content/uploads/2026/08/cropped-Thiet-ke-chua-co-ten-5-192x192.png",
+  "notes": "S2READ 英语 Madara 站点；只支持已核验的静态目录和图片正文。",
+  "sourceCodeUrl": "packages/s2read/0.1.5.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "s2read",
+    "sha256": "c86d53aa7af6520b86c23ed7c0c090c36672afaad36fade5fd6541fcd387c4a8",
+    "size": 9870,
+    "requestHosts": [
+      "s2read.com"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}

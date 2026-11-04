@@ -18,7 +18,16 @@
 - 同一提交的 [Mangafire 插件](https://github.com/kodjodevf/mangayomi-extensions/blob/6004f1f8d1a56f882dadb734ce26f50c626a3850/javascript/manga/src/all/mangafire.js)，版本 `0.1.25`，Apache-2.0，SHA-256 `95c4ea61a17359f0be2cf5bb3c2d7f4de20713e9d0bfa4aea6e3b3f51df4c6e6`。仅参考契约与调用流程，没有复制其站点实现。
 - [Comix](https://comix.to/) 的公开页面与 `apicore-tnxabt-CdoUI3T4.js`，SHA-256 `de90ece63f639c5bf6cac594de67ad1634b6fc08e0a36994988dea9109e9a05c`。源站脚本未声明开源许可，只在设备端作为协议数据解析，不打包、执行或分发下载的脚本。
 
-没有引入第三方字体、模型、封面或站点图标。测试夹具使用合成数据；不得提交源站 Cookie、验证码、会话或签名图片地址。
+没有打包第三方字体、模型、封面或站点图标。图标只引用下方源站地址；测试夹具使用合成数据，不得提交源站 Cookie、验证码、会话或签名图片地址。
+
+## 站点图标引用
+
+图标均来自对应站点首页声明的 favicon，匿名 HTTPS 请求可取得 PNG。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，未发现开源许可声明，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
+
+| 站点 | 源站图标／当前资源版本 | 尺寸 | SHA-256 |
+| --- | --- | --- | --- |
+| [Comix](https://comix.to/) | [35595e3de3c99889c1bd2c56f3e3714fc0c457.png](https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png) | 512 × 512 | `9d692cb5b15b7bc220a96bdb9a60ecb8bb33e3651e85b9c4754ce09fb443a002` |
+| [S2READ](https://s2read.com/) | [cropped-Thiet-ke-chua-co-ten-5-192x192.png](https://s2read.com/wp-content/uploads/2026/08/cropped-Thiet-ke-chua-co-ten-5-192x192.png) | 192 × 192 | `20820eb9042beea3295424906b07e63232eca63418c81be16b4b9bb9831646a1` |
 
 ## 新实现的协议参考
 
