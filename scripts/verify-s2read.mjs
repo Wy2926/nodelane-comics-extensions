@@ -10,7 +10,9 @@ const catalogs=new Map();
 for(const [name,call] of [['热门',()=>plugin.getPopular(1)],['热门下一页',()=>plugin.getPopular(2)],['最新',()=>plugin.getLatestUpdates(1)],['搜索',()=>plugin.search('soul land',1)],['搜索下一页',()=>plugin.search('soul land',2)],['空搜索',()=>plugin.search('nodelanevalidationzzqv',1)],['完整目录',()=>plugin.getDetail('https://s2read.com/manga/soul-land-iv-8211-the-ultimate-combat/')],['图片清单',()=>plugin.getPageList('https://s2read.com/manga/soul-land-iv-8211-the-ultimate-combat/chapter-2/')]]) {
  try {
   const r=await call();
-  console.log(name,JSON.stringify({count:r.list?.length??r.chapters?.length??r.length,next:r.hasNextPage}));
+  console.log(name,JSON.stringify({count:r.list?.length??r.chapters?.length??r.length,next:r.hasNextPage,
+   dated:r.chapters?.filter(c=>c.dateUpload).length}));
+  if(r.chapters?.length&&!r.chapters.some(c=>c.dateUpload)) throw Error('完整目录没有取得任何章节日期');
   if(name==='热门'||name==='最新') for(const item of r.list) catalogs.set(item.link,item.name);
  }
  catch(e){console.error(name,e.message);process.exitCode=1;break;}
@@ -23,7 +25,7 @@ if(args.includes('--catalogs')&&!process.exitCode) {
   try {
    const detail=await plugin.getDetail(link);
    passed++;
-   console.log('目录',JSON.stringify({name,chapters:detail.chapters.length}));
+   console.log('目录',JSON.stringify({name,chapters:detail.chapters.length,dated:detail.chapters.filter(c=>c.dateUpload).length}));
   } catch(e) {
    console.error('目录失败',JSON.stringify({name,error:e.message}));
    process.exitCode=1;

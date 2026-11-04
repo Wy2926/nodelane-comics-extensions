@@ -42,11 +42,11 @@ export class Client {
     return {statusCode:Number(data.subarray(end+1)),headers:responseHeaders,body:bytes.toString('utf8'),bodyBytes:bytes};
   }
 }
-export async function loadPlugin(slug, ClientImpl=Client) {
+export async function loadPlugin(slug, ClientImpl=Client, globals={}) {
   const entry=(await json(path.join(root,'.build/index.json'))).find(e=>e.nodelane.slug===slug);
   if(!entry)throw Error('来源尚未构建');
   const context=vm.createContext({MProvider:class { get source(){return entry;} },Client:ClientImpl,Document,
-    NodeLane:{capabilities:['image.tile-shuffle.v1']}});
+    NodeLane:{capabilities:['image.tile-shuffle.v1']},...globals});
   vm.runInContext(await readFile(path.join(root,'.build',entry.sourceCodeUrl),'utf8')+'\nglobalThis.plugin = new DefaultExtension();',context);
   return context.plugin;
 }

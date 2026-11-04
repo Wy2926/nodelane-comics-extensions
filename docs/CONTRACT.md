@@ -5,7 +5,7 @@
 | 接口 | 返回／约束 |
 | --- | --- |
 | `getPopular(page)`、`getLatestUpdates(page)`、`search(query,page,filters)` | 页码从 1 开始，`{list:[{name,link,imageUrl}],hasNextPage}`；列表只返回轻量候选 |
-| `getDetail(url)` | `{name,link,imageUrl,description,author,genre,status,chapters}`；章节保留稳定 URL，可带 scanlator 与毫秒时间字符串 |
+| `getDetail(url)` | `{name,link,imageUrl,description,author,genre,status,chapters}`；章节保留稳定 URL，可带 scanlator；`dateUpload` 为上传时间的毫秒字符串，明确未知时传空字符串，省略表示未提供该字段 |
 | `getPageList(url)` | URL 或 `{url,headers,imageProcessing?}` 数组，严格保留页序及重复图片页槽；只传清单 |
 | `getHeaders()`、`getFilterList()`、`getSourcePreferences()` | 复用 App 图片头、筛选和来源偏好，无需专用页面 |
 

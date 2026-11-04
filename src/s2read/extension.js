@@ -22,6 +22,28 @@ function s2Cover(node) {
     return value ? s2Image(value) : '';
 }
 function s2Text(node) { return node.text.replace(/\s+/g, ' ').trim(); }
+const S2_MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+function s2Date(value, now) {
+    const text = value.trim().toLowerCase();
+    const absolute = /^([a-z]+) (\d{1,2}), (\d{4})$/.exec(text);
+    if (absolute) {
+        const month = S2_MONTHS.indexOf(absolute[1]), day = Number(absolute[2]), year = Number(absolute[3]);
+        if (month < 0) return '';
+        // The site supplies a calendar date, without a time zone. Keep that
+        // day in the reader's local zone instead of shifting UTC midnight.
+        const date = new Date(year, month, day);
+        return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day
+            ? String(date.getTime()) : '';
+    }
+    const relative = /^(\d+) (second|minute|hour|day|week)s? ago$/.exec(text);
+    if (relative) {
+        const units = {second:1000,minute:60000,hour:3600000,day:86400000,week:604800000};
+        const date = now - Number(relative[1]) * units[relative[2]];
+        if (Number.isFinite(date) && date > 0) return String(date);
+    }
+    // Missing or unrecognized metadata must not pretend the chapter is new.
+    return '';
+}
 class SourceExtension extends MProvider {
     constructor() { super(); this.client = new Client({timeout: 25, connectTimeout: 10}); }
     get supportsLatest() { return true; }
@@ -74,7 +96,7 @@ class SourceExtension extends MProvider {
         const name=s2Text(doc.selectFirst('.post-title h1')), rows=doc.select('.listing-chapters_wrap .wp-manga-chapter');
         if (!name || !rows.length || rows.length>10000) throw s2Failure('chapter-list', '作品名称或章节目录不完整');
         if (doc.select('#manga-chapters-holder').length) throw s2Failure('chapter-list-ajax', '章节目录尚未展开');
-        const seen=new Set(), chapters=[];
+        const seen=new Set(), chapters=[], fetchedAt=Date.now();
         for (const row of rows) {
             const link=row.selectFirst('a'), chapter=s2Location(link.attr('href'),true), title=s2Text(link);
             if (chapter.slug!==loc.slug) throw s2Failure('chapter-owner', '目录混入其他作品的章节');
@@ -83,7 +105,8 @@ class SourceExtension extends MProvider {
             // identity once, without merging distinct URLs by chapter number.
             if (seen.has(chapter.url)) continue;
             seen.add(chapter.url);
-            chapters.push({name:title,url:chapter.url});
+            chapters.push({name:title,url:chapter.url,
+                dateUpload:s2Date(s2Text(row.selectFirst('.chapter-release-date')),fetchedAt)});
         }
         const fields={};
         for(const item of doc.select('.post-content_item')) fields[s2Text(item.selectFirst('h5')).toLowerCase()]=s2Text(item.selectFirst('.summary-content'));

@@ -115,6 +115,18 @@
   },
   {
     "slug": "s2read",
+    "name": "chapter upload dates survive QuickJS and native deserialization",
+    "setup": "Date.now = () => Date.UTC(2026,10,4,12);",
+    "method": "detail",
+    "args": ["https://s2read.com/manga/fixture/"],
+    "responses": [{"bodyFile": "s2read-dates.html"}],
+    "expect": {
+      "count": 10,
+      "uploadDates": ["2026-11-04","2024-02-29","2026-11-02","2026-11-04","2026-11-04","2026-11-04",null,null,null,"2026-10-28"]
+    }
+  },
+  {
+    "slug": "s2read",
     "name": "legacy image hosts and underscore chapter in native DOM",
     "method": "pages",
     "args": ["https://s2read.com/manga/fixture/chapter-116_1/"],

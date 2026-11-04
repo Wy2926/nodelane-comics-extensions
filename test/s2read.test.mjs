@@ -6,11 +6,11 @@ const detail=await readFile(new URL('./fixtures/s2read-detail.html',import.meta.
 const pages=await readFile(new URL('./fixtures/s2read-pages.html',import.meta.url),'utf8');
 const variants=await readFile(new URL('./fixtures/s2read-chapter-variants.html',import.meta.url),'utf8');
 function card(id) {return `<div class="c-tabs-item__content"><div class="post-title"><a href="https://s2read.com/manga/book-${id}/">Book ${id}</a></div><div class="tab-thumb"><img src="https://cdn-1.s2read.com/cover-${id}.jpg"></div></div>`;}
-async function runtime(body,statusCode=200) {
+async function runtime(body,statusCode=200,globals={}) {
  const requests=[]; const plugin=await loadPlugin('s2read', class {
   async get(url,headers) {requests.push({url,headers});return {statusCode,body,headers:{}};}
   async post(url,headers,data) {requests.push({url,headers,data});return {statusCode,body,headers:{}};}
- });return {plugin,requests};
+ },globals);return {plugin,requests};
 }
 test('HTML search uses one bounded read-only form request and preserves pagination',async()=>{
  const {plugin,requests}=await runtime(Array.from({length:12},(_,i)=>card(i)).join(''));
@@ -83,4 +83,24 @@ test('legacy same-site image hosts are supported without accepting host lookalik
 test('a verified chapter with no image slots is reported as empty source content',async()=>{
  const {plugin}=await runtime(pages.replace(/<div class="page-break">.*?<\/div>/g,''));
  await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:chapter-empty/);
+});
+test('chapter dates preserve local calendar days and resolve relative times once per response',async()=>{
+ const now=Date.UTC(2026,10,4,12), Clock=class extends Date {static now(){return now;}};
+ const html=await readFile(new URL('./fixtures/s2read-dates.html',import.meta.url),'utf8');
+ const {plugin}=await runtime(html,200,{Date:Clock});
+ const result=await plugin.getDetail('https://s2read.com/manga/fixture/');
+ assert.equal(result.chapters.length,10);
+ assert.deepEqual(Array.from(result.chapters,c=>c.dateUpload),[
+  String(new Date(2026,10,4).getTime()),String(new Date(2024,1,29).getTime()),
+  String(now-2*86400000),String(now-3*3600000),String(now-45*60000),String(now-8000),
+  '','','',String(now-604800000)
+ ]);
+});
+test('unknown or invalid dates stay unknown without shifting another chapter date',async()=>{
+ for(const text of ['February 29, 2023','April 31, 2024','November 0, 2026','Other 4, 2026','1000000000 days ago','']) {
+  const html=detail.replace('</a></li>',`</a><span class="chapter-release-date"><i>${text}</i></span></li>`);
+  const {plugin}=await runtime(html);
+  const result=await plugin.getDetail('https://s2read.com/manga/fixture/');
+  assert.deepEqual(Array.from(result.chapters,c=>c.dateUpload),['','']);
+ }
 });
