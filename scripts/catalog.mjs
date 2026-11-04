@@ -127,8 +127,14 @@ async function publishLocked(built, {directory = root, channel = 'testing', only
     for (const file of manifest.files) await immutable(path.join(sources, file), sourceFiles[file]);
     const rebuild = `import {readFile,writeFile} from 'node:fs/promises';\nconst m=JSON.parse(await readFile(new URL('manifest.json',import.meta.url),'utf8'));\nconst parts=await Promise.all(m.files.map(f=>readFile(new URL(f,import.meta.url),'utf8')));\nconst code=${JSON.stringify(bytes.toString().split('const DefaultExtension = (() => {\n')[0])}+'const DefaultExtension = (() => {\\n'+parts.join('\\n')+'\\nreturn '+m.entryClass+';\\n})();\\n';\nawait writeFile(new URL('plugin.js',import.meta.url),code);\n`;
     await immutable(path.join(sources, 'rebuild.mjs'), rebuild);
-    for (const file of ['LICENSE', 'THIRD_PARTY.md']) {
-      await immutable(path.join(sources, file), await readFile(path.join(directory, file)));
+    await immutable(path.join(sources, 'LICENSE'), await readFile(path.join(directory, 'LICENSE')));
+    // Shared notices can gain new sources without changing an old plugin.
+    // Keep each version's original snapshot; new versions get the current notice.
+    const notice = path.join(sources, 'THIRD_PARTY.md');
+    try { check((await readFile(notice)).length > 0, '已发布的来源声明为空'); }
+    catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      await immutable(notice, await readFile(path.join(directory, 'THIRD_PARTY.md')));
     }
   }
   const entries = onlySlug ? [...previous.filter(e => e.nodelane.slug !== onlySlug).map(e =>

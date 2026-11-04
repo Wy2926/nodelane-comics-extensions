@@ -158,5 +158,113 @@
       "count": 2,
       "referer": "https://s2read.com/"
     }
+  },
+  {
+    "slug": "guazimanhua",
+    "name": "Unicode query and native DOM listing",
+    "method": "search",
+    "args": [
+      "测试 & +",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "guazimanhua-list.html"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "name": "契约漫画 🌊",
+      "next": false,
+      "query": {
+        "keyword": "测试 & +"
+      }
+    }
+  },
+  {
+    "slug": "guazimanhua",
+    "name": "Complete catalog with unknown dates and bound chapter identities",
+    "method": "detail",
+    "args": [
+      "https://www.guazimanhua.com/comic.php?id=123"
+    ],
+    "responses": [
+      {
+        "bodyFile": "guazimanhua-detail.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "name": "契约漫画 🌊",
+      "uploadDates": [
+        null,
+        null,
+        null
+      ]
+    }
+  },
+  {
+    "slug": "guazimanhua",
+    "name": "Full image list beyond twenty-item SEO preview",
+    "method": "pages",
+    "args": [
+      "https://www.guazimanhua.com/chapter.php?id=91#nodelane-guazimanhua=123"
+    ],
+    "responses": [
+      {
+        "bodyFile": "guazimanhua-pages.html"
+      }
+    ],
+    "expect": {
+      "count": 21,
+      "referer": "https://www.guazimanhua.com/"
+    }
+  },
+  {
+    "slug": "guazimanhua",
+    "name": "Reader rejects a chapter belonging to another book",
+    "method": "pages",
+    "args": [
+      "https://www.guazimanhua.com/chapter.php?id=91#nodelane-guazimanhua=456"
+    ],
+    "responses": [
+      {
+        "bodyFile": "guazimanhua-pages.html"
+      }
+    ],
+    "expectError": "GZ:chapter-owner"
+  },
+  {
+    "slug": "guazimanhua",
+    "name": "Native filter definitions and empty preferences",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {
+      "count": 5,
+      "types": [
+        "cid",
+        "city",
+        "audience",
+        "is_end",
+        "sort"
+      ],
+      "options": [
+        24,
+        6,
+        3,
+        3,
+        5
+      ],
+      "preferences": 0
+    }
+  },
+  {
+    "slug": "guazimanhua",
+    "name": "Explicit zero-chapter catalog without ItemList",
+    "method": "detail",
+    "args": ["https://www.guazimanhua.com/comic.php?id=123"],
+    "responses": [{"bodyFile": "guazimanhua-empty.html"}],
+    "expect": {"count": 0, "name": "契约漫画 🌊", "uploadDates": []}
   }
 ]

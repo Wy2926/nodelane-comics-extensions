@@ -12,6 +12,14 @@
 | `protocol-source.ts` | `290c35a646d2e0242a91f5103e88417cb30989b263107e8acef3a6787ea6a621` | `src/comix/protocol-source.js` |
 | `LICENSE` | `3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986` | `LICENSE` |
 
+瓜子漫画适配参考并改写同一提交的 `apps/extension/src/sources/sites/guazimanhua/` 协议检查：用 `MProvider` 和 App DOM 桥实现作品绑定、结构化数据交叉核验与完整正文读取，增加分页筛选适配，不引入浏览器运行时。原代码归 NodeLane Comics 项目及贡献者，GPL-3.0-only。
+
+| 原文件 | 原始 SHA-256 | 本地适配 |
+| --- | --- | --- |
+| `definition.ts` | `a24672fbfad16727b58b9529d135707627e876ee7992d05f81178100461a7b09` | `src/guazimanhua/parser.js` 的地址与归属标记 |
+| `network.ts` | `cc4f4b3f64f51adff262847c5949b9b2322c11e09b4e4039b41c44f26bbc99fa` | `src/guazimanhua/parser.js` 的目录与正文核验 |
+| `search.ts` | `75a7505a8f403abce183863268b3b7a5b363c91ae8e93d202dcad60c32c9bcaf` | `src/guazimanhua/parser.js` 的列表与分页核验 |
+
 ## 接口参考
 
 - [Mangayomi JavaScript 插件指南](https://github.com/kodjodevf/mangayomi-extensions/blob/6004f1f8d1a56f882dadb734ce26f50c626a3850/CONTRIBUTING-JS.md)：`MProvider`、`Client`、分页、详情及图片返回格式。SHA-256 `fb9e59455c55d5a4cf1077a9e8251b9e19463eb62e1bd78eb39d40adfd12d146`。
@@ -22,12 +30,13 @@
 
 ## 站点图标引用
 
-图标均来自对应站点首页声明的 favicon，匿名 HTTPS 请求可取得 PNG。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，未发现开源许可声明，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
+图标来自对应站点或官方下载页声明的 favicon，匿名 HTTPS 请求可取得 PNG。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，未发现开源许可声明，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
 
 | 站点 | 源站图标／当前资源版本 | 尺寸 | SHA-256 |
 | --- | --- | --- | --- |
 | [Comix](https://comix.to/) | [35595e3de3c99889c1bd2c56f3e3714fc0c457.png](https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png) | 512 × 512 | `9d692cb5b15b7bc220a96bdb9a60ecb8bb33e3651e85b9c4754ce09fb443a002` |
 | [S2READ](https://s2read.com/) | [cropped-Thiet-ke-chua-co-ten-5-192x192.png](https://s2read.com/wp-content/uploads/2026/08/cropped-Thiet-ke-chua-co-ten-5-192x192.png) | 192 × 192 | `20820eb9042beea3295424906b07e63232eca63418c81be16b4b9bb9831646a1` |
+| [瓜子漫画官方下载页](https://d.guazimanhua.com/) | [favicon.ico](https://d.guazimanhua.com/favicon.ico)（实际内容为 PNG） | 16 × 16 | `6cec92f64c20b1e28db9630c1bb2b2db77302ca6ffc857cb28e9f5712e7b300a` |
 
 ## 新实现的协议参考
 

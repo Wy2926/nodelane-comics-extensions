@@ -61,3 +61,18 @@ test('stable is independent; recovery republishes archived source with a newer v
   await writeFile(path.join(directory,'repository.json'),JSON.stringify(registry));
   await assert.rejects(build({directory}),/永久 ID/);
 });
+test('shared provenance updates preserve old archives and accompany newly published versions', async t => {
+  const directory = await fixture(t), built = await build({directory});
+  await publish(built, {directory});
+  const entry = built.entries[0], archive = path.join(directory, 'repo/sources/comix', entry.version, 'THIRD_PARTY.md');
+  const original = await readFile(archive, 'utf8'), updated = original + '\nNew source provenance.\n';
+  await writeFile(path.join(directory, 'THIRD_PARTY.md'), updated);
+  await publish(built, {directory});
+  assert.equal(await readFile(archive, 'utf8'), original);
+  assert.equal(await readFile(path.join(directory, 'repo/THIRD_PARTY.md'), 'utf8'), updated);
+  const manifest = path.join(directory, 'src/comix/manifest.json');
+  await writeFile(manifest, JSON.stringify({...await json(manifest), version:'9.0.1'}));
+  await publish(await build({directory}), {directory});
+  assert.equal(await readFile(path.join(directory, 'repo/sources/comix/9.0.1/THIRD_PARTY.md'), 'utf8'), updated);
+  assert.equal(await readFile(archive, 'utf8'), original);
+});
