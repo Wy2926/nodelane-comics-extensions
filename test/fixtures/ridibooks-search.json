@@ -1,0 +1,59 @@
+{
+  "data": {
+    "riGrid": {
+      "cells": {
+        "search": {
+          "bookListWithTabCell": {
+            "cell": {
+              "books": [
+                {
+                  "id": "101",
+                  "book": {
+                    "id": "101",
+                    "isAdultOnly": false,
+                    "title": {
+                      "main": "第1话"
+                    },
+                    "categories": [
+                      {
+                        "genre": "webtoon"
+                      }
+                    ],
+                    "series": {
+                      "id": "100",
+                      "title": "契约漫画 🌊",
+                      "thumbnail": {
+                        "large": "https://img.ridicdn.net/cover/100/large#1"
+                      }
+                    }
+                  }
+                }
+              ],
+              "aggregations": [
+                {
+                  "tab": "ALL",
+                  "docCount": 999
+                },
+                {
+                  "tab": "WEBTOON",
+                  "docCount": 1
+                }
+              ]
+            },
+            "context": {
+              "adultOption": "EXCLUDE_ADULT",
+              "parentTab": "WEBTOON",
+              "keyword": [
+                "漫画 & + 🌊"
+              ],
+              "pageLimitInput": {
+                "page": 1,
+                "limit": 24
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

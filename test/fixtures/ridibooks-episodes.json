@@ -1,0 +1,42 @@
+{
+  "data": {
+    "riGrid": {
+      "cells": {
+        "bookDetailHome": {
+          "episodeBookListCell": {
+            "cell": {
+              "seriesId": "100",
+              "currentOrder": "SEQUENTIAL",
+              "currentTabType": "RENT",
+              "books": [
+                {
+                  "bookId": "102",
+                  "title": "第1话 同名",
+                  "button": {
+                    "action": "RENT_BOOK"
+                  },
+                  "metadata": {
+                    "regDate": ""
+                  }
+                },
+                {
+                  "bookId": "103",
+                  "title": "第0.5话 番外",
+                  "button": {
+                    "action": "RENT_BOOK"
+                  },
+                  "metadata": {
+                    "regDate": "2024.03.04"
+                  }
+                }
+              ],
+              "pagination": {
+                "nextPage": null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

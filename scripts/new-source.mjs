@@ -8,7 +8,7 @@ if (slug in repo.sourceIds || Object.values(repo.sourceIds).includes(Number(idTe
 const updated = {...repo, sourceIds: {...repo.sourceIds, [slug]: Number(idText)}};
 validateRepository(updated);
 const m = {slug, id: Number(idText), name, baseUrl, apiUrl: '', lang: 'en', version: '0.1.0', itemType: 0,
-  sourceCodeLanguage: 1, appMinVerReq: '0.9.9', isNsfw: false, hasCloudflare: false, isFullData: false,
+  sourceCodeLanguage: 1, appMinVerReq: '0.1.0', isNsfw: false, hasCloudflare: false, isFullData: false,
   typeSource: 'single', iconUrl: '', notes: '开发中，尚未启用', license: 'GPL-3.0-only',
   files: ['extension.js'], entryClass: 'SourceExtension', requestHosts: [new URL(baseUrl).hostname],
   requires: [], capabilities: ['popular', 'latest', 'search', 'details', 'pages'], enabled: false};

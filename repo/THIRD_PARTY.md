@@ -30,18 +30,20 @@
 
 ## 站点图标引用
 
-图标来自对应站点或官方下载页声明的 favicon，匿名 HTTPS 请求可取得 PNG。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，未发现开源许可声明，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
+图标来自对应站点的 favicon，匿名 HTTPS 请求可取得 PNG 或 ICO。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，未发现开源许可声明，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
 
 | 站点 | 源站图标／当前资源版本 | 尺寸 | SHA-256 |
 | --- | --- | --- | --- |
 | [Comix](https://comix.to/) | [35595e3de3c99889c1bd2c56f3e3714fc0c457.png](https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png) | 512 × 512 | `9d692cb5b15b7bc220a96bdb9a60ecb8bb33e3651e85b9c4754ce09fb443a002` |
 | [S2READ](https://s2read.com/) | [cropped-Thiet-ke-chua-co-ten-5-192x192.png](https://s2read.com/wp-content/uploads/2026/08/cropped-Thiet-ke-chua-co-ten-5-192x192.png) | 192 × 192 | `20820eb9042beea3295424906b07e63232eca63418c81be16b4b9bb9831646a1` |
-| [瓜子漫画官方下载页](https://d.guazimanhua.com/) | [favicon.ico](https://d.guazimanhua.com/favicon.ico)（实际内容为 PNG） | 16 × 16 | `6cec92f64c20b1e28db9630c1bb2b2db77302ca6ffc857cb28e9f5712e7b300a` |
+| [瓜子漫画](https://www.guazimanhua.com/) | [favicon.ico](https://www.guazimanhua.com/favicon.ico)（ICO） | 16 × 16、32 × 32 | `ddf19896c48eaaec5ff0d295ca97e0b24587f8fe2304b076a570d5ffc6a4bb3c` |
+| [RIDI](https://ridibooks.com/) | [favicon-192x192.01frp6098zlb2.png](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/media/favicon-192x192.01frp6098zlb2.png) | 192 × 192 | `932024489ab08a057c597da156a62c63ce652a122ab07cf22a676309c7f0d2fc` |
 
 ## 新实现的协议参考
 
 - Comix 图片还原参数依据同一 `node-comics` 提交中的 `images.ts`，SHA-256 `3a7eedd0c9a8fbf1a14e67f89285d71f71dfc2e40d60fa3ce67e66ce0ad92113`。本插件仅声明已知算法与种子掩码，通用像素置换由 App 独立实现，不复制浏览器 Canvas／Blob 运行时。
 - S2READ 依据 [s2read.com](https://s2read.com/) 当前原始响应与同一提交的 `sites/s2manga/README.md`（SHA-256 `ceaaf52a083fec840cb29fc18cac59f42bf813d8a3a338d3c341d77a82667ced`）及 `shared/madara/search.ts`（SHA-256 `3676260b1908a7d30a020d04ead94c6ff1715d43671dde9801ce160cdebb81fb`）核对协议，独立实现 Mangayomi DOM 适配器，未复制共享引擎代码。网站 HTML 和图片未进入发布包。
+- RIDI 依据 [官方站点](https://ridibooks.com/) 的公开 HTML、只读 GraphQL 和阅读器响应独立实现。参考官方前端版本 `b28d6b` 的 [目录查询](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/chunks/03ezojnr9-n3s.js)（SHA-256 `40a28b9fa5eb0480ff2ae336a63a711bdb9d12fa552c88365d040d485cf7946b`）、[搜索查询](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/chunks/0vui-y-2njyvl.js)（`e9d9bd7300436063ced97a7ac4bca2e40fe7cc282b6118406a2a600384271895`），以及阅读器版本 `e8fef6` 的 [index-CErQqw3J.js](https://static.ridicdn.net/web-viewer/p/e8fef6/assets/index-CErQqw3J.js)（`0292a67b41233bed5475fc99ba984f40155ec92e6971016835e5b1de9365fce1`）。官方脚本未声明开源许可，仅核对字段、请求路径与权限语义，不复制、执行或分发下载的脚本，不处理 DRM 或购买流程。站点内容与签名地址不进入仓库。
 
 ## 开发依赖
 

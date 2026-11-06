@@ -1,0 +1,37 @@
+{
+  "slug": "ridibooks",
+  "id": 86001004,
+  "name": "RIDI",
+  "baseUrl": "https://ridibooks.com",
+  "apiUrl": "",
+  "lang": "ko",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/media/favicon-192x192.01frp6098zlb2.png",
+  "notes": "条漫／漫画搜索、热门、最新与完整目录；读取 RIDI 已授予权限的图片正文。付费或年龄验证章节需先在原站处理，不以试读替代正文。",
+  "license": "GPL-3.0-only",
+  "files": [
+    "parser.js",
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "ridibooks.com",
+    "api.ridibooks.com"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

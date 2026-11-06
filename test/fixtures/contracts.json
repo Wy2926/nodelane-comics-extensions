@@ -266,5 +266,103 @@
     "args": ["https://www.guazimanhua.com/comic.php?id=123"],
     "responses": [{"bodyFile": "guazimanhua-empty.html"}],
     "expect": {"count": 0, "name": "契约漫画 🌊", "uploadDates": []}
+  },
+  {
+    "slug": "ridibooks",
+    "name": "category filter crosses App bridge",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {
+      "count": 1,
+      "types": [
+        "category"
+      ],
+      "options": [
+        2
+      ],
+      "preferences": 0
+    }
+  },
+  {
+    "slug": "ridibooks",
+    "name": "filtered search ignores SSR placeholders",
+    "method": "search",
+    "args": [
+      "漫画 & + 🌊",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "ridibooks-search.html"
+      },
+      {
+        "bodyFile": "ridibooks-search.json"
+      }
+    ],
+    "expect": {
+      "count": 1,
+      "name": "契约漫画 🌊",
+      "next": false
+    }
+  },
+  {
+    "slug": "ridibooks",
+    "name": "complete paginated catalog and calendar dates",
+    "method": "detail",
+    "args": [
+      "https://ridibooks.com/books/100"
+    ],
+    "responses": [
+      {
+        "bodyFile": "ridibooks-detail.html"
+      },
+      {
+        "bodyFile": "ridibooks-episodes.json"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "name": "契约漫画 🌊",
+      "uploadDates": [
+        "2024-03-03",
+        null,
+        "2024-03-04"
+      ]
+    }
+  },
+  {
+    "slug": "ridibooks",
+    "name": "bound image pages keep duplicate page slots",
+    "method": "pages",
+    "args": [
+      "https://ridibooks.com/books/101/view#nodelane-ridibooks=100"
+    ],
+    "responses": [
+      {
+        "bodyFile": "ridibooks-reader.html"
+      },
+      {
+        "bodyFile": "ridibooks-pages.json"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "referer": "https://ridibooks.com/books/101/view"
+    }
+  },
+  {
+    "slug": "ridibooks",
+    "name": "paid access is not a preview or empty success",
+    "method": "pages",
+    "args": [
+      "https://ridibooks.com/books/101/view#nodelane-ridibooks=100"
+    ],
+    "responses": [
+      {
+        "body": "<html><body><script id=\"app_init\" type=\"application/json\">{\"detail\": {\"book\": {\"b_id\": \"101\", \"series_id\": \"100\", \"content_type\": {\"is_comic\": true}, \"is_adult_only\": false, \"payment_info\": {\"available\": \"none\", \"is_expired\": false}}}}</script></body></html>\n"
+      }
+    ],
+    "expectError": "RIDI:access"
   }
 ]

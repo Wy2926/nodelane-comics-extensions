@@ -25,7 +25,11 @@ export class Client {
   async request(method,url,headers,body) {
     const args=['-sS','--max-time','30','--max-filesize','12582912','-D','-','-w','\n%{http_code}','-X',method];
     for(const [key,value] of Object.entries(headers)) args.push('-H', key+': '+value);
-    if(body !== undefined) for(const [key,value] of Object.entries(body)) args.push('--data-urlencode',key+'='+value);
+    if(body !== undefined) {
+      const jsonBody=Object.entries(headers).some(([k,v])=>k.toLowerCase()==='content-type'&&v.includes('application/json'));
+      if(jsonBody || typeof body==='string') args.push('--data-binary',jsonBody?JSON.stringify(body):body);
+      else for(const [key,value] of Object.entries(body)) args.push('--data-urlencode',key+'='+value);
+    }
     args.push(url);
     let data;
     try { ({stdout:data}=await run('curl',args,{encoding:'buffer',maxBuffer:13*1024*1024})); }

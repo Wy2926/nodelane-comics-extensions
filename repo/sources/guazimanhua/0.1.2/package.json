@@ -1,0 +1,37 @@
+{
+  "id": 86001003,
+  "name": "瓜子漫画",
+  "baseUrl": "https://www.guazimanhua.com",
+  "apiUrl": "",
+  "lang": "zh",
+  "version": "0.1.2",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://www.guazimanhua.com/favicon.ico",
+  "notes": "热门、最新、搜索及全部站内筛选；完整章节目录和图片正文。源站未提供逐章上传日期。",
+  "sourceCodeUrl": "packages/guazimanhua/0.1.2.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "guazimanhua",
+    "sha256": "b781db063dae65252ce2c542ec0eaa56c9f59375a0071eb9e53aece9bfe61d84",
+    "size": 16181,
+    "requestHosts": [
+      "www.guazimanhua.com"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}

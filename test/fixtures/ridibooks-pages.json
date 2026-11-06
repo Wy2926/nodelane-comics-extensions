@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "data": {
+    "type": "comic",
+    "pages": [
+      {
+        "src": "https://webview-cache.ridibooks.com/101/webtoon/page.webp",
+        "width": 720,
+        "height": 1280
+      },
+      {
+        "src": "https://webview-cache.ridibooks.com/101/webtoon/page.webp",
+        "width": 720,
+        "height": 1280
+      }
+    ]
+  }
+}

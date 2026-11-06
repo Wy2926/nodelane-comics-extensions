@@ -6,7 +6,7 @@
 
 详情一次 GET 读取全部 `.all-chapter-grid`，核对总数和 JSON-LD 目录预览；保留网站倒序、0 话、小数话与番外，不按 ID 大小排序。没有目录预览的空作品须由侧栏明确标为 0 话。源站没有逐章上传日期，统一返回未知；作品或正文的 `dateModified` 不作为章节上传时间。封面、作者、简介、题材和连载状态来自已核实的作品数据。
 
-正文一次 GET 读取 `.reader-images` 全部图片，核对总数、连续页号及 JSON-LD 预览，保留重复 URL 的不同页槽；预览通常只有前 20 张，不能据此截断正文。普通图片由 App 读取，不需还原；正文仅接受 `img.guazicdn.com` 的 HTTPS 地址，封面另支持 `api.guaziapp.com` 的 HTTPS 地址。图标引用站点官方下载页声明的 favicon。
+正文一次 GET 读取 `.reader-images` 全部图片，核对总数、连续页号及 JSON-LD 预览，保留重复 URL 的不同页槽；预览通常只有前 20 张，不能据此截断正文。普通图片由 App 读取，不需还原；正文仅接受 `img.guazicdn.com` 的 HTTPS 地址，封面另支持 `api.guaziapp.com` 的 HTTPS 地址。图标使用主站 `https://www.guazimanhua.com/favicon.ico`。
 
 列表每页最多 36 项，页码上限 10000；单部目录上限 10000 章，单章上限 1500 页，HTML 上限 2 × 1024² 字符，主机另限制响应字节数。单次调用不并发请求、请求限时，不逐章抓日期，不缓存整本正文，不自动重试验证或限流。失败区分 `[GZ:verification]`、`rate-limit`、`identity`、`pagination`、`chapter-owner`、`page-count` 等原因，不以空成功结果替代故障。没有额外的持久化来源设置；登录、会员、付费与广告流程不属于公开阅读适配范围。
 
