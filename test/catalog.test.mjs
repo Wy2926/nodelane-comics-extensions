@@ -4,7 +4,6 @@ import assert from 'node:assert/strict';
 import {mkdtemp, cp, readFile, writeFile, rm} from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import {generateKeyPairSync, verify} from 'node:crypto';
 import {preparePages} from '../scripts/pages.mjs';
 import {root, build, publish, json, validateManifest, validateRepository, digest} from '../scripts/catalog.mjs';
 import {rollback} from '../scripts/rollback.mjs';
@@ -79,27 +78,23 @@ test('shared provenance updates preserve old archives and accompany newly publis
   assert.equal(await readFile(archive, 'utf8'), original);
 });
 
-test('Pages signs channel-bound snapshots, preserves archives and fails before replacing valid output', async t => {
+test('Pages preserves plain channel catalogs and archives; damaged packages cannot replace valid output', async t => {
   const directory = await fixture(t), built = await build({directory});
   await publish(built, {directory});
   await publish(built, {directory, channel: 'stable'});
-  const {privateKey, publicKey} = generateKeyPairSync('ed25519');
-  const pem = privateKey.export({type: 'pkcs8', format: 'pem'});
-  await writeFile(path.join(directory, 'catalog-public-key.json'), JSON.stringify({
-    keyId: 'test', publicKey: Buffer.from(publicKey.export({format: 'jwk'}).x, 'base64url').toString('base64'),
-  }));
-  const out = await preparePages({directory, privateKey: pem});
+  const out = await preparePages({directory});
+  for (const channel of ['stable', 'testing']) {
+    for (const name of ['index.json', 'repo.json']) {
+      assert.deepEqual(await json(path.join(out, channel, name)), await json(path.join(directory, 'repo', channel, name)));
+    }
+  }
+  const entry = built.entries[0];
+  assert.deepEqual(await readFile(path.join(out, entry.sourceCodeUrl)), await readFile(path.join(directory, 'repo', entry.sourceCodeUrl)));
+  assert.deepEqual(await readFile(path.join(out, 'sources', entry.nodelane.slug, entry.version, 'LICENSE')), await readFile(path.join(directory, 'LICENSE')));
   const file = path.join(out, 'stable/index.json'), first = await readFile(file);
-  const envelope = JSON.parse(first), payload = Buffer.from(envelope.payload, 'base64');
-  assert.ok(verify(null, payload, publicKey, Buffer.from(envelope.signatures[0].signature, 'base64')));
-  assert.equal(JSON.parse(payload).channel, 'stable');
-  assert.equal(JSON.parse(payload).sources.length, built.entries.length);
-  assert.ok(Array.isArray(await json(path.join(directory, 'repo/stable/index.json'))));
-  await preparePages({directory, privateKey: pem});
+  await preparePages({directory});
   assert.deepEqual(await readFile(file), first);
-  const wrong = generateKeyPairSync('ed25519').privateKey.export({type: 'pkcs8', format: 'pem'});
-  await assert.rejects(preparePages({directory, privateKey: wrong}), /固定公钥/);
-  await writeFile(path.join(directory, 'repo', built.entries[0].sourceCodeUrl), 'corrupt');
-  await assert.rejects(preparePages({directory, privateKey: pem}), /摘要/);
+  await writeFile(path.join(directory, 'repo', entry.sourceCodeUrl), 'corrupt');
+  await assert.rejects(preparePages({directory}), /摘要/);
   assert.deepEqual(await readFile(file), first);
 });

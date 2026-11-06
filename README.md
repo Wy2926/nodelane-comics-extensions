@@ -19,9 +19,9 @@ npm run release -- testing
 npm run serve
 ```
 
-正式入口为 `https://comics-extensions.nodelane.net/stable/index.json`，测试渠道为同域名下的 `/testing/index.json`。`main` 分支通过检查后，GitHub Actions 自动签名并部署到 Pages；只有显式执行 `npm run release -- stable` 更新的版本进入正式目录。域名与 HTTPS 状态见 GitHub 仓库 Settings → Pages。
+正式入口为 `https://comics-extensions.nodelane.net/stable/index.json`，测试渠道为同域名下的 `/testing/index.json`。`main` 分支通过检查后，GitHub Actions 自动部署到 Pages；只有显式执行 `npm run release -- stable` 更新的版本进入正式目录。域名与 HTTPS 状态见 GitHub 仓库 Settings → Pages。
 
-上述本地命令生成未签名的开发目录 `http://127.0.0.1:8787/index.json`；App 通过 `NODELANE_CATALOG_URL` 显式切换本地地址。
+上述本地命令生成开发目录 `http://127.0.0.1:8787/index.json`；App 通过 `NODELANE_CATALOG_URL` 显式切换本地地址。
 
 真实 iPhone 使用同一局域网的开发机地址：`HOST=0.0.0.0 npm run serve`，并在 App 启动时指定 `--dart-define=NODELANE_CATALOG_URL=http://开发机IP:8787/index.json`。
 

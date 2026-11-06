@@ -55,15 +55,14 @@ npm run rollback -- comix 0.2.0 0.2.2 testing
 
 ## GitHub Pages 分发
 
-正式域名为 `comics-extensions.nodelane.net`，DNS CNAME 指向 `wy2926.github.io`，仓库 Pages 使用 GitHub Actions 发布模式。工作流只在 `main` 或其手动运行时部署；PR 只检查，没有签名私钥。发布内容限于 `.pages/`，包含两个签名渠道、不可变插件、对应源码及许可。Actions 产物只保留一天，不使用付费大规格运行器或独立服务。
+正式域名为 `comics-extensions.nodelane.net`，DNS CNAME 指向 `wy2926.github.io`，仓库 Pages 使用 GitHub Actions 发布模式。工作流只在 `main` 或其手动运行时部署；PR 只检查。发布内容限于 `.pages/`，包含正式与测试目录、不可变插件、对应源码及许可。Actions 产物只保留一天，不使用付费大规格运行器或独立服务。
 
-维护者升版、完成验收并运行 `npm run release -- stable` 后，将源码和 `repo/` 产物一起提交推送。自动流程检查代码、校验目录与文件摘要，再签名并一次部署整个快照；失败不会替换线上目录。未经推广的测试版本不会自动进入正式目录。发布前核对 `git diff -- repo/stable/index.json`；恢复旧实现仍须使用更高版本。
+维护者升版、完成验收并运行 `npm run release -- stable` 后，将源码和 `repo/` 产物一起提交推送。自动流程检查代码、校验目录与文件摘要，再一次部署整个快照；失败不会替换线上目录。未经推广的测试版本不会自动进入正式目录。发布前核对 `git diff -- repo/stable/index.json`；恢复旧实现仍须使用更高版本。
 
-`npm run pages` 从已记录的 `repo/stable` 和 `repo/testing` 生成签名快照。`CATALOG_SIGNING_KEY` 是 GitHub Actions secret 中的 Ed25519 PKCS#8 PEM 私钥，禁止写入仓库或日志；`catalog-public-key.json` 只含公钥及标识。App 固定公钥验证目录，之后验证插件 SHA-256；目录和签名放在同一个 JSON 文件，避免分步发布的错配。目录不依赖 GitHub API，也不要求用户登录。
+`npm run pages` 将已记录的 `repo/stable` 和 `repo/testing` JSON 目录连同插件、源码及许可准备为静态站点。App 沿用来源数组解析与插件大小、SHA-256 检查。目录不依赖 GitHub API，也不要求用户登录。
 
-换托管服务时保留正式域名、路径、仓库身份、来源 ID、插件 slug、现有文件和签名密钥。不要把包路径改成跨域下载或重定向。换域名需要更新 App 的官方地址；旧域名应保留服务直到旧客户端退出使用。
+换托管服务时保留正式域名、路径、仓库身份、来源 ID、插件 slug 和现有文件。不要把包路径改成跨域下载或重定向。换域名需要更新 App 的官方地址；旧域名应保留服务直到旧客户端退出使用。
 
-换密钥时先在 App 中加入新公钥并发行，随后更换本仓库公钥和 Actions secret，再重新生成目录；仅支持旧公钥的 App 将无法读取新签名，必须先升级。当前没有静默远程信任新密钥的机制。源码与许可随插件版本提供，App 的 Apache-2.0 基线与 GPL 插件保持独立。
-
+源码与许可随插件版本提供，App 的 Apache-2.0 基线与 GPL 插件保持独立。
 
 故障报告至少带来源名／版本、App／iOS 版本、失败步骤、可公开作品或章节链接、错误类型。区分 CF、站点验证码、限流、网络失败、协议变化和不支持的图片；不要提交认证信息或完整请求日志。
