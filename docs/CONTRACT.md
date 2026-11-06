@@ -67,7 +67,7 @@ App 在 QuickJS 中实例化 `DefaultExtension extends MProvider`，通过 `this
 
 `capabilities` 声明插件功能：`popular/latest/search/details/pages`，应与实现一致；它不会自动实现方法或控制 UI。`requires` 声明额外主机能力，App 通过只读 `NodeLane.capabilities` 提供可用能力；缺少依赖时拒绝安装或更新。基础版本号不能替代能力检查。
 
-App 核对仓库与来源身份、下载地址、兼容性、包大小及 SHA-256；包上限 1 MiB，初始化成功才保存，失败保留已安装版本及关联数据。SHA-256 用于内容完整性校验，不证明发布者身份。新增主机能力需使用有版本的能力名；站点解析规则和已有能力的参数变化由插件更新。
+App 核对仓库与来源身份、下载地址、兼容性、包大小及 SHA-256；包上限 1 MiB，初始化成功才保存，失败保留已安装版本及关联数据。远程 NodeLane 目录先验证 Ed25519 签名，SHA-256 再校验具体插件内容。新增主机能力需使用有版本的能力名；站点解析规则和已有能力的参数变化由插件更新。
 
 ## 请求、解析与错误
 
@@ -94,3 +94,7 @@ App 核对仓库与来源身份、下载地址、兼容性、包大小及 SHA-25
 `seedMasks` 是响应标识到无符号 32 位整数掩码的映射，最多 8 项；键为 1–32 位小写十六进制字符串。App 读取图片响应的 `X-Scramble-Algo/Grid/Seed/Hash`，按算法 3（xorshift32／Fisher-Yates）还原图块并保留网格外边缘像素；未知协议明确失败。
 
 处理上限为每张 12 MiB、800 万像素、256 块、单帧。App 负责有限队列与解码，缓存键包含处理参数，成功后才缓存或保存；阅读、下载和翻译共用还原后的原图。新增图片算法需要 App 提供对应能力，插件只声明参数。
+
+## 签名目录
+
+线上 `index.json` 使用 `{format: "nodelane-catalog-v1", payload, signatures}`；`payload` 是 UTF-8 JSON 原始字节的 Base64，内容为 `{schema: 1, repositoryId, channel, sources}`，`sources` 沿用上述来源数组。`signatures` 包含 `{keyId, signature}`，签名为 Ed25519 对 payload 原始字节的签名，Base64 编码。App 固定公钥并核对仓库身份、URL 渠道与 payload 渠道，验签前不解释来源数据。目录最大 2 MiB，包最大 1 MiB，正式地址不接受跳转或未签名降级。本地私网 HTTP 目录供显式开发配置使用，保持未签名来源数组。

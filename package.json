@@ -10,6 +10,7 @@
     "test": "node --test test/*.test.mjs",
     "check": "node build.mjs && node --test test/*.test.mjs",
     "release": "node scripts/release.mjs",
+    "pages": "node scripts/pages.mjs",
     "serve": "node scripts/serve.mjs",
     "new-source": "node scripts/new-source.mjs",
     "test:app": "node scripts/test-app.mjs",
