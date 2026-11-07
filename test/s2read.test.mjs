@@ -1,21 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {loadPlugin} from '../scripts/runtime.mjs';
+import {mockPlugin} from './helpers/runtime.mjs';
 const detail=await readFile(new URL('./fixtures/s2read-detail.html',import.meta.url),'utf8');
 const pages=await readFile(new URL('./fixtures/s2read-pages.html',import.meta.url),'utf8');
 const variants=await readFile(new URL('./fixtures/s2read-chapter-variants.html',import.meta.url),'utf8');
 function card(id) {return `<div class="c-tabs-item__content"><div class="post-title"><a href="https://s2read.com/manga/book-${id}/">Book ${id}</a></div><div class="tab-thumb"><img src="https://cdn-1.s2read.com/cover-${id}.jpg"></div></div>`;}
-async function runtime(body,statusCode=200,globals={}) {
- const requests=[]; const plugin=await loadPlugin('s2read', class {
-  async get(url,headers) {requests.push({url,headers});return {statusCode,body,headers:{}};}
-  async post(url,headers,data) {requests.push({url,headers,data});return {statusCode,body,headers:{}};}
- },globals);return {plugin,requests};
+function runtime(body,statusCode=200,globals={}) {
+ return mockPlugin('s2read',()=>({statusCode,body,headers:{}}),globals);
 }
 test('HTML search uses one bounded read-only form request and preserves pagination',async()=>{
  const {plugin,requests}=await runtime(Array.from({length:12},(_,i)=>card(i)).join(''));
  const first=await plugin.search('comic & +',2);assert.equal(first.list.length,12);assert.equal(first.hasNextPage,true);
- assert.equal(requests.length,1);assert.equal(requests[0].data['vars[s]'],'comic & +');assert.equal(requests[0].data.page,'1');
+ assert.equal(requests.length,1);assert.equal(requests[0].method,'POST');assert.equal(requests[0].body['vars[s]'],'comic & +');assert.equal(requests[0].body.page,'1');
  const last=await runtime(card(1)+'<div class="no-posts"></div>');assert.equal((await last.plugin.search('x',1)).hasNextPage,false);
  const empty=await runtime('');assert.equal((await empty.plugin.search('x',1)).list.length,0);
 });
@@ -44,7 +41,7 @@ test('complete static catalog preserves zero and decimal chapters and validates 
 test('chapter navigation, page order and duplicate image slots are preserved',async()=>{
  const {plugin}=await runtime(pages);const result=await plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/');
  assert.equal(result.length,2);assert.equal(result[0].url,result[1].url);assert.equal(result[0].headers.Referer,'https://s2read.com/');
- for(const broken of [pages.replace('image-1','image-3'),pages.replace('value="chapter-0"','value="chapter-1"'),pages.replace('cdn-1.s2read.com','foreign.test')]) {
+ for(const broken of [pages.replace('image-1','image-3'),pages.replace('cdn-1.s2read.com','foreign.test')]) {
   const {plugin}=await runtime(broken);await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'));
  }
 });

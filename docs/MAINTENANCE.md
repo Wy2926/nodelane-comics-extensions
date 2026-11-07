@@ -65,7 +65,7 @@ npm run rollback -- comix 0.2.0 0.2.2 testing
 
 正式域名为 `comics-extensions.nodelane.net`，DNS CNAME 指向 `wy2926.github.io`，仓库 Pages 使用 GitHub Actions 发布模式。工作流只在 `main` 或其手动运行时部署；PR 只检查。发布内容限于 `.pages/`，包含正式与测试目录、不可变插件、对应源码及许可。Actions 产物只保留一天，不使用付费大规格运行器或独立服务。
 
-维护者升版、完成验收并运行 `npm run release -- stable` 后，将源码和 `repo/` 产物一起提交推送。自动流程检查代码、校验目录与文件摘要，再一次部署整个快照；失败不会替换线上目录。未经推广的测试版本不会自动进入正式目录。发布前核对 `git diff -- repo/stable/index.json`；恢复旧实现仍须使用更高版本。
+维护者升版、完成验收并运行 `npm run release -- stable` 后，按 [AGENTS.md](../AGENTS.md) 的授权要求将源码和 `repo/` 产物一起提交推送。自动流程检查代码、校验目录与文件摘要，再一次部署整个快照；失败不会替换线上目录。未经推广的测试版本不会自动进入正式目录。发布前核对 `git diff -- repo/stable/index.json`；恢复旧实现仍须使用更高版本。
 
 `npm run pages` 将已记录的 `repo/stable` 和 `repo/testing` JSON 目录连同插件、源码及许可准备为静态站点。App 沿用来源数组解析与插件大小、SHA-256 检查。目录不依赖 GitHub API，也不要求用户登录。
 

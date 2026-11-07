@@ -1,20 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {loadPlugin} from '../scripts/runtime.mjs';
+import {mockPlugin} from './helpers/runtime.mjs';
 const origin = 'https://www.guazimanhua.com';
 const book = origin + '/comic.php?id=123', chapter = origin + '/chapter.php?id=91#nodelane-guazimanhua=123';
 const fixtures = Object.fromEntries(await Promise.all(['list','detail','empty','pages'].map(async name =>
     [name, await readFile(new URL('./fixtures/guazimanhua-' + name + '.html', import.meta.url), 'utf8')])));
-async function runtime(body, statusCode = 200, responseHeaders = {}) {
-    const requests = [];
-    const plugin = await loadPlugin('guazimanhua', class {
-        async get(url, headers) {
-            requests.push({url, headers});
-            return typeof body === 'function' ? body(url, requests.length) : {statusCode, body, headers: responseHeaders};
-        }
-    });
-    return {plugin, requests};
+function runtime(body, statusCode = 200, headers = {}) {
+    return mockPlugin('guazimanhua', ({url}, count) =>
+        typeof body === 'function' ? body(url, count) : {statusCode, body, headers});
 }
 function listing(url, total) {
     const u = new URL(url), page = Number(u.searchParams.get('page') || 1), last = Math.max(1, Math.ceil(total / 36));

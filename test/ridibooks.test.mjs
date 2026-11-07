@@ -1,26 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {loadPlugin} from '../scripts/runtime.mjs';
+import {mockPlugin} from './helpers/runtime.mjs';
 const origin = 'https://ridibooks.com', book = origin + '/books/100';
 const chapter = origin + '/books/101/view#nodelane-ridibooks=100';
 const fixtures = Object.fromEntries(await Promise.all(['detail.html','episodes.json','reader.html','pages.json','search.html','search.json'].map(async file =>
     [file, await readFile(new URL('./fixtures/ridibooks-' + file, import.meta.url), 'utf8')])));
 const ok = body => ({statusCode: 200, body, headers: {}});
-async function runtime(responses) {
-    const requests = [];
-    const plugin = await loadPlugin('ridibooks', class {
-        async request(method, url, headers, body) {
-            requests.push({method, url, headers, body});
-            const response = responses[requests.length - 1];
-            assert.ok(response, 'unexpected request');
-            if (response instanceof Error) throw response;
-            return typeof response === 'string' ? ok(response) : response;
-        }
-        get(u,h) { return this.request('GET',u,h); }
-        post(u,h,b) { return this.request('POST',u,h,b); }
+function runtime(responses) {
+    return mockPlugin('ridibooks', (_, count) => {
+        const response = responses[count - 1];
+        assert.ok(response, 'unexpected request');
+        if (response instanceof Error) throw response;
+        return typeof response === 'string' ? ok(response) : response;
     });
-    return {plugin, requests};
 }
 function apiListing(path, page = 1, category = '1600') {
     const params = {adults_only:'0',category_includes:category,limit:'18',...(path === 'bestsellers' ? {period:'WEEKLY',only_rent_available:'0'} : {}),offset:String(page*18)};

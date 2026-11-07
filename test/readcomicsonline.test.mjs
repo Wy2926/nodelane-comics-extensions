@@ -1,19 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {loadPlugin} from '../scripts/runtime.mjs';
+import {mockPlugin} from './helpers/runtime.mjs';
 const origin = 'https://readcomicsonline.ru', book = origin + '/comic/fixture', chapter = book + '/1.1';
 const fixtures = Object.fromEntries(await Promise.all(['search','detail','pages'].map(async name =>
     [name, await readFile(new URL('./fixtures/readcomicsonline-' + name + '.html', import.meta.url), 'utf8')])));
-async function runtime(body, statusCode = 200, headers = {}) {
-    const requests = [];
-    const plugin = await loadPlugin('readcomicsonline', class {
-        async get(url, requestHeaders) {
-            requests.push({url, headers: requestHeaders});
-            return typeof body === 'function' ? body(url, requests.length) : {statusCode, body, headers};
-        }
-    });
-    return {plugin, requests};
+function runtime(body, statusCode = 200, headers = {}) {
+    return mockPlugin('readcomicsonline', ({url}, count) =>
+        typeof body === 'function' ? body(url, count) : {statusCode, body, headers});
 }
 function listing(url, total = 61) {
     const u = new URL(url), page = Number(u.searchParams.get('page')), search = u.pathname === '/advanced-search';
@@ -31,16 +25,16 @@ function listing(url, total = 61) {
 }
 test('RCO popular/latest and filtered search preserve request parameters through the last page', async () => {
     const {plugin, requests} = await runtime(url => ({statusCode:200, headers:{}, body:listing(url)}));
-    assert.equal((await plugin.getPopular(1)).list.length,60);
-    assert.equal((await plugin.getPopular(1)).hasNextPage,true);
+    const popular = await plugin.getPopular(1);
+    assert.equal(popular.list.length,60);assert.equal(popular.hasNextPage,true);
     assert.equal((await plugin.getLatestUpdates(2)).hasNextPage,false);
-    assert.equal(new URL(requests[2].url).searchParams.get('sort'),'latest');
+    assert.equal(new URL(requests[1].url).searchParams.get('sort'),'latest');
     const filters = plugin.getFilterList();
     assert.deepEqual(Array.from(filters,f=>f.values.length),[3,4,83]);
     filters[0].state=2;filters[1].state=1;filters[2].state=filters[2].values.findIndex(v=>v.value==='33');
     const result = await plugin.search('漫画 & + 🌊',2,filters);
     assert.equal(result.list.length,1);assert.equal(result.hasNextPage,false);
-    assert.deepEqual(Object.fromEntries(new URL(requests[3].url).searchParams),{name:'漫画 & + 🌊',status_id:'2',type_id:'1',category:'33',page:'2'});
+    assert.deepEqual(Object.fromEntries(new URL(requests[2].url).searchParams),{name:'漫画 & + 🌊',status_id:'2',type_id:'1',category:'33',page:'2'});
     assert.equal(plugin.getFilterList()[0].state,0);
     await plugin.search('',1);
     assert.equal(new URL(requests.at(-1).url).pathname,'/comic-list');

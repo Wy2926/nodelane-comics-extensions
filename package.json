@@ -14,7 +14,7 @@
     "serve": "node scripts/serve.mjs",
     "new-source": "node scripts/new-source.mjs",
     "test:app": "node scripts/test-app.mjs",
-    "verify:live": "node verify-live.mjs",
+    "verify:live": "node scripts/verify-comix.mjs",
     "rollback": "node scripts/rollback.mjs"
   },
   "devDependencies": {

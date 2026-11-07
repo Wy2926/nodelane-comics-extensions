@@ -9,7 +9,7 @@
 ```sh
 npm run check
 npm run test:app -- /明确选择的App路径
-node verify-live.mjs
+npm run verify:live
 node scripts/verify-comix-images.mjs
 ```
 

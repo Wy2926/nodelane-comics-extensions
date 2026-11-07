@@ -10,7 +10,7 @@ function runtime(handler = () => { throw new Error('unexpected network'); }) {
     const context = vm.createContext({MProvider: class {}, Client: class {
         async get(url, headers) { requests.push({url, headers}); return handler(url, headers); }
     }});
-    const exposed = code.replace('return ComixExtension;', 'globalThis.helpers = {parseProtocolSource, encodeRequest, decodeResponse, TextEncoder, TextDecoder, atob, btoa}; return ComixExtension;');
+    const exposed = code.replace('return ComixExtension;', 'globalThis.helpers = {parseProtocolSource, TextEncoder, TextDecoder, atob, btoa}; return ComixExtension;');
     vm.runInContext(exposed + '\nglobalThis.plugin = new DefaultExtension();', context);
     return {...context, requests, context};
 }
