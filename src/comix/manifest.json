@@ -8,7 +8,7 @@
   "iconUrl": "https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png",
   "dateFormat": "",
   "dateFormatLocale": "",
-  "isNsfw": false,
+  "isNsfw": true,
   "isFullData": false,
   "hasCloudflare": true,
   "version": "0.2.2",
@@ -37,5 +37,24 @@
     "search",
     "details",
     "pages"
-  ]
+  ],
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp",
+      "kr",
+      "cn",
+      "western"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "original",
+      "fan",
+      "adaptation"
+    ],
+    "pricing": "free"
+  }
 }

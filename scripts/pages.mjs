@@ -1,12 +1,13 @@
 import {cp, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
-import {root, json, digest} from './catalog.mjs';
+import {root, json, digest, validateCatalogMetadata} from './catalog.mjs';
 
 export async function preparePages({directory = root, out = path.join(directory, '.pages')} = {}) {
   for (const channel of ['stable', 'testing']) {
     const sources = await json(path.join(directory, 'repo', channel, 'index.json'));
     if (!Array.isArray(sources) || !sources.length) throw Error('发布目录为空');
     for (const entry of sources) {
+      validateCatalogMetadata(entry.catalogMetadata);
       if (!/^\.\.\/packages\/[a-z][a-z0-9-]*\/\d+\.\d+\.\d+\.js$/.test(entry.sourceCodeUrl)) throw Error('插件路径无效');
       const file = path.resolve(directory, 'repo', channel, entry.sourceCodeUrl);
       const bytes = await readFile(file);

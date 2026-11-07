@@ -364,5 +364,105 @@
       }
     ],
     "expectError": "RIDI:access"
+  },
+  {
+    "slug": "readcomicsonline",
+    "name": "Native filters and website options",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {
+      "count": 3,
+      "types": [
+        "status_id",
+        "type_id",
+        "category"
+      ],
+      "options": [
+        3,
+        4,
+        83
+      ],
+      "preferences": 0
+    }
+  },
+  {
+    "slug": "readcomicsonline",
+    "name": "Native DOM search preserves missing covers and Unicode query",
+    "method": "search",
+    "args": [
+      "漫画 & + 🌊",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "readcomicsonline-search.html"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "name": "契约漫画 🌊",
+      "next": false,
+      "query": {
+        "name": "漫画 & + 🌊"
+      }
+    }
+  },
+  {
+    "slug": "readcomicsonline",
+    "name": "Special chapters and calendar dates survive QuickJS",
+    "method": "detail",
+    "args": [
+      "https://readcomicsonline.ru/comic/fixture"
+    ],
+    "responses": [
+      {
+        "bodyFile": "readcomicsonline-detail.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "name": "契约漫画 🌊",
+      "uploadDates": [
+        "2024-02-29",
+        null,
+        null
+      ]
+    }
+  },
+  {
+    "slug": "readcomicsonline",
+    "name": "Full reader image slots and referer cross native bridge",
+    "method": "pages",
+    "args": [
+      "https://readcomicsonline.ru/comic/fixture/1.1"
+    ],
+    "responses": [
+      {
+        "bodyFile": "readcomicsonline-pages.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "referer": "https://readcomicsonline.ru/"
+    }
+  },
+  {
+    "slug": "readcomicsonline",
+    "name": "Cloudflare challenge is not empty success",
+    "method": "popular",
+    "args": [
+      1
+    ],
+    "responses": [
+      {
+        "statusCode": 403,
+        "headers": {
+          "cf-mitigated": "challenge"
+        },
+        "body": "challenge"
+      }
+    ],
+    "expectError": "RCO:verification"
   }
 ]

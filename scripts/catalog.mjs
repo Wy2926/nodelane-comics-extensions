@@ -11,6 +11,21 @@ const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const slugPattern = /^[a-z][a-z0-9-]{1,39}$/;
 const capabilities = new Set(['popular', 'latest', 'search', 'details', 'pages']);
 const hostCapabilities = new Set(['image.tile-shuffle.v1']);
+const catalogValues = {
+  regions: ['jp', 'kr', 'cn', 'hk_tw', 'western', 'other'],
+  formats: ['page', 'vertical', 'strip'],
+  creations: ['original', 'fan', 'adaptation'],
+};
+export function validateCatalogMetadata(value) {
+  if (value === undefined) return;
+  check(value && typeof value === 'object' && !Array.isArray(value) && value.schema === 1, '来源卡片资料版本无效');
+  check(Object.keys(value).every(key => ['schema', 'pricing', ...Object.keys(catalogValues)].includes(key)), '来源卡片资料包含未知字段');
+  for (const [key, allowed] of Object.entries(catalogValues)) {
+    const list = value[key];
+    check(list === undefined || Array.isArray(list) && new Set(list).size === list.length && list.every(v => allowed.includes(v)), '来源卡片分类无效：' + key);
+  }
+  check(value.pricing === undefined || ['unknown', 'free', 'partial', 'paid'].includes(value.pricing), '来源收费模式无效');
+}
 export function compareVersion(a, b) {
   for (let i = 0; i < 3; i++) {
     const difference = Number(a.split('.')[i]) - Number(b.split('.')[i]);
@@ -43,6 +58,8 @@ export function validateManifest(m, slug, repo) {
     m.requestHosts.every(h => /^[a-z0-9]+([.-][a-z0-9]+)*\.[a-z]{2,}$/.test(h)), '必须明确声明精确请求主机');
   check(Array.isArray(m.capabilities) && m.capabilities.length > 0 && m.capabilities.every(c => capabilities.has(c)), '能力声明无效');
   check(Array.isArray(m.requires) && m.requires.every(c => hostCapabilities.has(c)), '未知主机能力');
+  check(m.isNsfw === undefined || typeof m.isNsfw === 'boolean', '成人标记必须为布尔值');
+  validateCatalogMetadata(m.catalogMetadata);
 }
 export async function build({directory = root, out = path.join(directory, '.build')} = {}) {
   const repo = await json(path.join(directory, 'repository.json'));
@@ -90,6 +107,18 @@ async function immutable(file, bytes) {
     }
   } finally { await unlink(temp); }
 }
+// Card facts may change independently of executable releases. Keep the first
+// archive snapshot, but reject every other same-version manifest/package change.
+async function archiveMetadata(file, value) {
+  try {
+    const original = await json(file);
+    const executable = ({catalogMetadata, isNsfw, ...rest}) => rest;
+    check(JSON.stringify(executable(original)) === JSON.stringify(executable(value)), '已发布的同版本元数据不同，必须升版');
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    await immutable(file, Buffer.from(JSON.stringify(value, null, 2) + '\n'));
+  }
+}
 async function atomicJson(file, value) {
   await mkdir(path.dirname(file), {recursive: true});
   const temp = file + '.' + randomUUID() + '.tmp';
@@ -122,8 +151,8 @@ async function publishLocked(built, {directory = root, channel = 'testing', only
   for (const {entry, bytes, sourceFiles, manifest} of built.artifacts) {
     await immutable(path.join(dest, entry.sourceCodeUrl), bytes);
     const sources = path.join(dest, 'sources', manifest.slug, manifest.version);
-    await immutable(path.join(sources, 'package.json'), Buffer.from(JSON.stringify(entry, null, 2) + '\n'));
-    await immutable(path.join(sources, 'manifest.json'), Buffer.from(JSON.stringify(manifest, null, 2) + '\n'));
+    await archiveMetadata(path.join(sources, 'package.json'), entry);
+    await archiveMetadata(path.join(sources, 'manifest.json'), manifest);
     for (const file of manifest.files) await immutable(path.join(sources, file), sourceFiles[file]);
     const rebuild = `import {readFile,writeFile} from 'node:fs/promises';\nconst m=JSON.parse(await readFile(new URL('manifest.json',import.meta.url),'utf8'));\nconst parts=await Promise.all(m.files.map(f=>readFile(new URL(f,import.meta.url),'utf8')));\nconst code=${JSON.stringify(bytes.toString().split('const DefaultExtension = (() => {\n')[0])}+'const DefaultExtension = (() => {\\n'+parts.join('\\n')+'\\nreturn '+m.entryClass+';\\n})();\\n';\nawait writeFile(new URL('plugin.js',import.meta.url),code);\n`;
     await immutable(path.join(sources, 'rebuild.mjs'), rebuild);

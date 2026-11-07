@@ -63,11 +63,28 @@ App 在 QuickJS 中实例化 `DefaultExtension extends MProvider`，通过 `this
 | `version`、`appMinVerReq` | 插件版本与最低 App 版本，格式为 `x.y.z` |
 | `itemType`、`sourceCodeLanguage` | 当前契约为 `0`（漫画）、`1`（JavaScript） |
 | `sourceCodeUrl` | 插件包地址，相对地址按目录索引解析；必须与索引同源 |
+| `catalogMetadata` | 可选的来源卡片资料，独立于包校验及执行参数，结构见下文 |
+| `isNsfw` | 可选布尔值；`true` 展示 18+ 并参与成人来源过滤，缺失不表示全年龄认证 |
 | `nodelane` | `schema: 1`，以及 `repositoryId`、`slug`、`sha256`、`size`、`requestHosts`、`capabilities`、`requires`、`license` |
 
 `capabilities` 声明插件功能：`popular/latest/search/details/pages`，应与实现一致；它不会自动实现方法或控制 UI。`requires` 声明额外主机能力，App 通过只读 `NodeLane.capabilities` 提供可用能力；缺少依赖时拒绝安装或更新。基础版本号不能替代能力检查。
 
 App 核对仓库与来源身份、下载地址、兼容性、包大小及 SHA-256；包上限 1 MiB，初始化成功才保存，失败保留已安装版本及关联数据。正式与本地目录均为 JSON 来源数组；正式目录通过 HTTPS 分发，插件摘要用于内容完整性检查。新增主机能力需使用有版本的能力名；站点解析规则和已有能力的参数变化由插件更新。
+
+### 来源卡片资料
+
+目录行的 `catalogMetadata` 使用 `schema: 1`，与 `nodelane` 并列：
+
+| 字段 | 类型与值 |
+| --- | --- |
+| `regions` | 数组：`jp` 日漫、`kr` 韩漫、`cn` 国漫、`hk_tw` 港台漫画、`western` 欧美漫画、`other` 其他地区 |
+| `formats` | 数组：`page` 页漫、`vertical` 条漫、`strip` 短篇条格 |
+| `creations` | 数组：`original` 原创、`fan` 同人、`adaptation` 改编 |
+| `pricing` | `unknown` 未标注、`free` 免费、`partial` 免费与付费内容并存、`paid` 付费 |
+
+三个分类维度可多选，描述网站覆盖范围，不承诺每部作品都具备这些属性；地区不表示服务器位置或阅读语言，语言继续读取 `lang`。收费模式由目录维护者声明，只控制卡片显示，不包含价格、订阅方案、广告、登录或用户购买状态，不控制阅读权限。成人标记独立使用顶层 `isNsfw`，不放入分类数组。
+
+App 将缺失资料、未知收费枚举和不支持的版本视为未标注，不推断免费；未知分类保留但不显示。官方维护目录只发布已核实的当前枚举。资料随来源备份，可在插件版本不变时刷新；更新不能覆盖安装代码、常用、阅读状态或被迟到旧目录覆盖，不要求新增主机能力。
 
 ## 请求、解析与错误
 

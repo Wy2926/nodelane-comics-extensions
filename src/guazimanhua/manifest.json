@@ -32,5 +32,24 @@
     "details",
     "pages"
   ],
-  "enabled": true
+  "enabled": true,
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "cn",
+      "jp",
+      "kr",
+      "hk_tw",
+      "western"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "original",
+      "adaptation"
+    ],
+    "pricing": "free"
+  }
 }

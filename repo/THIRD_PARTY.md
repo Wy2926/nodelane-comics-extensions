@@ -1,6 +1,6 @@
 # 插件来源与许可
 
-`src/` 与生成的 `repo/packages/` 以 **GPL-3.0-only** 分发，全文见 [LICENSE](LICENSE)。应用上游的 Apache-2.0 声明保持不变；不要将这些插件文件标记为 Apache-2.0。仓库文件服务同时提供 LICENSE、THIRD_PARTY 和每个版本的对应源码／重建脚本。本仓库从 node-comics-app 工作区的 extensions 目录迁出，原插件 ID 与协议来源保留；该目录当时尚未提交，因此不虚构迁出提交号。
+NodeLane 的 `src/` 与生成的 `repo/packages/` 衍生作品以 **GPL-3.0-only** 分发，全文见 [LICENSE](LICENSE)。移植代码保留原作者、许可及声明；其中 Apache-2.0 原始部分的许可原文随源码和包提供。应用自身的 Apache-2.0 基线与插件分开。仓库文件服务同时提供 LICENSE、THIRD_PARTY 和每个版本的对应源码／重建脚本。本仓库从 node-comics-app 工作区的 extensions 目录迁出，原插件 ID 与协议来源保留；该目录当时尚未提交，因此不虚构迁出提交号。
 
 ## 复用的协议实现
 
@@ -22,6 +22,20 @@
 
 ## 接口参考
 
+### Read Comics Online 移植
+
+来自 [Keiyoushi/extensions-source](https://github.com/keiyoushi/extensions-source/blob/b647c92fd14801fda23e866d5a7da7d5fdd7ec92/src/en/readcomicsonline/src/eu/kanade/tachiyomi/extension/en/readcomicsonline/ReadComicsOnline.kt)，固定提交 `b647c92fd14801fda23e866d5a7da7d5fdd7ec92`。上游项目版权为 2015 Javier Tomás 及贡献者，Apache-2.0。
+
+| 原文件 | SHA-256 | 使用方式 |
+| --- | --- | --- |
+| `src/en/readcomicsonline/.../ReadComicsOnline.kt` | `99e590957d8d157254b785a7349b9e8410b5f88cb428777c7dcb3295694e99bc` | 移植新版 HTML 选择器、列表／搜索地址、目录与图片解析到 `src/readcomicsonline/` |
+| `src/en/readcomicsonline/build.gradle.kts` | `73bb6d220d9602238a43489f6718eea3d0d57f714ce43fafad55646289a9ddaf` | 核对语言、域名和内容标记，不复制构建体系 |
+| `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 全文保存在 `parser.js` 注释中，随单文件插件及逐版本源码分发 |
+
+NodeLane 改用 `MProvider`／DOM 桥，依据站点表单补齐筛选，并增加请求限制、身份／页数核验、日期校验和错误分类；这些修改按 GPL-3.0-only 分发。未打包或依赖上游 APK、JVM、MMRCMS 运行库。Mangayomi 同一站点的 Dart 配置也已检索，其旧 MMRCMS 主题未用于本次实现。
+
+### 主机接口与协议资料
+
 - [Mangayomi JavaScript 插件指南](https://github.com/kodjodevf/mangayomi-extensions/blob/6004f1f8d1a56f882dadb734ce26f50c626a3850/CONTRIBUTING-JS.md)：`MProvider`、`Client`、分页、详情及图片返回格式。SHA-256 `fb9e59455c55d5a4cf1077a9e8251b9e19463eb62e1bd78eb39d40adfd12d146`。
 - 同一提交的 [Mangafire 插件](https://github.com/kodjodevf/mangayomi-extensions/blob/6004f1f8d1a56f882dadb734ce26f50c626a3850/javascript/manga/src/all/mangafire.js)，版本 `0.1.25`，Apache-2.0，SHA-256 `95c4ea61a17359f0be2cf5bb3c2d7f4de20713e9d0bfa4aea6e3b3f51df4c6e6`。仅参考契约与调用流程，没有复制其站点实现。
 - [Comix](https://comix.to/) 的公开页面与 `apicore-tnxabt-CdoUI3T4.js`，SHA-256 `de90ece63f639c5bf6cac594de67ad1634b6fc08e0a36994988dea9109e9a05c`。源站脚本未声明开源许可，只在设备端作为协议数据解析，不打包、执行或分发下载的脚本。
@@ -30,7 +44,7 @@
 
 ## 站点图标引用
 
-图标来自对应站点的 favicon，匿名 HTTPS 请求可取得 PNG 或 ICO。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，未发现开源许可声明，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
+图标来自站点 favicon 或上游仓库保存的站点图标。只将 URL 写入 `iconUrl`，图片文件不进入源码或发布包；权利归各站点及相应权利人，不纳入本仓库 GPL 代码授权。摘要标识已核验的响应，源站后续可能更新内容。
 
 | 站点 | 源站图标／当前资源版本 | 尺寸 | SHA-256 |
 | --- | --- | --- | --- |
@@ -38,6 +52,23 @@
 | [S2READ](https://s2read.com/) | [cropped-Thiet-ke-chua-co-ten-5-192x192.png](https://s2read.com/wp-content/uploads/2026/08/cropped-Thiet-ke-chua-co-ten-5-192x192.png) | 192 × 192 | `20820eb9042beea3295424906b07e63232eca63418c81be16b4b9bb9831646a1` |
 | [瓜子漫画](https://www.guazimanhua.com/) | [favicon.ico](https://www.guazimanhua.com/favicon.ico)（ICO） | 16 × 16、32 × 32 | `ddf19896c48eaaec5ff0d295ca97e0b24587f8fe2304b076a570d5ffc6a4bb3c` |
 | [RIDI](https://ridibooks.com/) | [favicon-192x192.01frp6098zlb2.png](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/media/favicon-192x192.01frp6098zlb2.png) | 192 × 192 | `932024489ab08a057c597da156a62c63ce652a122ab07cf22a676309c7f0d2fc` |
+| [Read Comics Online](https://readcomicsonline.ru/) | [Mangayomi 固定提交中的 icon.png](https://raw.githubusercontent.com/kodjodevf/mangayomi-extensions/6004f1f8d1a56f882dadb734ce26f50c626a3850/dart/manga/multisrc/mmrcms/src/en/readcomicsonline/icon.png) | 96 × 96 | `38f9bad0d71e2561eb3d386d523a77990a86aeb4c61c2bd0000102d49de34a11` |
+
+Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开的图标地址。
+
+## 来源卡片资料依据
+
+卡片描述网站覆盖范围，以下资料只作为分类与收费声明的依据，不改变阅读权限或插件现有内容过滤。
+
+| 来源 | 核对依据 |
+| --- | --- |
+| Comix | 站点公开免费目录及 Keiyoushi 固定提交的 `src/en/comix`：MIXED 内容标记，类型／题材含漫画、条漫、同人和改编 |
+| S2READ | [站点题材目录](https://s2read.com/manga-genre/smut/)：Manga／Manhua／Manhwa、Webtoon、Doujinshi、Adaptation、Adult；公开正文免费 |
+| 瓜子漫画 | [分类页面](https://www.guazimanhua.com/category.php) 的地区与漫画类型；[会员说明](https://www.guazimanhua.com/member.php) 为去广告服务，免费阅读能力不变 |
+| RIDI | [官方条漫目录](https://ridibooks.com/webtoon/romance) 的免费／付费、19+ 内容及漫画／条漫分类；已购权限由网站决定 |
+| Read Comics Online | [搜索分类](https://readcomicsonline.ru/advanced-search) 及公开目录／阅读器：欧美页漫、原创与改编、免费阅读；上游当前内容标记 SAFE，不作为全年龄认证 |
+
+本节 Keiyoushi 引用均固定到上述 `b647c92f…` 提交。成人标记依据网站整体目录，不代表插件会扩展现有的非成人筛选。
 
 ## 新实现的协议参考
 

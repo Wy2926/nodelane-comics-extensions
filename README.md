@@ -8,6 +8,7 @@
 | S2READ | Madara AJAX 列表／搜索、静态完整目录与公开图片正文 | [src/s2read](src/s2read/README.md) |
 | 瓜子漫画 | 热门／最新、搜索与五类筛选、完整目录及图片正文 | [src/guazimanhua](src/guazimanhua/README.md) |
 | RIDI | 条漫热门／最新、漫画与条漫搜索、完整目录及已获权限的图片正文 | [src/ridibooks](src/ridibooks/README.md) |
+| Read Comics Online | 热门／最新、搜索与三类筛选、完整目录、上传日期及图片正文 | [src/readcomicsonline](src/readcomicsonline/README.md) |
 
 ## 本地运行
 
@@ -26,16 +27,4 @@ npm run serve
 
 真实 iPhone 使用同一局域网的开发机地址：`HOST=0.0.0.0 npm run serve`，并在 App 启动时指定 `--dart-define=NODELANE_CATALOG_URL=http://开发机IP:8787/index.json`。
 
-## 开发导航
-
-| 入口 | 用途 |
-| --- | --- |
-| [开发约定](AGENTS.md) | 代码边界、提交前清理与文档维护规则 |
-| [维护与发布](docs/MAINTENANCE.md) | 新增插件、永久身份、构建、测试、更新与恢复 |
-| [插件契约](docs/CONTRACT.md) | 接口、数据格式、能力声明与主机边界 |
-| [来源与许可](THIRD_PARTY.md) | 迁移来源、固定提交、摘要和第三方声明 |
-| [仓库分配表](repository.json) | 永久仓库身份与来源 ID，删除站点仍保留分配 |
-| [构建与发布脚本](scripts/catalog.mjs) | 可复现构建、不可覆盖的版本产物与索引更新 |
-| [App 仓库](https://github.com/Wy2926/node-comics-app) | QuickJS、阅读器、下载与图片处理主机 |
-
-代码采用 [GPL-3.0-only](LICENSE)。站点内容不随仓库分发。开发测试依赖的许可与运行时插件分开记录。
+NodeLane 代码采用 [GPL-3.0-only](LICENSE)，移植部分保留原许可，见 [第三方声明](THIRD_PARTY.md)。站点内容不随仓库分发。

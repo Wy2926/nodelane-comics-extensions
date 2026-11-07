@@ -25,8 +25,28 @@ test('invalid ID, version, paths and host capabilities fail before publication',
   const repo = await json(path.join(root,'repository.json'));
   const m = await json(path.join(root,'src/comix/manifest.json'));
   assert.throws(() => validateRepository({...repo, sourceIds:{...repo.sourceIds, collision:m.id}}), /重复/);
-  for (const change of [{id:1}, {version:'main'}, {files:['../escape.js']}, {requestHosts:['*']}, {requires:['unknown']}])
+  for (const change of [{id:1}, {version:'main'}, {files:['../escape.js']}, {requestHosts:['*']}, {requires:['unknown']},
+    {isNsfw:'true'}, ...[{schema:2}, {schema:1,regions:['en']}, {schema:1,formats:['page','page']},
+      {schema:1,creations:'original'}, {schema:1,pricing:'subscription'}, {schema:1,tags:['manga']}].map(catalogMetadata=>({catalogMetadata}))])
     assert.throws(() => validateManifest({...m,...change}, 'comix', repo));
+});
+test('card facts update without replacing code, immutable archives or the other channel', async t => {
+  const directory = await fixture(t), before = await build({directory});
+  await publish(before,{directory}); await publish(before,{directory,channel:'stable'});
+  const first=before.artifacts[0], archive=path.join(directory,'repo/sources/comix',first.entry.version);
+  const snapshot=await readFile(path.join(archive,'manifest.json'),'utf8');
+  const catalogMetadata={schema:1,regions:['jp','kr'],formats:['page','vertical'],creations:['original','adaptation'],pricing:'partial'};
+  await writeFile(path.join(directory,'src/comix/manifest.json'),JSON.stringify({...first.manifest,catalogMetadata,isNsfw:!first.manifest.isNsfw}));
+  const updated=await build({directory});
+  assert.equal(updated.entries[0].nodelane.sha256,first.entry.nodelane.sha256);
+  await publish(updated,{directory}); await publish(updated,{directory});
+  assert.deepEqual((await json(path.join(directory,'repo/testing/index.json')))[0].catalogMetadata,catalogMetadata);
+  assert.deepEqual((await json(path.join(directory,'repo/stable/index.json')))[0],{...first.entry,sourceCodeUrl:'../'+first.entry.sourceCodeUrl});
+  assert.equal(await readFile(path.join(archive,'manifest.json'),'utf8'),snapshot);
+  await preparePages({directory});
+  await writeFile(path.join(directory,'src/comix/manifest.json'),JSON.stringify({...first.manifest,requestHosts:['comix.to','foreign.test']}));
+  await assert.rejects(publish(await build({directory}),{directory}),/同版本元数据/);
+  assert.deepEqual((await json(path.join(directory,'repo/testing/index.json')))[0].catalogMetadata,catalogMetadata);
 });
 test('publish is repeatable; overwritten or downgraded packages cannot change the active index', async t => {
   const directory = await fixture(t);

@@ -9,7 +9,7 @@
   "itemType": 0,
   "sourceCodeLanguage": 1,
   "appMinVerReq": "0.1.0",
-  "isNsfw": false,
+  "isNsfw": true,
   "hasCloudflare": true,
   "isFullData": false,
   "typeSource": "single",
@@ -31,5 +31,23 @@
     "details",
     "pages"
   ],
-  "enabled": true
+  "enabled": true,
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp",
+      "kr",
+      "cn"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "original",
+      "fan",
+      "adaptation"
+    ],
+    "pricing": "free"
+  }
 }
