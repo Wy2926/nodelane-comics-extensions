@@ -17,9 +17,9 @@ test('build is deterministic, relative, and independent from App or sibling repo
   const directory = await fixture(t);
   const a = await build({directory}), b = await build({directory});
   assert.deepEqual(a.entries, b.entries);
-  assert.equal(a.entries[0].id, 86001001);
-  assert.match(a.entries[0].sourceCodeUrl, /^packages\/comix\/[\d.]+\.js$/);
-  assert.equal(a.entries[0].nodelane.size, a.artifacts[0].bytes.length);
+  const entry = a.entries.find(e=>e.id===86001001);
+  assert.match(entry.sourceCodeUrl, /^packages\/comix\/[\d.]+\.js$/);
+  assert.equal(entry.nodelane.size, a.artifacts.find(a=>a.entry.id===entry.id).bytes.length);
 });
 test('invalid ID, version, paths and host capabilities fail before publication', async () => {
   const repo = await json(path.join(root,'repository.json'));
@@ -33,29 +33,29 @@ test('invalid ID, version, paths and host capabilities fail before publication',
 test('card facts update without replacing code, immutable archives or the other channel', async t => {
   const directory = await fixture(t), before = await build({directory});
   await publish(before,{directory}); await publish(before,{directory,channel:'stable'});
-  const first=before.artifacts[0], archive=path.join(directory,'repo/sources/comix',first.entry.version);
+  const first=before.artifacts.find(a=>a.entry.id===86001001), archive=path.join(directory,'repo/sources/comix',first.entry.version);
   const snapshot=await readFile(path.join(archive,'manifest.json'),'utf8');
   const catalogMetadata={schema:1,regions:['jp','kr'],formats:['page','vertical'],creations:['original','adaptation'],pricing:'partial'};
   await writeFile(path.join(directory,'src/comix/manifest.json'),JSON.stringify({...first.manifest,catalogMetadata,isNsfw:!first.manifest.isNsfw}));
   const updated=await build({directory});
-  assert.equal(updated.entries[0].nodelane.sha256,first.entry.nodelane.sha256);
+  assert.equal(updated.entries.find(e=>e.id===86001001).nodelane.sha256,first.entry.nodelane.sha256);
   await publish(updated,{directory}); await publish(updated,{directory});
-  assert.deepEqual((await json(path.join(directory,'repo/testing/index.json')))[0].catalogMetadata,catalogMetadata);
-  assert.deepEqual((await json(path.join(directory,'repo/stable/index.json')))[0],{...first.entry,sourceCodeUrl:'../'+first.entry.sourceCodeUrl});
+  assert.deepEqual((await json(path.join(directory,'repo/testing/index.json'))).find(e=>e.id===86001001).catalogMetadata,catalogMetadata);
+  assert.deepEqual((await json(path.join(directory,'repo/stable/index.json'))).find(e=>e.id===86001001),{...first.entry,sourceCodeUrl:'../'+first.entry.sourceCodeUrl});
   assert.equal(await readFile(path.join(archive,'manifest.json'),'utf8'),snapshot);
   await preparePages({directory});
   await writeFile(path.join(directory,'src/comix/manifest.json'),JSON.stringify({...first.manifest,requestHosts:['comix.to','foreign.test']}));
   await assert.rejects(publish(await build({directory}),{directory}),/同版本元数据/);
-  assert.deepEqual((await json(path.join(directory,'repo/testing/index.json')))[0].catalogMetadata,catalogMetadata);
+  assert.deepEqual((await json(path.join(directory,'repo/testing/index.json'))).find(e=>e.id===86001001).catalogMetadata,catalogMetadata);
 });
 test('publish is repeatable; overwritten or downgraded packages cannot change the active index', async t => {
   const directory = await fixture(t);
   const built = await build({directory});
   await publish(built,{directory}); await publish(built,{directory});
-  const archive=path.join(directory,'repo/sources/comix',built.entries[0].version);
+  const archive=path.join(directory,'repo/sources/comix',built.entries.find(e=>e.id===86001001).version);
   const rebuilt=spawnSync(process.execPath,[path.join(archive,'rebuild.mjs')],{encoding:'utf8'});
   assert.equal(rebuilt.status,0,rebuilt.stderr);
-  assert.equal(digest(await readFile(path.join(archive,'plugin.js'))),built.entries[0].nodelane.sha256);
+  assert.equal(digest(await readFile(path.join(archive,'plugin.js'))),built.entries.find(e=>e.id===86001001).nodelane.sha256);
   const index = path.join(directory,'repo/index.json'), before = await readFile(index,'utf8');
   assert.match((await json(index))[0].sourceCodeUrl,/^packages\//);
   const mfile = path.join(directory,'src/comix/manifest.json'), m = await json(mfile);
@@ -69,7 +69,7 @@ test('publish is repeatable; overwritten or downgraded packages cannot change th
 });
 test('stable is independent; recovery republishes archived source with a newer version', async t => {
   const directory = await fixture(t);
-  const built = await build({directory}); const version = built.entries[0].version;
+  const built = await build({directory}); const version = built.entries.find(e=>e.id===86001001).version;
   await publish(built,{directory}); await publish(built,{directory,channel:'stable'});
   const source = path.join(directory,'src/comix/extension.js'), before = await readFile(source,'utf8');
   const restored = await rollback('comix',version,'9.0.0','testing',directory);
@@ -85,7 +85,7 @@ test('stable is independent; recovery republishes archived source with a newer v
 test('shared provenance updates preserve old archives and accompany newly published versions', async t => {
   const directory = await fixture(t), built = await build({directory});
   await publish(built, {directory});
-  const entry = built.entries[0], archive = path.join(directory, 'repo/sources/comix', entry.version, 'THIRD_PARTY.md');
+  const entry = built.entries.find(e=>e.id===86001001), archive = path.join(directory, 'repo/sources/comix', entry.version, 'THIRD_PARTY.md');
   const original = await readFile(archive, 'utf8'), updated = original + '\nNew source provenance.\n';
   await writeFile(path.join(directory, 'THIRD_PARTY.md'), updated);
   await publish(built, {directory});
@@ -108,7 +108,7 @@ test('Pages preserves plain channel catalogs and archives; damaged packages cann
       assert.deepEqual(await json(path.join(out, channel, name)), await json(path.join(directory, 'repo', channel, name)));
     }
   }
-  const entry = built.entries[0];
+  const entry = built.entries.find(e=>e.id===86001001);
   assert.deepEqual(await readFile(path.join(out, entry.sourceCodeUrl)), await readFile(path.join(directory, 'repo', entry.sourceCodeUrl)));
   assert.deepEqual(await readFile(path.join(out, 'sources', entry.nodelane.slug, entry.version, 'LICENSE')), await readFile(path.join(directory, 'LICENSE')));
   const file = path.join(out, 'stable/index.json'), first = await readFile(file);

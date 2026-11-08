@@ -11,6 +11,7 @@
 | Read Comics Online | 热门／最新、搜索与三类筛选、完整目录、上传日期及图片正文 | [src/readcomicsonline](src/readcomicsonline/README.md) |
 | Raw Otaku | 热门／最新、搜索与四类筛选、完整目录及图片正文 | [src/rawotaku](src/rawotaku/README.md) |
 | Manga18fx | 热门／最新、搜索与题材／原文／排序筛选、完整目录、上传日期及图片正文 | [src/manga18fx](src/manga18fx/README.md) |
+| Asura Scans | 热门／最新、搜索与组合筛选、完整目录、日期及免费正文；保留付费章节标识 | [src/asurascans](src/asurascans/README.md) |
 
 ## 本地运行
 

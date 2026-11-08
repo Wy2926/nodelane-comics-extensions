@@ -15,7 +15,7 @@
 移植结果在本站 README 保留当前支持范围和验证边界，`THIRD_PARTY.md` 记录固定提交、文件摘要、原版权、许可及 NodeLane 修改。保留上游许可原文，不将 Apache 原始代码改标成只有 GPL；NodeLane 衍生修改按本仓库 GPL-3.0-only 分发。
 
 ```sh
-npm run new-source -- example 86001009 https://example.org Example
+npm run new-source -- example 86001010 https://example.org Example
 ```
 
 生成的插件默认 `enabled: false`，不进入目录。填好本站协议、范围说明与样本测试，通过后再启用。永久 ID 只分配一次；改名、换域名、换目录渠道或发布版本不改变 ID，移除站点也保留 `repository.json` 分配记录。`repo/registry.json` 保存已发布的分配，构建拒绝删除或重分配。仓库固定身份为 `net.nodelane.extensions`。

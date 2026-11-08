@@ -1,0 +1,52 @@
+{
+  "slug": "asurascans",
+  "id": 86001009,
+  "name": "Asura Scans",
+  "baseUrl": "https://asurascans.com",
+  "apiUrl": "https://api.asurascans.com/api",
+  "lang": "en",
+  "version": "0.1.1",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://asurascans.com/images/logo.webp",
+  "notes": "热门、最新、搜索与题材／类型／状态／作者／画师／章节数筛选；完整目录与免费正文。付费及提前阅读章节保留锁定标识。",
+  "license": "GPL-3.0-only",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "kr",
+      "cn"
+    ],
+    "formats": [
+      "vertical"
+    ],
+    "creations": [
+      "adaptation"
+    ],
+    "pricing": "partial"
+  },
+  "files": [
+    "filters.js",
+    "parser.js",
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "asurascans.com",
+    "api.asurascans.com"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

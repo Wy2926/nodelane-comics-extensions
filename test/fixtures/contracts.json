@@ -693,5 +693,108 @@
         "http://images.fixture.test:8080/new-layout/two.jpg?signature=fixture"
       ]
     }
+  },
+  {
+    "slug": "asurascans",
+    "name": "Native nested genre, sort and text filters",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {
+      "count": 7,
+      "types": [
+        "sort",
+        "status",
+        "type",
+        "genres",
+        "author",
+        "artist",
+        "min_chapters"
+      ],
+      "options": [
+        5,
+        6,
+        4,
+        35,
+        0,
+        0,
+        0
+      ],
+      "preferences": 0
+    }
+  },
+  {
+    "slug": "asurascans",
+    "name": "API optional has_more and native filter round trip",
+    "method": "search",
+    "args": [
+      "漫画 & + 🌊",
+      1
+    ],
+    "nativeFilters": true,
+    "responses": [
+      {
+        "bodyFile": "asurascans-list.json"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "name": "契约漫画 🌊",
+      "next": false,
+      "query": {
+        "search": "漫画 & + 🌊",
+        "sort": "latest",
+        "order": "desc"
+      }
+    }
+  },
+  {
+    "slug": "asurascans",
+    "name": "Astro complete catalog with paid, fractional and zero chapters",
+    "method": "detail",
+    "args": [
+      "https://asurascans.com/comics/fixture?language=en#info"
+    ],
+    "responses": [
+      {
+        "bodyFile": "asurascans-detail.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "name": "契约漫画 🌊",
+      "author": "作者 A",
+      "status": "ongoing",
+      "hasCover": true,
+      "query": {"language": "en"},
+      "uploadDates": [
+        "2024-02-29",
+        null,
+        "2024-03-01"
+      ]
+    }
+  },
+  {
+    "slug": "asurascans",
+    "name": "Rotating source suffix and duplicate image slots in native DOM",
+    "method": "pages",
+    "args": [
+      "https://asurascans.com/comics/fixture/chapter/0?mode=full#reader"
+    ],
+    "responses": [
+      {
+        "bodyFile": "asurascans-reader.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "referer": "https://asurascans.com/",
+      "query": {"mode": "full"},
+      "urls": [
+        "https://cdn.example.test/first.webp?sig=fixture",
+        "http://different.example.test:8080/changed/second.webp?sig=fixture",
+        "http://different.example.test:8080/changed/second.webp?sig=fixture"
+      ]
+    }
   }
 ]
