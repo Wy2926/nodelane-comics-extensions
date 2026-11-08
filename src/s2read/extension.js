@@ -14,12 +14,15 @@ function s2Image(value) {
     value = String(value || '').trim();
     // Older chapters still declare HTTP on this CDN; the same paths serve HTTPS.
     value = value.replace(/^http:\/\/cdn\.s2read\.com\//, 'https://cdn.s2read.com/');
-    if (!/^https:\/\/(?:(?:cdn(?:-?[1-9][0-9]*)?|vps[1-9][0-9]*)\.)?s2read\.com\/[\S]+$/.test(value)) throw s2Failure('image-url', '图片地址不在已适配的站点范围');
+    value = value.replace(/ /g, '%20');
+    if (value.startsWith('//')) value = 'https:' + value;
+    else if (value.startsWith('/')) value = S2_ORIGIN + value;
+    if (!/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(value)) throw s2Failure('image-url', '图片地址格式无效');
     return value;
 }
 function s2Cover(node) {
     // Some valid search cards have an empty thumbnail container.
-    // Covers are optional; chapter images still require a valid site URL.
+    // Covers are optional; chapter images still require a valid URL.
     const value = node.attr('data-src') || node.attr('src');
     return value ? s2Image(value) : '';
 }

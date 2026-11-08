@@ -22,12 +22,10 @@ test('malformed, truncated, duplicate and challenge fragments do not become empt
  }
  const {plugin}=await runtime('limited',429);await assert.rejects(plugin.getPopular(1),/频繁/);
 });
-test('a missing optional cover preserves a valid search result; foreign covers still fail',async()=>{
+test('a missing optional cover preserves a valid search result; chapter images remain required',async()=>{
  const body=card(1).replace(/<img[^>]+>/,'')+'<div class="no-posts"></div>';
  const {plugin}=await runtime(body);const result=await plugin.search('Soul',1);
  assert.equal(result.list.length,1);assert.equal(result.list[0].imageUrl,'');
- const foreign=await runtime(card(1).replace('cdn-1.s2read.com','foreign.test')+'<div class="no-posts"></div>');
- await assert.rejects(foreign.plugin.search('Soul',1));
  const broken=await runtime(pages.replace(/src="[^"]+"/g,'src=""'));
  await assert.rejects(broken.plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'));
 });
@@ -41,9 +39,8 @@ test('complete static catalog preserves zero and decimal chapters and validates 
 test('chapter navigation, page order and duplicate image slots are preserved',async()=>{
  const {plugin}=await runtime(pages);const result=await plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/');
  assert.equal(result.length,2);assert.equal(result[0].url,result[1].url);assert.equal(result[0].headers.Referer,'https://s2read.com/');
- for(const broken of [pages.replace('image-1','image-3'),pages.replace('cdn-1.s2read.com','foreign.test')]) {
-  const {plugin}=await runtime(broken);await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'));
- }
+ const broken=await runtime(pages.replace('image-1','image-3'));
+ await assert.rejects(broken.plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'));
 });
 test('real-site chapter slug variants and repeated links retain distinct page identities',async()=>{
  const {plugin}=await runtime(variants);
@@ -66,17 +63,17 @@ test('chapter deduplication never hides foreign works or unsafe path variants',a
  const wrongNavigation=await runtime(pages.replace('value="chapter-0"','value="chapter-0.5"'));
  await assert.rejects(wrongNavigation.plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:chapter-navigation/);
 });
-test('verified image hosts normalize the legacy HTTP CDN without accepting other origins',async()=>{
- for(const origin of ['https://s2read.com','https://cdn.s2read.com','http://cdn.s2read.com','https://cdn-1.s2read.com','https://cdn2.s2read.com','https://vps1.s2read.com']) {
+test('image URLs follow source CDN changes while retaining the legacy HTTPS upgrade',async()=>{
+ for(const [origin,expected] of [['http://cdn.s2read.com','https://cdn.s2read.com'],['http://images.fixture.test:8080','http://images.fixture.test:8080'],['//images.fixture.test','https://images.fixture.test']]) {
   const {plugin}=await runtime(pages.replaceAll('https://cdn-1.s2read.com/page.jpg',origin+'/page%20one.jpg?size=full&v=1'));
   const result=await plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/');
   assert.equal(result.length,2);
-  assert.deepEqual(Array.from(result,p=>p.url),Array(2).fill(origin.replace('http:','https:')+'/page%20one.jpg?size=full&v=1'));
+  assert.deepEqual(Array.from(result,p=>p.url),Array(2).fill(expected+'/page%20one.jpg?size=full&v=1'));
   assert.equal(result[0].headers.Referer,'https://s2read.com/');
   const cover=await runtime(card(1).replace('https://cdn-1.s2read.com',origin)+'<div class="no-posts"></div>');
-  assert.equal((await cover.plugin.search('x',1)).list[0].imageUrl,origin.replace('http:','https:')+'/cover-1.jpg');
+  assert.equal((await cover.plugin.search('x',1)).list[0].imageUrl,expected+'/cover-1.jpg');
  }
- for(const origin of ['https://cdn2.s2read.com.evil.test','https://vps1.s2read.com@evil.test','https://evil.test','https://unknown.s2read.com','http://cdn.s2read.com.evil.test','http://cdn.s2read.com@evil.test','http://cdn-1.s2read.com','https://cdn.s2read.com:444','//cdn.s2read.com','file://cdn.s2read.com']) {
+ for(const origin of ['file://images','javascript:images']) {
   const {plugin}=await runtime(pages.replaceAll('https://cdn-1.s2read.com',origin));
   await assert.rejects(plugin.getPageList('https://s2read.com/manga/fixture/chapter-0/'),/S2:image-url/);
  }

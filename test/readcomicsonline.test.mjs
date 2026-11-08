@@ -65,11 +65,13 @@ test('RCO catalog keeps specials and same-named chapters, deduplicates only norm
 test('RCO reader returns all slots with repeated URLs and validates ownership, count and order', async () => {
     const pages = await (await runtime(fixtures.pages)).plugin.getPageList(chapter);
     assert.equal(pages.length,3);assert.equal(pages[1].url,pages[2].url);assert.equal(pages[0].headers.Referer,origin+'/');
+    const moved=fixtures.pages.replaceAll('https://cdn.readcomicsonline.ru/uploads/manga/fixture/chapters/1.1','http://images.fixture.test:8080/new-layout');
+    assert.equal((await (await runtime(moved)).plugin.getPageList(chapter))[0].url,'http://images.fixture.test:8080/new-layout/01.jpg');
     for (const body of [fixtures.pages.replace('rel="canonical" href="'+chapter,'rel="canonical" href="'+book+'/2'),
         fixtures.pages.replace('selected value="/comic/fixture/1.1"','selected value="/comic/other/1.1"'),
         fixtures.pages.replace('<option value="/comic/fixture/1.1/3">Page 3</option>',''),
-        fixtures.pages.replace('/1.1/3','/1.1/4'),fixtures.pages.replace('cdn.readcomicsonline.ru','cdn.readcomicsonline.ru.evil.test'),
-        fixtures.pages.replace('/fixture/chapters','/other/chapters'),fixtures.pages.replace('id="reader-all"','id="broken"')])
+        fixtures.pages.replace('/1.1/3','/1.1/4'),fixtures.pages.replace('https://cdn.readcomicsonline.ru','file://images'),
+        fixtures.pages.replace('id="reader-all"','id="broken"')])
         await assert.rejects((await runtime(body)).plugin.getPageList(chapter),/RCO:/);
 });
 test('RCO verification, rate limits and HTTP errors remain visible, and retry uses a fresh response', async () => {

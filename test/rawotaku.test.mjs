@@ -41,7 +41,7 @@ test('RawOtaku missing covers and explicit empty results work; mismatched or inc
     assert.equal(result.list.length,2);assert.equal(result.list[1].imageUrl,'');
     const shared=fixtures['search.html'].replace('mgoimg.view47.com/thumb/220/upload','f002.backblazeb2.com/file/WCMS-Images/MangaOnline');
     assert.equal((await (await runtime([shared])).plugin.search('漫画 & + 🌊',1)).list.length,2);
-    await assert.rejects((await runtime([shared.replace('WCMS-Images','other-bucket')])).plugin.search('漫画 & + 🌊',1),/RO:image-url/);
+    assert.equal((await (await runtime([shared.replace('WCMS-Images','other-bucket')])).plugin.search('漫画 & + 🌊',1)).list.length,2);
     assert.equal((await (await runtime([fixtures['empty.html']])).plugin.search('none',1)).list.length,0);
     await assert.rejects((await runtime([fixtures['empty.html'].replace('データなし！','unavailable')])).plugin.search('none',1),/RO:listing/);
     const {plugin:emptyFilter}=await runtime(({url})=>ok(listing(url,{empty:true})));
@@ -76,8 +76,10 @@ test('RawOtaku reader refetches the current menu ID instead of trusting stale wr
     assert.equal(new URL(requests[1].url).searchParams.get('id'),'702');assert.equal(requests[1].headers.Referer,encodeURIComponent(chapter));
     assert.equal(requests[1].headers['X-Requested-With'],'XMLHttpRequest');
     assert.equal(JSON.stringify(await plugin.getPageList(chapter)),JSON.stringify(pages));assert.equal(requests.length,4);
+    const migrated=fixtures['pages.json'].replaceAll('https://sv1.freeimgmg.online/files/fixture','http://images.fixture.test:8080/new-layout');
+    assert.equal((await (await runtime([fixtures['reader.html'],migrated])).plugin.getPageList(chapter))[0].url,'http://images.fixture.test:8080/new-layout/one.jpg');
 });
-test('RawOtaku rejects foreign readers, missing menu entries, invalid JSON, missing slots and unknown image hosts',async()=>{
+test('RawOtaku rejects foreign readers, missing menu entries, invalid JSON, missing slots and invalid image URLs',async()=>{
     for(const body of [fixtures['reader.html'].replace('href="/read/fixture-raw/"','href="/read/other-raw/"'),
         fixtures['reader.html'].replace('href="/read/fixture/ja/chapter-0.5-raw/"','href="/read/fixture/ja/chapter-2-raw/"'),
         fixtures['reader.html'].replace('id="ja-chapters"','id="en-chapters"')]) {
@@ -85,7 +87,7 @@ test('RawOtaku rejects foreign readers, missing menu entries, invalid JSON, miss
     }
     const body=JSON.parse(fixtures['pages.json']);
     for(const response of ['invalid',JSON.stringify({...body,status:0}),
-        ...[s=>s.replace('mrt-bottom','missing'),s=>s.replace('alt="1"','alt="4"'),s=>s.replace('sv1.freeimgmg.online','sv1.freeimgmg.online.evil.test'),
+        ...[s=>s.replace('mrt-bottom','missing'),s=>s.replace('alt="1"','alt="4"'),s=>s.replaceAll('https://sv1.freeimgmg.online','file://images'),
             s=>s.replaceAll('data-src=','missing=')].map(change=>JSON.stringify({...body,html:change(body.html)}))])
         await assert.rejects((await runtime([fixtures['reader.html'],response])).plugin.getPageList(chapter),/RO:(pages|page-order|image-url)/);
 });

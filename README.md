@@ -10,6 +10,7 @@
 | RIDI | 条漫热门／最新、漫画与条漫搜索、完整目录及已获权限的图片正文 | [src/ridibooks](src/ridibooks/README.md) |
 | Read Comics Online | 热门／最新、搜索与三类筛选、完整目录、上传日期及图片正文 | [src/readcomicsonline](src/readcomicsonline/README.md) |
 | Raw Otaku | 热门／最新、搜索与四类筛选、完整目录及图片正文 | [src/rawotaku](src/rawotaku/README.md) |
+| Manga18fx | 热门／最新、搜索与题材／原文／排序筛选、完整目录、上传日期及图片正文 | [src/manga18fx](src/manga18fx/README.md) |
 
 ## 本地运行
 

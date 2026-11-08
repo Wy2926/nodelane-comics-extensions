@@ -84,7 +84,7 @@ class SourceExtension extends MProvider {
             rdRequire(rdId(id) && name && Array.isArray(book.categories) && book.categories.some(c => /comic|webtoon/.test(c.genre)), 'search', '搜索返回了非漫画作品');
             rdRequire(book.isAdultOnly === false, 'search', '搜索未应用年龄筛选');
             if (seen.has(id)) continue;
-            seen.add(id); list.push({name, link: rdBookUrl(id), imageUrl: rdCover(book.series?.thumbnail?.large)});
+            seen.add(id); list.push({name, link: rdBookUrl(id), imageUrl: rdImage(book.series?.thumbnail?.large)});
         }
         return {list, hasNextPage: page * 24 < total};
     }

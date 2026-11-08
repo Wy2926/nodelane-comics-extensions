@@ -138,6 +138,10 @@ test('image lists declare native restoration, require host support, and reject f
     let result = {id: 1, url: chapterUrl, pages: {baseUrl: 'https://cdn.example.test/', items: [{url: 'page.jpg', s: 0}]}};
     context.plugin.api = async () => result;
     assert.equal((await context.plugin.getPageList(chapterUrl))[0].url, 'https://cdn.example.test/page.jpg');
+    for (const [base,expected] of [['http://images.fixture.test:8080/','http://images.fixture.test:8080/'],['//images.fixture.test/','https://images.fixture.test/']]) {
+        result.pages.baseUrl=base;
+        assert.equal((await context.plugin.getPageList(chapterUrl))[0].url,expected+'page.jpg');
+    }
     result.pages.items[0].s = 1;
     await assert.rejects(context.plugin.getPageList(chapterUrl), /打乱图片/);
     context.context.NodeLane = {capabilities:['image.tile-shuffle.v1']};

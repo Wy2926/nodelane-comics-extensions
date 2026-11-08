@@ -38,8 +38,10 @@ function gzLocation(value, kind) {
 function gzImage(value, required = false) {
     value = typeof value === 'string' ? value.trim() : '';
     if (!value && !required) return '';
-    const hosts = required ? 'img\\.guazicdn\\.com' : '(?:img\\.guazicdn\\.com|api\\.guaziapp\\.com)';
-    gzRequire(new RegExp('^https://' + hosts + '/[^\\s#]+$').test(value), 'image-url', '图片地址不在已核实的 HTTPS 范围');
+    value = value.replace(/ /g, '%20');
+    if (value.startsWith('//')) value = 'https:' + value;
+    else if (value.startsWith('/')) value = GZ_ORIGIN + value;
+    gzRequire(/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(value), 'image-url', '图片地址格式无效');
     return value;
 }
 function gzCategoryIdentity(value, params, page) {

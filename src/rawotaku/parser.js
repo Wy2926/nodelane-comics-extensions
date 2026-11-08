@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Keiyoushi MangaReader/RawOtaku port; original Apache-2.0 terms appended below.
 const RO_ORIGIN = 'https://rawotaku.com';
-const RO_IMAGE_HOSTS = ['mgoimg.view47.com', 'sv1.freeimgmg.online'];
 function roError(code, message) { return Error('[RO:' + code + '] ' + message); }
 function roRequire(value, code, message) { if (!value) throw roError(code, message); }
 function roText(element) { return (element?.text || '').replace(/\s+/g, ' ').trim(); }
@@ -46,12 +45,13 @@ function roDocument(html, loc) {
     return doc;
 }
 function roImage(element) {
-    const src = ['data-lazy-src','data-src','data-url','src'].map(k => element.attr(k)).find(Boolean) || '';
+    let src = (['data-lazy-src','data-src','data-url','src'].map(k => element.attr(k)).find(Boolean) || '').trim();
     if (!src || src.startsWith('data:image/')) return '';
-    const match = /^https:\/\/([^/?#]+)\/([^\s#\\]+)$/.exec(src.trim());
-    roRequire(match && (RO_IMAGE_HOSTS.includes(match[1]) || match[1] === 'f002.backblazeb2.com' &&
-        match[2].startsWith('file/WCMS-Images/MangaOnline/')), 'image-url', '图片主机或协议不在已核实范围');
-    return src.trim();
+    src = src.replace(/ /g, '%20');
+    if (src.startsWith('//')) src = 'https:' + src;
+    else if (src.startsWith('/')) src = RO_ORIGIN + src;
+    roRequire(/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(src), 'image-url', '图片地址格式无效');
+    return src;
 }
 function roPagination(doc, path, params, page, count) {
     const pagers = doc.select('ul.pagination');
@@ -188,7 +188,7 @@ Copyright 2015 Javier Tomás and contributors (upstream project).
 Original portions: Apache-2.0. NodeLane adaptations: GPL-3.0-only.
 Changes: MProvider/DOM bridge, verified filter options, bounded requests,
 canonical URL identity, full catalog validation, current-menu chapter IDs,
-page order and host validation, and categorized errors. No JVM dependency.
+page order and image URL parsing, and categorized errors. No JVM dependency.
 
                                  Apache License
                            Version 2.0, January 2004

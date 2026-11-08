@@ -20,9 +20,13 @@ function rdLocation(url, chapter = false) {
     if (chapter) rdRequire(match[3], 'chapter-binding', '章节缺少作品归属，请刷新目录后重试');
     return {id: match[1], owner: match[3], url: rdBookUrl(match[1]) + (chapter ? '/view' : '')};
 }
-function rdCover(value) {
-    if (!value) return '';
-    rdRequire(typeof value === 'string' && /^https:\/\/img\.ridicdn\.net\/(?:cover|thumbnail)\/[1-9]\d*\/(?:small|large|xxlarge)(?:#[^\s]*)?$/.test(value), 'cover', '封面地址不受支持');
+function rdImage(value, required = false) {
+    if (!value && !required) return '';
+    rdRequire(typeof value === 'string', 'image-url', '图片地址缺失');
+    value = value.trim().replace(/ /g, '%20');
+    if (value.startsWith('//')) value = 'https:' + value;
+    else if (value.startsWith('/')) value = RD_ORIGIN + value;
+    rdRequire(/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(value), 'image-url', '图片地址格式无效');
     return value;
 }
 function rdNext(html, page) {
@@ -56,7 +60,7 @@ function rdApiList(data, endpoint, params) {
         rdRequire(rdId(id) && name && book.file?.comic === true, 'listing', '列表包含无效或非漫画作品');
         if (book.adults_only === true || seen.has(id)) continue;
         seen.add(id);
-        list.push({name, link: rdBookUrl(id), imageUrl: rdCover(book.serial?.cover?.large || book.cover?.large)});
+        list.push({name, link: rdBookUrl(id), imageUrl: rdImage(book.serial?.cover?.large || book.cover?.large)});
     }
     rdRequire(data.data.items.length <= 18, 'listing', '列表大小超出预期');
     const next = data.data.pagination.next_page;
@@ -91,7 +95,7 @@ function rdDetail(html, loc) {
     for (const group of info.authorGroups || []) for (const author of group.authors || []) {
         if (author.name) (author.role === 'ILLUSTRATOR' ? artists : authors).push(rdText(author.name));
     }
-    const detail = {name: rdText(info.title.title), link: loc.url, imageUrl: rdCover(header.thumbnail?.cover?.large),
+    const detail = {name: rdText(info.title.title), link: loc.url, imageUrl: rdImage(header.thumbnail?.cover?.large),
         description: rdText(intro.introductionHtml), author: [...new Set(authors)].join(', '), artist: [...new Set(artists)].join(', '),
         genre: [...new Set((info.category || []).map(c => c.childCategory?.name).filter(Boolean))],
         status: typeof series?.isCompleted === 'boolean' ? (series.isCompleted ? 1 : 0) : 5, chapters: []};
@@ -133,10 +137,9 @@ function rdPages(data, loc) {
     const pages = data.data.pages;
     rdRequire(Array.isArray(pages) && pages.length > 0 && pages.length <= 1500, 'page-count', '正文为空或页数超出上限');
     return pages.map(page => {
-        const match = typeof page?.src === 'string' && page.src.match(/^https:\/\/(webview-cache2?\.ridibooks\.com)\/([1-9]\d*)\/(webtoon|bom)\/[^\s?#]+(?:\?[^\s#]+)?$/);
-        rdRequire(match && match[2] === loc.id, 'page-owner', '图片地址或章节归属变化');
+        const url = rdImage(page?.src, true);
         rdRequire(Number.isInteger(page.width) && page.width > 0 && Number.isInteger(page.height) && page.height > 0,
             'page-shape', '图片尺寸无效');
-        return {url: page.src, headers: {Referer: loc.url}};
+        return {url, headers: {Referer: loc.url}};
     });
 }

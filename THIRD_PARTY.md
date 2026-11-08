@@ -46,7 +46,21 @@ NodeLane 改用 `MProvider`／DOM 桥，依据站点表单补齐筛选，并增�
 | `src/ja/rawotaku/build.gradle.kts` | `56a3aee0a09c3fde4857bd160028410cfc2d450e0be330728c9f1d918ae729c4` | 语言、域名及 MIXED 内容标记 |
 | `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 原文保存在 `src/rawotaku/parser.js`，随插件及对应源码分发 |
 
-NodeLane 改写为 `MProvider`／DOM 桥，校验页面身份、目录归属、图片顺序与主机；从当前章节菜单解析 ID，避开源站过期模板字段。修改按 GPL-3.0-only 分发，不依赖上游 APK 或 JVM。Mangayomi 同一固定提交的完整代码树与索引中未找到该站实现。
+NodeLane 改写为 `MProvider`／DOM 桥，校验页面身份、目录归属、图片顺序与地址格式；从当前章节菜单解析 ID，避开源站过期模板字段。修改按 GPL-3.0-only 分发，不依赖上游 APK 或 JVM。Mangayomi 同一固定提交的完整代码树与索引中未找到该站实现。
+
+### Manga18fx 移植
+
+来自 [Keiyoushi Manga18fx](https://github.com/keiyoushi/extensions-source/blob/48b291828458a32c97c3b167be453258c1bd5a86/src/all/manga18fx/src/eu/kanade/tachiyomi/extension/all/manga18fx/Manga18fx.kt) 和 [YiiMadara](https://github.com/keiyoushi/extensions-source/blob/48b291828458a32c97c3b167be453258c1bd5a86/lib-multisrc/yiimadara/src/eu/kanade/tachiyomi/multisrc/yiimadara/YiiMadara.kt)，固定提交 `48b291828458a32c97c3b167be453258c1bd5a86`。上游项目版权为 2015 Javier Tomás 及贡献者，Apache-2.0。
+
+| 原文件 | SHA-256 | 使用方式 |
+| --- | --- | --- |
+| `src/all/manga18fx/.../Manga18fx.kt` | `a482d3b51243d28af11c31e0e5185fa7368ca6b603b0a9d38f5d9ec075bc5017` | 站点地址、搜索撇号处理、语言范围 |
+| `lib-multisrc/yiimadara/.../YiiMadara.kt` | `ef470b8fd075ef9384dbbe2b74b6af412c0bb7ba6b804addb068c617fe569a3b` | 列表、详情、章节和图片协议 |
+| `lib-multisrc/yiimadara/.../Filters.kt` | `2bc3c8fd9ffae049ee2f18d3ea5a2ad67c3bdc07a7660d34e135b471a4de9d1b` | 筛选参数与优先级，选项以当前网站核实结果为准 |
+| `src/all/manga18fx/build.gradle.kts` | `bbd2b04de204902d75e3ede516291679892c207731fc0eefd8fa2044a3fff8da` | YiiMadara 主题与 NSFW 标记 |
+| `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 原文保存在 `src/manga18fx/parser.js`，随插件及对应源码分发 |
+
+NodeLane 改写为 `MProvider`／DOM 桥，补充页面身份、分页条件、目录归属、日期、图片顺序与地址解析，以及有界请求与分类错误。修改按 GPL-3.0-only 分发，不依赖 APK 或 JVM。Mangayomi 固定提交 `6004f1f8…` 的完整代码树与索引未发现同站实现。
 
 ### 主机接口与协议资料
 
@@ -68,6 +82,7 @@ NodeLane 改写为 `MProvider`／DOM 桥，校验页面身份、目录归属、�
 | [RIDI](https://ridibooks.com/) | [favicon-192x192.01frp6098zlb2.png](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/media/favicon-192x192.01frp6098zlb2.png) | 192 × 192 | `932024489ab08a057c597da156a62c63ce652a122ab07cf22a676309c7f0d2fc` |
 | [Read Comics Online](https://readcomicsonline.ru/) | [Mangayomi 固定提交中的 icon.png](https://raw.githubusercontent.com/kodjodevf/mangayomi-extensions/6004f1f8d1a56f882dadb734ce26f50c626a3850/dart/manga/multisrc/mmrcms/src/en/readcomicsonline/icon.png) | 96 × 96 | `38f9bad0d71e2561eb3d386d523a77990a86aeb4c61c2bd0000102d49de34a11` |
 | [Raw Otaku](https://rawotaku.com/) | [favicon.png](https://rawotaku.com/theme/mangareader/images/favicon.png) | 180 × 180 | `aafb004739c79e8aa70aa762d1fb19069bc25b4b260e6bc4364174581b141412` |
+| [Manga18fx](https://manga18fx.com/) | [favicon-160x160.jpg](https://manga18fx.com/images/favicon-160x160.jpg) | 160 × 160 | `b0a3018a46cdc4c0903059b4e9b740ef037f61b479af72c33c163a44fda79f3e` |
 
 Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开的图标地址。
 
@@ -83,8 +98,9 @@ Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开
 | RIDI | [官方条漫目录](https://ridibooks.com/webtoon/romance) 的免费／付费、19+ 内容及漫画／条漫分类；已购权限由网站决定 |
 | Read Comics Online | [搜索分类](https://readcomicsonline.ru/advanced-search) 及公开目录／阅读器：欧美页漫、原创与改编、免费阅读；上游当前内容标记 SAFE，不作为全年龄认证 |
 | Raw Otaku | [首页](https://rawotaku.com/) 的免费阅读声明、[分类](https://rawotaku.com/filter/) 的成人类别、公开日本页漫与改编作品目录；上游标记 MIXED |
+| Manga18fx | [首页](https://manga18fx.com/) 的免费阅读声明、Manhwa／Manhua 分类、Mature／Uncensored 题材及公开条漫正文；上述 `48b29182…` 提交明确标记 NSFW，原创／改编保持未知 |
 
-本节 Keiyoushi 引用均固定到上述 `b647c92f…` 提交。成人标记依据网站整体目录，不代表插件会扩展现有的非成人筛选。
+本节其他 Keiyoushi 引用固定到上述 `b647c92f…` 提交。成人标记依据网站整体目录，不代表插件会扩展现有的非成人筛选。
 
 ## 新实现的协议参考
 

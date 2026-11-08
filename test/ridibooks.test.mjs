@@ -92,8 +92,9 @@ test('RIDI plain image pages retain repeat slots and request only the bound chap
     assert.equal(pages.length,2);assert.equal(pages[0].url,pages[1].url);
     assert.equal(pages[0].headers.Referer,origin+'/books/101/view');
     assert.equal(requests[1].body.book_id,'101');assert.equal(new URL(requests[0].url).hash,'');
-    for (const body of [fixtures['pages.json'].replaceAll('/101/webtoon/','/102/webtoon/'),
-        fixtures['pages.json'].replaceAll('webview-cache.ridibooks.com','webview-cache.ridibooks.com.evil.test'),
+    const moved=fixtures['pages.json'].replaceAll('https://webview-cache.ridibooks.com/101/webtoon/page.webp','http://images.fixture.test:8080/new-layout/page.webp?signature=fixture');
+    assert.equal((await (await runtime([fixtures['reader.html'],moved])).plugin.getPageList(chapter))[0].url,'http://images.fixture.test:8080/new-layout/page.webp?signature=fixture');
+    for (const body of [fixtures['pages.json'].replaceAll('https://webview-cache.ridibooks.com','file://images'),
         fixtures['pages.json'].replace('"comic"','"epub"')])
         await assert.rejects((await runtime([fixtures['reader.html'],body])).plugin.getPageList(chapter),/RIDI:/);
     await assert.rejects((await runtime([fixtures['reader.html'].replace('"series_id": "100"','"series_id": "999"')])).plugin.getPageList(chapter),/RIDI:chapter-owner/);

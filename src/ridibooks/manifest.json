@@ -5,7 +5,7 @@
   "baseUrl": "https://ridibooks.com",
   "apiUrl": "",
   "lang": "ko",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "itemType": 0,
   "sourceCodeLanguage": 1,
   "appMinVerReq": "0.1.0",

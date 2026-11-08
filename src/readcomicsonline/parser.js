@@ -4,14 +4,13 @@ const RCO_ORIGIN = 'https://readcomicsonline.ru';
 function rcoError(code, message) { return new Error('[RCO:' + code + '] ' + message); }
 function rcoRequire(value, code, message) { if (!value) throw rcoError(code, message); }
 function rcoText(element) { return (element?.text || '').replace(/\s+/g, ' ').trim(); }
-function rcoUrl(value, image = false) {
+function rcoUrl(value) {
     rcoRequire(typeof value === 'string' && value.trim() && !/[\s\\\u0000-\u001f]/.test(value.trim()), 'url', '地址格式无效');
     let url = value.trim();
     if (url.startsWith('//')) url = 'https:' + url;
     else if (url.startsWith('/')) url = RCO_ORIGIN + url;
     const match = /^https:\/\/([^/?#]+)(\/[^?#]*)?(?:\?([^#]*))?(?:#)?$/.exec(url);
-    const hosts = image ? ['readcomicsonline.ru', 'cdn.readcomicsonline.ru'] : ['readcomicsonline.ru'];
-    rcoRequire(match && hosts.includes(match[1]), 'url', '地址协议或主机不受支持');
+    rcoRequire(match && match[1] === 'readcomicsonline.ru', 'url', '地址协议或主机不受支持');
     let parts;
     try { parts = (match[2] || '/').replace(/\/$/, '').split('/').slice(1).map(decodeURIComponent); }
     catch { throw rcoError('url', '地址编码无效'); }
@@ -37,14 +36,14 @@ function rcoIdentity(doc, expected) {
     const url = doc.selectFirst('link[rel="canonical"]').attr('href');
     rcoRequire(url && rcoUrl(url).url === expected, 'identity', '返回页面与请求身份不一致');
 }
-function rcoImage(element, owner, chapter) {
-    const src = element.attr('data-src') || element.attr('src');
+function rcoImage(element) {
+    let src = (element.attr('data-src') || element.attr('src')).trim();
     if (!src) return '';
-    const loc = rcoUrl(src, true), parts = loc.parts;
-    rcoRequire(parts[0] === 'uploads' && parts[1] === 'manga' && parts[2] === owner &&
-        (chapter === undefined ? parts[3] === 'cover' : parts[3] === 'chapters' && parts[4] === chapter),
-        'image-owner', '图片与作品或章节归属不一致');
-    return loc.url;
+    src = src.replace(/ /g, '%20');
+    if (src.startsWith('//')) src = 'https:' + src;
+    else if (src.startsWith('/')) src = RCO_ORIGIN + src;
+    rcoRequire(/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(src), 'image-url', '图片地址格式无效');
+    return src;
 }
 function rcoNext(doc, path, params, page) {
     const next = doc.select('nav a[rel="next"]');
@@ -67,7 +66,7 @@ function rcoListing(html, path, params, page) {
         const loc = rcoLocation(a.attr('href')), name = rcoText(search ? a.selectFirst('p') : a);
         rcoRequire(name && !seen.has(loc.url), 'listing', '列表缺少标题或含有重复作品');
         seen.add(loc.url);
-        return {name, link: loc.url, imageUrl: rcoImage(card.selectFirst('img'), loc.parts[1])};
+        return {name, link: loc.url, imageUrl: rcoImage(card.selectFirst('img'))};
     });
     const hasNextPage = rcoNext(main, path, params, page);
     const total = search ? rcoText(main.selectFirst('h2')).match(/^Search results\s*\(([\d,]+)\)$/i) : null;
@@ -110,7 +109,7 @@ function rcoDetail(html, loc) {
     const field = label => fields.find(e => rcoText(e.selectFirst('span')).toLowerCase().replace(/:$/, '') === label);
     const names = label => (field(label)?.select('a') || []).map(rcoText);
     const state = rcoText(main.selectFirst('div.flex.flex-wrap.gap-2 span.rounded-full')).toLowerCase();
-    return {name, link: loc.url, imageUrl: rcoImage(main.selectFirst('img.w-full.rounded-xl'), loc.parts[1]),
+    return {name, link: loc.url, imageUrl: rcoImage(main.selectFirst('img.w-full.rounded-xl')),
         description: (synopsis?.select('p') || []).map(rcoText).join('\n\n'), author: names('author').join(', '), artist: names('artist').join(', '),
         genre: names('genres'), status: ({ongoing: 0, complete: 1, completed: 1, hiatus: 2, dropped: 3})[state] ?? 5, chapters};
 }
@@ -127,7 +126,7 @@ function rcoPages(html, loc) {
     rcoRequire(images.length > 0 && images.length <= 2000 && slots.length === images.length, 'pages', '完整图片清单缺失或页数不匹配');
     slots.forEach((slot, i) => rcoRequire(rcoUrl(slot.attr('value')).url === loc.url + '/' + (i + 1), 'page-order', '图片导航顺序或章节归属无效'));
     return images.map(image => {
-        const url = rcoImage(image, loc.parts[1], loc.parts[2]);
+        const url = rcoImage(image);
         rcoRequire(url, 'pages', '图片地址缺失');
         return {url, headers: {Referer: RCO_ORIGIN + '/'}};
     });

@@ -581,5 +581,117 @@
         "https://sv1.freeimgmg.online/files/fixture/two.jpg"
       ]
     }
+  },
+  {
+    "slug": "manga18fx",
+    "name": "Native filters include keyword and sort constraints",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {
+      "count": 4,
+      "types": [
+        null,
+        "genre",
+        "category",
+        "sort"
+      ],
+      "options": [
+        0,
+        24,
+        2,
+        4
+      ],
+      "preferences": 0
+    }
+  },
+  {
+    "slug": "manga18fx",
+    "name": "Search preserves Unicode, apostrophe normalization and duplicate works",
+    "method": "search",
+    "args": [
+      "Doctor's & + 🌊",
+      1
+    ],
+    "nativeFilters": true,
+    "responses": [
+      {
+        "bodyFile": "manga18fx-search.html"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "name": "契约漫画 🌊",
+      "next": false,
+      "query": {
+        "q": "Doctor’s & + 🌊",
+        "page": "1"
+      }
+    }
+  },
+  {
+    "slug": "manga18fx",
+    "name": "Explicit empty search without canonical metadata",
+    "method": "search",
+    "args": [
+      "none",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "manga18fx-empty.html"
+      }
+    ],
+    "expect": {
+      "count": 0,
+      "next": false
+    }
+  },
+  {
+    "slug": "manga18fx",
+    "name": "Metadata and complete catalog retain dates and NEW remains unknown",
+    "method": "detail",
+    "args": [
+      "https://manga18fx.com/manga/fixture"
+    ],
+    "responses": [
+      {
+        "bodyFile": "manga18fx-detail.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "name": "契约漫画 🌊",
+      "author": "作者 A, 作者 B",
+      "status": "ongoing",
+      "hasCover": true,
+      "uploadDates": [
+        "2024-02-29",
+        null,
+        "2026-11-07"
+      ]
+    }
+  },
+  {
+    "slug": "manga18fx",
+    "name": "Native reader validates menus and retains repeated image slots",
+    "method": "pages",
+    "args": [
+      "https://manga18fx.com/manga/fixture/chapter-0.5"
+    ],
+    "responses": [
+      {
+        "bodyFile": "manga18fx-reader.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "referer": "https://manga18fx.com/",
+      "urls": [
+        "https://img02.manga18fx.com/fixture/one.jpg",
+        "http://images.fixture.test:8080/new-layout/two.jpg?signature=fixture",
+        "http://images.fixture.test:8080/new-layout/two.jpg?signature=fixture"
+      ]
+    }
   }
 ]

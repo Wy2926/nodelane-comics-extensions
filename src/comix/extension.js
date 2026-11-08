@@ -13,10 +13,11 @@ function locationOf(value) {
     return {hid: match[1], chapterId: match[3], path, url: origin + path};
 }
 function imageUrl(value) {
-    if (typeof value !== 'string' || !value || /[\s\\]/.test(value)) throw protocolChanged();
-    if (value.startsWith('/') && !value.startsWith('//')) return origin + value;
-    // Do not pass credentials, local files or data URLs into the reader.
-    if (!/^https:\/\/[a-z0-9.-]+(?::443)?\/[^#]*$/i.test(value)) throw protocolChanged();
+    if (typeof value !== 'string') throw protocolChanged();
+    value = value.trim().replace(/ /g, '%20');
+    if (value.startsWith('//')) value = 'https:' + value;
+    else if (value.startsWith('/')) value = origin + value;
+    if (!/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(value)) throw protocolChanged();
     return value;
 }
 function assetUrl(value, base = origin + '/browse') {

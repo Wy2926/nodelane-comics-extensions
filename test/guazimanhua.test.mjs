@@ -95,11 +95,13 @@ test('Guazi returns all 21 image slots beyond the SEO preview and preserves repe
     assert.equal(pages[0].headers.Referer, origin+'/');
     assert.equal(requests[0].url, origin+'/chapter.php?id=91'); // Binding never leaves the device.
     assert.ok(pages.every(p=>p.url.startsWith('https://img.guazicdn.com/')));
+    const migrated=await (await runtime(fixtures.pages.replaceAll('https://img.guazicdn.com','http://images.fixture.test:8080'))).plugin.getPageList(chapter);
+    assert.equal(migrated.length,21);assert.ok(migrated.every(p=>p.url.startsWith('http://images.fixture.test:8080/')));
 });
-test('Guazi fails whole chapters on wrong ownership, missing pages, bad order or foreign images', async () => {
+test('Guazi fails whole chapters on wrong ownership, missing pages, bad order or invalid image URLs', async () => {
     const changes = [body=>body.replace('comic.php?id=123','comic.php?id=999'),body=>body.replace('numberOfItems":21','numberOfItems":22'),
         body=>body.replace('data-page="21"','data-page="22"'),body=>body.replace('position":1','position":2'),
-        body=>body.replaceAll('img.guazicdn.com','img.guazicdn.com.evil.test'),body=>body.replaceAll('https://img.guazicdn.com','http://img.guazicdn.com')];
+        body=>body.replaceAll('https://img.guazicdn.com','file://images')];
     for (const change of changes) await assert.rejects((await runtime(change(fixtures.pages))).plugin.getPageList(chapter),/GZ:/);
     await assert.rejects((await runtime(fixtures.pages)).plugin.getPageList(chapter.replace('=123','=456')),/GZ:chapter-owner/);
 });
