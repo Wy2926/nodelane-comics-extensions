@@ -1,0 +1,51 @@
+{
+  "slug": "readcomicsonline",
+  "id": 86001006,
+  "name": "Read Comics Online",
+  "baseUrl": "https://readcomicsonline.ru",
+  "apiUrl": "",
+  "lang": "en",
+  "version": "0.1.1",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://raw.githubusercontent.com/kodjodevf/mangayomi-extensions/6004f1f8d1a56f882dadb734ce26f50c626a3850/dart/manga/multisrc/mmrcms/src/en/readcomicsonline/icon.png",
+  "notes": "热门、最新、搜索及状态／类型／出版社筛选；完整目录、上传日期和图片正文。Cloudflare 验证由设备网页处理。",
+  "license": "GPL-3.0-only",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "western"
+    ],
+    "formats": [
+      "page"
+    ],
+    "creations": [
+      "original",
+      "adaptation"
+    ],
+    "pricing": "free"
+  },
+  "files": [
+    "filters.js",
+    "parser.js",
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "readcomicsonline.ru"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

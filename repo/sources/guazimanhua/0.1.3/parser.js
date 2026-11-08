@@ -1,0 +1,169 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Adapted protocol checks from NodeLane Comics; provenance: ../../THIRD_PARTY.md.
+const GZ_ORIGIN = 'https://www.guazimanhua.com';
+const GZ_BINDING = 'nodelane-guazimanhua=';
+function gzError(code, message) { return new Error('瓜子漫画：' + message + ' [GZ:' + code + ']'); }
+function gzRequire(ok, code, message) { if (!ok) throw gzError(code, message); }
+function gzOne(items, code) {
+    gzRequire(items.length === 1, code, '页面缺少唯一的必要数据');
+    return items[0];
+}
+function gzText(value) { return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : ''; }
+function gzObject(value) {
+    gzRequire(value && typeof value === 'object' && !Array.isArray(value), 'schema', '结构化数据格式无效');
+    return value;
+}
+function gzAddress(value) {
+    const match = /^(?:https:\/\/www\.guazimanhua\.com)?\/(comic|chapter|category)\.php(?:\?([^#]*))?(?:#([^\s]*))?$/.exec(String(value || ''));
+    gzRequire(match, 'url', '来源地址格式不受支持');
+    const params = {};
+    for (const part of (match[2] || '').split('&').filter(Boolean)) {
+        const at = part.indexOf('=');
+        gzRequire(at > 0, 'url', '来源参数无效');
+        let key, value;
+        try { key = decodeURIComponent(part.slice(0, at).replace(/\+/g, ' ')); value = decodeURIComponent(part.slice(at + 1).replace(/\+/g, ' ')); }
+        catch (_) { throw gzError('url', '来源参数编码无效'); }
+        gzRequire(['id', 'cid', 'city', 'audience', 'is_end', 'sort', 'keyword', 'page'].includes(key) && !(key in params), 'url', '来源参数重复或未知');
+        params[key] = value;
+    }
+    return {kind: match[1], params, fragment: match[3] || ''};
+}
+function gzLocation(value, kind) {
+    const parsed = gzAddress(value), id = parsed.params.id;
+    gzRequire(parsed.kind === kind && /^[1-9]\d{0,9}$/.test(id || '') && Object.keys(parsed.params).length === 1, 'url', '作品或章节地址无效');
+    const owner = parsed.fragment ? new RegExp('^' + GZ_BINDING + '([1-9]\\d{0,9})$').exec(parsed.fragment) : null;
+    gzRequire(!parsed.fragment || kind === 'chapter' && owner, 'url', '章节归属标记无效');
+    return {id, owner: owner ? owner[1] : '', url: GZ_ORIGIN + '/' + kind + '.php?id=' + id};
+}
+function gzImage(value, required = false) {
+    value = typeof value === 'string' ? value.trim() : '';
+    if (!value && !required) return '';
+    value = value.replace(/ /g, '%20');
+    if (value.startsWith('//')) value = 'https:' + value;
+    else if (value.startsWith('/')) value = GZ_ORIGIN + value;
+    gzRequire(/^https?:\/\/[^/?#@\s\\]+(?:[/?#][^\s\\]*)?$/i.test(value), 'image-url', '图片地址格式无效');
+    return value;
+}
+function gzCategoryIdentity(value, params, page) {
+    const target = gzAddress(value);
+    // SEO URLs may retain sort/category while omitting search and other filters.
+    return target.kind === 'category' && !target.fragment && Object.entries(target.params).every(([key, value]) =>
+        key === 'page' ? value === String(page) : params[key] === value);
+}
+function gzDocument(html, expected) {
+    const root = new Document(html);
+    const canonicalUrl = gzOne(root.select('link[rel="canonical"]'), 'identity').attr('href'), canonical = gzAddress(canonicalUrl);
+    gzRequire(canonical.kind === expected.kind && !canonical.fragment &&
+        (expected.kind === 'category' ? gzCategoryIdentity(canonicalUrl, expected.params, expected.page) : canonical.params.id === expected.id && Object.keys(canonical.params).length === 1),
+        'identity', '返回页面与请求身份不符');
+    const data = [];
+    for (const script of root.select('script[type="application/ld+json"]')) {
+        let decoded;
+        try { decoded = JSON.parse(script.text); } catch (_) { throw gzError('schema', '结构化数据无法解析'); }
+        for (const row of Array.isArray(decoded) ? decoded : decoded['@graph'] || [decoded]) data.push(gzObject(row));
+    }
+    return {root, data};
+}
+function gzSchema(data, type) { return gzOne(data.filter(row => row['@type'] === type), 'schema-' + type); }
+function gzItems(list, max) {
+    gzRequire(list['@type'] === 'ItemList' && Number.isSafeInteger(list.numberOfItems) && list.numberOfItems >= 0 && list.numberOfItems <= max &&
+        Array.isArray(list.itemListElement), 'item-list', '列表数量或结构无效');
+    return list.itemListElement;
+}
+function gzPreview(entries, length) {
+    gzRequire(entries.length <= length && (length === 0 ? entries.length === 0 : entries.length > 0), 'preview', '结构化预览与完整数据不一致');
+}
+function gzListing(html, params, page) {
+    const {root, data} = gzDocument(html, {kind: 'category', params, page});
+    const collection = gzSchema(data, 'CollectionPage'), list = gzObject(collection.mainEntity), entries = gzItems(list, 36);
+    gzRequire(gzCategoryIdentity(collection.url, params, page), 'listing-identity', '列表身份不符');
+    const cards = root.select('article.card');
+    gzRequire(entries.length === list.numberOfItems && cards.length === entries.length, 'listing-count', '列表数量不完整');
+    const summary = /当前筛选\s*([\d,]+)\s*部作品\s*·\s*第\s*(\d+)\s*\/\s*(\d+)\s*页\s*·\s*每页\s*(\d+)\s*部/.exec(root.selectFirst('.filter-head p').text);
+    gzRequire(summary, 'pagination', '未识别列表分页');
+    const total = Number(summary[1].replace(/,/g, '')), pages = Number(summary[3]);
+    gzRequire(Number(summary[2]) === page && Number(summary[4]) === 36 && pages === Math.max(1, Math.ceil(total / 36)) && page <= pages &&
+        cards.length <= Math.min(36, Math.max(0, total - (page - 1) * 36)) &&
+        (cards.length > 0 || total === 0 && root.select('.empty').length === 1),
+        'pagination', '列表被截断或返回了其他页');
+    const pager = gzOne(root.select('nav.pager'), 'pagination'), seen = new Set();
+    let current = 0, next = false;
+    for (const anchor of pager.select('a')) {
+        const target = gzAddress(anchor.attr('href')), targetPage = Number(target.params.page || '1');
+        delete target.params.page;
+        gzRequire(target.kind === 'category' && !target.fragment && Number.isSafeInteger(targetPage) && targetPage >= 1 && targetPage <= pages &&
+            JSON.stringify(Object.entries(target.params).sort()) === JSON.stringify(Object.entries(params).sort()), 'pagination-query', '翻页条件与请求不一致');
+        if (anchor.attr('class').split(/\s+/).includes('on')) { gzRequire(targetPage === page, 'pagination', '当前页标识不符'); current++; }
+        if (targetPage === page + 1) next = true;
+    }
+    gzRequire(current === 1 && next === (page < pages), 'pagination', '下一页标识不完整');
+    return {list: cards.map((card, index) => {
+        const anchor = gzOne(card.select('h3 a'), 'listing-title'), loc = gzLocation(anchor.attr('href'), 'comic');
+        const name = gzText(anchor.text), row = gzObject(entries[index]);
+        gzRequire(name && !seen.has(loc.id) && row['@type'] === 'ListItem' && row.position === index + 1 &&
+            gzLocation(row.url, 'comic').id === loc.id && gzText(row.name) === name, 'listing-item', '作品身份、名称或顺序不一致');
+        seen.add(loc.id);
+        return {name, link: loc.url, imageUrl: gzImage(card.selectFirst('img.cover').attr('src'))};
+    }), hasNextPage: next};
+}
+function gzDetail(html, loc) {
+    const {root, data} = gzDocument(html, {kind: 'comic', id: loc.id}), story = gzSchema(data, 'ComicStory');
+    gzRequire(gzLocation(story.url, 'comic').id === loc.id, 'work-owner', '目录不属于当前作品');
+    const name = gzText(story.name);
+    gzRequire(name && gzText(root.selectFirst('#cinema-title').text) === name, 'work-title', '作品名称不一致');
+    const anchors = gzOne(root.select('.all-chapter-grid'), 'catalog').select('a');
+    const lists = data.filter(row => row['@type'] === 'ItemList');
+    let preview = [];
+    if (!anchors.length && !lists.length) {
+        // Empty works omit ItemList; require the site's explicit zero count.
+        const counts = root.select('.side-card p').map(e => /章节总数[：:]\s*(\d+)\s*话/.exec(e.text)).filter(Boolean);
+        gzRequire(counts.length === 1 && counts[0][1] === '0', 'catalog-count', '未确认空目录，章节数据可能缺失');
+    } else {
+        const list = gzOne(lists, 'schema-ItemList');
+        preview = gzItems(list, 10000);
+        gzRequire(anchors.length === list.numberOfItems, 'catalog-count', '章节目录不完整');
+    }
+    gzPreview(preview, anchors.length);
+    const seen = new Set();
+    // Keep source order (newest first), including extras and nonmonotonic IDs.
+    const chapters = anchors.map(anchor => {
+        const chapter = gzLocation(anchor.attr('href'), 'chapter'), title = gzText(anchor.text);
+        gzRequire(title && (!chapter.owner || chapter.owner === loc.id) && !seen.has(chapter.id), 'chapter-owner', '章节归属错误或重复');
+        seen.add(chapter.id);
+        // The catalog has no per-chapter upload date. Page dateModified is not one.
+        return {name: title, url: chapter.url + '#' + GZ_BINDING + loc.id, dateUpload: ''};
+    });
+    preview.forEach((value, index) => {
+        const row = gzObject(value), expected = chapters[chapters.length - index - 1];
+        gzRequire(row['@type'] === 'ListItem' && row.position === index + 1 && gzLocation(row.url, 'chapter').url === gzLocation(expected.url, 'chapter').url &&
+            gzText(row.name) === expected.name, 'catalog-order', '章节预览与完整目录顺序不一致');
+    });
+    const statuses = root.select('.cinema-info .meta .badge').map(e => gzText(e.text));
+    const authors = Array.isArray(story.author) ? story.author : story.author ? [story.author] : [];
+    return {name, link: loc.url, imageUrl: gzImage(story.image), description: gzText(story.description),
+        author: authors.map(a => gzText(typeof a === 'string' ? a : a.name)).filter(Boolean).join('、'),
+        genre: (Array.isArray(story.genre) ? story.genre : []).map(gzText).filter(Boolean),
+        status: statuses.includes('完结') ? 1 : statuses.includes('连载') ? 0 : 5, chapters};
+}
+function gzPages(html, loc) {
+    const {root, data} = gzDocument(html, {kind: 'chapter', id: loc.id}), article = gzSchema(data, 'Article');
+    const parent = gzObject(article.isPartOf), owner = gzLocation(parent.url, 'comic');
+    gzRequire(gzLocation(article.url, 'chapter').id === loc.id && parent['@type'] === 'ComicStory' && owner.id === loc.owner,
+        'chapter-owner', '章节不属于当前作品');
+    const list = gzSchema(data, 'ItemList'), preview = gzItems(list, 1500);
+    gzRequire(list.numberOfItems > 0, 'chapter-empty', '源站没有提供可读取的正文，请在网页核对访问权限');
+    const images = gzOne(root.select('section.reader-images'), 'reader').select('img');
+    gzRequire(images.length === list.numberOfItems, 'page-count', '正文图片缺页');
+    gzPreview(preview, images.length);
+    return images.map((image, index) => {
+        const url = gzImage(image.attr('src'), true);
+        gzRequire(image.attr('id') === 'page-' + (index + 1) && image.attr('data-page') === String(index + 1) &&
+            image.attr('class').split(/\s+/).includes('reading-image'), 'page-order', '正文图片页序不连续');
+        if (index < preview.length) {
+            const row = gzObject(preview[index]), item = gzObject(row.item);
+            gzRequire(row['@type'] === 'ListItem' && row.position === index + 1 && item['@type'] === 'ImageObject' && item.url === url,
+                'page-preview', '正文图片与预览不一致');
+        }
+        return {url, headers: {Referer: GZ_ORIGIN + '/'}};
+    });
+}

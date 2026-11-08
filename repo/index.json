@@ -12,7 +12,7 @@
     "isNsfw": true,
     "isFullData": false,
     "hasCloudflare": true,
-    "version": "0.2.2",
+    "version": "0.2.3",
     "itemType": 0,
     "sourceCodeLanguage": 1,
     "appMinVerReq": "0.1.0",
@@ -36,13 +36,13 @@
       ],
       "pricing": "free"
     },
-    "sourceCodeUrl": "packages/comix/0.2.2.js",
+    "sourceCodeUrl": "packages/comix/0.2.3.js",
     "nodelane": {
       "schema": 1,
       "repositoryId": "net.nodelane.extensions",
       "slug": "comix",
-      "sha256": "000a9ec11a0b6bdb3612638415e05c81ebddbbdf32008fd00a5e91fd5c0dd20c",
-      "size": 24198,
+      "sha256": "d15b8300d53d87e1da685298fe4d10fb4c1f80c62300acf6ec0e34caef57980e",
+      "size": 24178,
       "requestHosts": [
         "comix.to"
       ],
@@ -65,7 +65,7 @@
     "baseUrl": "https://www.guazimanhua.com",
     "apiUrl": "",
     "lang": "zh",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "itemType": 0,
     "sourceCodeLanguage": 1,
     "appMinVerReq": "0.1.0",
@@ -94,15 +94,115 @@
       ],
       "pricing": "free"
     },
-    "sourceCodeUrl": "packages/guazimanhua/0.1.2.js",
+    "sourceCodeUrl": "packages/guazimanhua/0.1.3.js",
     "nodelane": {
       "schema": 1,
       "repositoryId": "net.nodelane.extensions",
       "slug": "guazimanhua",
-      "sha256": "b781db063dae65252ce2c542ec0eaa56c9f59375a0071eb9e53aece9bfe61d84",
-      "size": 16181,
+      "sha256": "8b7c3a72029578490fedbaa1cc8760c2a40329cac54730d6504039a59d144578",
+      "size": 16220,
       "requestHosts": [
         "www.guazimanhua.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001008,
+    "name": "Manga18fx",
+    "baseUrl": "https://manga18fx.com",
+    "apiUrl": "",
+    "lang": "all",
+    "version": "0.1.2",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": true,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://manga18fx.com/images/favicon-160x160.jpg",
+    "notes": "热门、最新、关键词搜索及题材／原文／排序筛选；完整章节、可用上传日期和图片正文。含英语译本与原文，NEW 标记不代替上传日期。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "kr",
+        "cn"
+      ],
+      "formats": [
+        "vertical"
+      ],
+      "creations": [],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "packages/manga18fx/0.1.2.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "manga18fx",
+      "sha256": "c545b52d128f4553026e206ddfe317e0b5e18934e170365c0c48cbb6aab09715",
+      "size": 28227,
+      "requestHosts": [
+        "manga18fx.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001007,
+    "name": "Raw Otaku",
+    "baseUrl": "https://rawotaku.com",
+    "apiUrl": "",
+    "lang": "ja",
+    "version": "0.1.2",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": true,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://rawotaku.com/theme/mangareader/images/favicon.png",
+    "notes": "热门、最新、关键词搜索和类型／状态／语言／排序筛选；完整目录及图片正文。关键词搜索不应用筛选；源站未提供章节上传日期。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "creations": [
+        "original",
+        "adaptation"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "packages/rawotaku/0.1.2.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "rawotaku",
+      "sha256": "ff4cf28da1557a1ea02f69f713eef5a3b3b822fb18feb35a4814b7747e875bde",
+      "size": 27900,
+      "requestHosts": [
+        "rawotaku.com"
       ],
       "requires": [],
       "capabilities": [
@@ -121,7 +221,7 @@
     "baseUrl": "https://readcomicsonline.ru",
     "apiUrl": "",
     "lang": "en",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "itemType": 0,
     "sourceCodeLanguage": 1,
     "appMinVerReq": "0.1.0",
@@ -145,13 +245,13 @@
       ],
       "pricing": "free"
     },
-    "sourceCodeUrl": "packages/readcomicsonline/0.1.0.js",
+    "sourceCodeUrl": "packages/readcomicsonline/0.1.1.js",
     "nodelane": {
       "schema": 1,
       "repositoryId": "net.nodelane.extensions",
       "slug": "readcomicsonline",
-      "sha256": "3cac9684a4a30ed4a5e2b8025172f6e93880fec94c4b4cdcaf7e844015b3b500",
-      "size": 26791,
+      "sha256": "8cfa247edeb4bcd218d7a2fe11a618cf02dd0d43644f15cb0d0f3b101f7a5eda",
+      "size": 26560,
       "requestHosts": [
         "readcomicsonline.ru"
       ],
@@ -172,7 +272,7 @@
     "baseUrl": "https://ridibooks.com",
     "apiUrl": "",
     "lang": "ko",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "itemType": 0,
     "sourceCodeLanguage": 1,
     "appMinVerReq": "0.1.0",
@@ -198,13 +298,13 @@
       ],
       "pricing": "partial"
     },
-    "sourceCodeUrl": "packages/ridibooks/0.1.0.js",
+    "sourceCodeUrl": "packages/ridibooks/0.1.1.js",
     "nodelane": {
       "schema": 1,
       "repositoryId": "net.nodelane.extensions",
       "slug": "ridibooks",
-      "sha256": "965a27612d8b0425efac8cc4965da9dbc5d3aaf6b42c956fbd80c1f54e51381e",
-      "size": 18287,
+      "sha256": "76c37779ac5c6077257a6895fbcbc6c14c089c1f59675d000e8b7c562e32aa67",
+      "size": 18250,
       "requestHosts": [
         "ridibooks.com",
         "api.ridibooks.com"
@@ -226,7 +326,7 @@
     "baseUrl": "https://s2read.com",
     "apiUrl": "",
     "lang": "en",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "itemType": 0,
     "sourceCodeLanguage": 1,
     "appMinVerReq": "0.1.0",
@@ -254,13 +354,13 @@
       ],
       "pricing": "free"
     },
-    "sourceCodeUrl": "packages/s2read/0.1.6.js",
+    "sourceCodeUrl": "packages/s2read/0.1.7.js",
     "nodelane": {
       "schema": 1,
       "repositoryId": "net.nodelane.extensions",
       "slug": "s2read",
-      "sha256": "bfe3d4ead9620d51ff8e0add865c3e35f57f7718533c36a608e20f0b558d2063",
-      "size": 9870,
+      "sha256": "1793b1d9a52ffa2df2c69483689c8161ca9c014023c271291847e474916a606f",
+      "size": 9975,
       "requestHosts": [
         "s2read.com"
       ],

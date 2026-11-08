@@ -1,0 +1,60 @@
+{
+  "id": 86001001,
+  "name": "Comix",
+  "baseUrl": "https://comix.to",
+  "apiUrl": "https://comix.to/api/v1",
+  "lang": "en",
+  "typeSource": "single",
+  "iconUrl": "https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": true,
+  "isFullData": false,
+  "hasCloudflare": true,
+  "version": "0.2.3",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "notes": "需要网站验证时在来源网页完成后重试。支持普通图片及已知网格还原协议。",
+  "slug": "comix",
+  "license": "GPL-3.0-only",
+  "files": [
+    "codec.js",
+    "protocol.js",
+    "protocol-source.js",
+    "extension.js"
+  ],
+  "entryClass": "ComixExtension",
+  "requestHosts": [
+    "comix.to"
+  ],
+  "requires": [
+    "image.tile-shuffle.v1"
+  ],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp",
+      "kr",
+      "cn",
+      "western"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "original",
+      "fan",
+      "adaptation"
+    ],
+    "pricing": "free"
+  }
+}

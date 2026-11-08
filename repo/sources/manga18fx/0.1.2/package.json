@@ -1,0 +1,49 @@
+{
+  "id": 86001008,
+  "name": "Manga18fx",
+  "baseUrl": "https://manga18fx.com",
+  "apiUrl": "",
+  "lang": "all",
+  "version": "0.1.2",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": true,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://manga18fx.com/images/favicon-160x160.jpg",
+  "notes": "热门、最新、关键词搜索及题材／原文／排序筛选；完整章节、可用上传日期和图片正文。含英语译本与原文，NEW 标记不代替上传日期。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "kr",
+      "cn"
+    ],
+    "formats": [
+      "vertical"
+    ],
+    "creations": [],
+    "pricing": "free"
+  },
+  "sourceCodeUrl": "packages/manga18fx/0.1.2.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "manga18fx",
+    "sha256": "c545b52d128f4553026e206ddfe317e0b5e18934e170365c0c48cbb6aab09715",
+    "size": 28227,
+    "requestHosts": [
+      "manga18fx.com"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}
