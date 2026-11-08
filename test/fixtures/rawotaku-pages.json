@@ -1,0 +1,4 @@
+{
+  "status": 1,
+  "html": "<div class=\"container-reader-chapter\" id=\"vertical-content\"><div><center><img src=\"https://ads.example.test/banner.jpg\"></center></div><div class=\"iv-card\"><img alt=\"0\" src=\"data:image/gif;base64,placeholder\" data-src=\"https://sv1.freeimgmg.online/files/fixture/one.jpg\"></div><div class=\"iv-card\"><img alt=\"1\" data-lazy-src=\"https://sv1.freeimgmg.online/files/fixture/two.jpg\"></div><div class=\"iv-card\"><img alt=\"2\" data-url=\"https://sv1.freeimgmg.online/files/fixture/two.jpg\"></div></div><div class=\"mr-tools mrt-bottom\">Prev Chapter / Next Chapter</div>"
+}

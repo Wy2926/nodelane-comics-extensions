@@ -464,5 +464,122 @@
       }
     ],
     "expectError": "RCO:verification"
+  },
+  {
+    "slug": "rawotaku",
+    "name": "Native filters include keyword behavior notice",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {
+      "count": 5,
+      "types": [
+        null,
+        "type",
+        "status",
+        "language",
+        "sort"
+      ],
+      "options": [
+        0,
+        9,
+        3,
+        3,
+        5
+      ],
+      "preferences": 0
+    }
+  },
+  {
+    "slug": "rawotaku",
+    "name": "Unicode search, duplicate works and optional covers",
+    "method": "search",
+    "args": [
+      "漫画 & + 🌊",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "rawotaku-search.html"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "name": "契約漫画 🌊",
+      "next": false,
+      "query": {
+        "q": "漫画 & + 🌊",
+        "p": "1"
+      }
+    },
+    "nativeFilters": true
+  },
+  {
+    "slug": "rawotaku",
+    "name": "Explicit empty search without list wrapper",
+    "method": "search",
+    "args": [
+      "none",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "rawotaku-empty.html"
+      }
+    ],
+    "expect": {
+      "count": 0,
+      "next": false
+    }
+  },
+  {
+    "slug": "rawotaku",
+    "name": "Complete catalog retains same-name parts and unknown dates",
+    "method": "detail",
+    "args": [
+      "https://rawotaku.com/read/fixture-raw/"
+    ],
+    "responses": [
+      {
+        "bodyFile": "rawotaku-detail.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "name": "契約漫画 🌊",
+      "author": "作者 A, 作者 B",
+      "status": "ongoing",
+      "hasCover": true,
+      "uploadDates": [
+        null,
+        null,
+        null
+      ]
+    }
+  },
+  {
+    "slug": "rawotaku",
+    "name": "Menu chapter identity and repeated image slots cross native bridge",
+    "method": "pages",
+    "args": [
+      "https://rawotaku.com/read/fixture/ja/chapter-0.5-raw/"
+    ],
+    "responses": [
+      {
+        "bodyFile": "rawotaku-reader.html"
+      },
+      {
+        "bodyFile": "rawotaku-pages.json"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "referer": "https://sv1.freeimgmg.online/files/fixture/one.jpg",
+      "urls": [
+        "https://sv1.freeimgmg.online/files/fixture/one.jpg",
+        "https://sv1.freeimgmg.online/files/fixture/two.jpg",
+        "https://sv1.freeimgmg.online/files/fixture/two.jpg"
+      ]
+    }
   }
 ]

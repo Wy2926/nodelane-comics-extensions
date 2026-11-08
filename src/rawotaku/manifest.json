@@ -1,0 +1,51 @@
+{
+  "slug": "rawotaku",
+  "id": 86001007,
+  "name": "Raw Otaku",
+  "baseUrl": "https://rawotaku.com",
+  "apiUrl": "",
+  "lang": "ja",
+  "version": "0.1.1",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": true,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://rawotaku.com/theme/mangareader/images/favicon.png",
+  "notes": "热门、最新、关键词搜索和类型／状态／语言／排序筛选；完整目录及图片正文。关键词搜索不应用筛选；源站未提供章节上传日期。",
+  "license": "GPL-3.0-only",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp"
+    ],
+    "formats": [
+      "page"
+    ],
+    "creations": [
+      "original",
+      "adaptation"
+    ],
+    "pricing": "free"
+  },
+  "files": [
+    "filters.js",
+    "parser.js",
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "rawotaku.com"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}
