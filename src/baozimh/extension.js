@@ -42,7 +42,7 @@ class SourceExtension extends MProvider {
   }
   async getPageList(url) {
     const loc=bzLocation(url,true),pages=[];let next=loc.url,total,part=1;
-    do {const result=bzReader(await this.read(next),loc,part,total);pages.push(...result.pages);next=result.next;total=result.total;part++;} while(next);
+    do {const result=bzReader(await this.read(bzReaderUrl(next)),loc,part,total);pages.push(...result.pages);next=result.next;total=result.total;part++;} while(next);
     return this.routeImages(pages);
   }
 }

@@ -90,7 +90,7 @@ NodeLane 改写为 MProvider／DOM 桥，使用稳定作品地址、完整目录
 | `build.gradle.kts` | `0ab95a8c06f5b36d77ab9b8a44ed490d172dc33c11771882081912da3fe5ce4d` | 语言、镜像和 SAFE 标记 |
 | `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 全文保存在 src/baozimh/parser.js，随插件包分发 |
 
-NodeLane 改写为 MProvider／DOM 桥，按当前主站 AMP API 的 `next` 分页，使用实际跳转到 `cn.twbzmg.com` 的公开阅读器，串行合并一话全部分页，保留页位及目录日期语义。原 appcn／appgb 入口在本机被 CF 封禁；未迁入其图片裁切、替换图片和 Gatekeeper 自动解题拦截器，验证交由 App 网页会话。NodeLane 修改按 GPL-3.0-only 分发。
+NodeLane 改写为 MProvider／DOM 桥，按当前主站 AMP API 的 `next` 分页，按章节身份使用 `tw.twbzmg.com` 的公开阅读器，串行合并一话全部分页，保留已保存的章节 URL、页位及目录日期语义。未迁入原 App 镜像的图片裁切、替换图片和 Gatekeeper 自动解题拦截器，验证交由 App 网页会话。NodeLane 修改按 GPL-3.0-only 分发。
 
 Mangayomi 固定提交 `6004f1f8d1a56f882dadb734ce26f50c626a3850` 的完整代码树未检出包子漫画同站实现。网站 HTML、脚本及漫画图片不随仓库分发。
 

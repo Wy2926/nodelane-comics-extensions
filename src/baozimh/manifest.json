@@ -5,7 +5,7 @@
   "baseUrl": "https://cn.baozimh.com",
   "apiUrl": "",
   "lang": "zh",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "itemType": 0,
   "sourceCodeLanguage": 1,
   "appMinVerReq": "0.1.0",
@@ -42,7 +42,7 @@
   "entryClass": "SourceExtension",
   "requestHosts": [
     "cn.baozimh.com",
-    "cn.twbzmg.com",
+    "tw.twbzmg.com",
     "s1-rsa1-usla.bzcdn.net",
     "s1-ogsm1-uspho.bzcdn.net",
     "s1-dpa1-cnhk.bzcdn.net",

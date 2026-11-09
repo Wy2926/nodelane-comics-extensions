@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Adapted from Keiyoushi Baozi (Apache-2.0); attribution and original license below.
 const BZ_ORIGIN = 'https://cn.baozimh.com';
+const BZ_READER_ORIGIN = 'https://tw.twbzmg.com';
 // Public reader /s/page_runtime_v5.js: regional nodes and its small availability probe.
 const BZ_IMAGE_ROUTES = ['-rsa1-usla.bzcdn.net','-ogsm1-uspho.bzcdn.net','-dpa1-cnhk.bzcdn.net','-mha1-nlams.bzcdn.net','.baozimh.com'];
 const BZ_IMAGE_PROBE = '/scomic/wangyenujiajiangefei-boyidongman/0/12-fmo5/10.jpg';
@@ -34,6 +35,10 @@ function bzLocation(value,chapter=false) {
   return {url,id:p.comic_id,section:p.section_slot,slot:p.chapter_slot,part:1};
 }
 function bzSameChapter(a,b) {return a.id===b.id && a.section===b.section && a.slot===b.slot;}
+function bzReaderUrl(value) {
+  const loc=bzLocation(value,true);
+  return BZ_READER_ORIGIN+'/comic/chapter/'+encodeURIComponent(loc.id)+'/'+loc.section+'_'+loc.slot+(loc.part>1?'_'+loc.part:'')+'.html';
+}
 function bzMeta(doc,key) {return doc.selectFirst('meta[name="'+key+'"], meta[property="'+key+'"]').attr('content');}
 function bzApiList(body) {
   let data;try {data=JSON.parse(body);} catch (_) {throw bzError('response','分类数据无法解析');}

@@ -20,12 +20,15 @@ test('Baozi HTML search preserves Unicode, ignores templates and recognizes expl
 });
 test('Baozi complete hidden catalog keeps special chapters, URL identity and only known dates',async()=>{
  const {plugin}=await runtime([detail]);const result=await plugin.getDetail(book);assert.equal(result.name,'漫画🌊');assert.equal(result.status,0);assert.equal(result.chapters.length,3);assert.deepEqual(Array.from(result.chapters,c=>c.dateUpload),[String(Date.UTC(2024,1,28,16)),'','']);assert.match(result.chapters[0].url,/edition=extra$/);assert.equal(result.chapters[0].name,result.chapters[1].name);
+ assert.ok(result.chapters.every(c=>c.url.startsWith(origin+'/')));
  assert.equal((await (await runtime([detail])).plugin.getDetail(origin+'/comic/old-alias')).chapters.length,3);
  for(const [body,code] of [[detail.replace('chapter_slot=2','comic_id=foreign&chapter_slot=2'),'chapter-owner'],[detail.replace('chapter_slot=3','chapter_slot=4'),'catalog'],[detail.replace('2024年02月29日','2023年02月29日'),null],[detail.replace('简介 &amp; Story','章节数据缺少，进行屏蔽处理'),'access']]) {const ext=(await runtime([body])).plugin;if(code)await assert.rejects(ext.getDetail(book),new RegExp('BAOZI:'+code));else assert.equal((await ext.getDetail(book)).chapters[0].dateUpload,'');}
  await assert.rejects((await runtime([detail])).plugin.getDetail(origin+'/comic/foreign'),/BAOZI:identity/);
 });
 test('Baozi collects all reader parts, preserves duplicate slots and stops before next chapter',async()=>{
- const {plugin,requests}=await runtime([reader,last]);const pages=await plugin.getPageList(chapter);assert.equal(pages.length,4);assert.equal(pages[0].url,pages[2].url);assert.equal(pages[1].url,'http://new-cdn.example.test/arbitrary/two.webp');assert.equal(pages[0].headers.Referer,origin+'/');assert.equal(requests[1].url,'https://cn.twbzmg.com/comic/chapter/fixture/0_0_2.html');
+ for(const url of [chapter,origin+'/comic/chapter/fixture/0_0.html','https://cn.twbzmg.com/comic/chapter/fixture/0_0.html']) {
+  const {plugin,requests}=await runtime([reader,last]);const pages=await plugin.getPageList(url);assert.equal(pages.length,4);assert.equal(pages[0].url,pages[2].url);assert.equal(pages[1].url,'http://new-cdn.example.test/arbitrary/two.webp');assert.equal(pages[0].headers.Referer,origin+'/');assert.equal(requests[0].url,'https://tw.twbzmg.com/comic/chapter/fixture/0_0.html');assert.equal(requests[1].url,'https://tw.twbzmg.com/comic/chapter/fixture/0_0_2.html');
+ }
  assert.equal((await (await runtime([reader,last])).plugin.getPageList(chapter.replace('comic_id=fixture','comic_id=old-alias'))).length,4);
 });
 test('Baozi reader rejects missing, repeated, foreign parts and invalid image protocols without returning partial pages',async()=>{
