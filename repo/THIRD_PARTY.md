@@ -62,6 +62,40 @@ NodeLane 改写为 `MProvider`／DOM 桥，校验页面身份、目录归属、�
 
 NodeLane 改写为 `MProvider`／DOM 桥，补充页面身份、分页条件、目录归属、日期、图片顺序与地址解析，以及有界请求与分类错误。修改按 GPL-3.0-only 分发，不依赖 APK 或 JVM。Mangayomi 固定提交 `6004f1f8…` 的完整代码树与索引未发现同站实现。
 
+### Asura Scans 移植
+
+来自 [Keiyoushi AsuraScans](https://github.com/keiyoushi/extensions-source/blob/48b291828458a32c97c3b167be453258c1bd5a86/src/en/asurascans/src/eu/kanade/tachiyomi/extension/en/asurascans/AsuraScans.kt)，固定提交 `48b291828458a32c97c3b167be453258c1bd5a86`。原版权为 2015 Javier Tomás 及贡献者，Apache-2.0。
+
+| 原文件 | SHA-256 | 使用方式 |
+| --- | --- | --- |
+| `AsuraScans.kt` | `8023dce2cd760da8d1a3322fe97ef30d06e2c42139bb93c85bb75accb7c81044` | 移植 API 列表、Astro 详情及章节解析 |
+| `Dto.kt` | `aed70708ccfbc56d4a7f95396ce8c52145ebcaf02576668a17e24138c6d61cd8` | 作品、章节、日期与锁定状态字段 |
+| `Filters.kt` | `94cad321726b6dd9d3036c80dab5c7cc85d2ad4f4211b14c7b00bd54917221f3` | 排序、类型、状态、题材和创作者参数 |
+| `build.gradle.kts` | `7712a6a351dca67d7f5eea66ceaa7f0f5527d093118a92a7e0ab2134ff8152f2` | 核对域名、语言与 SAFE 标记 |
+| `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 全文保存在 parser.js 注释，随插件包分发 |
+
+NodeLane 改写为 MProvider／DOM 桥，使用稳定作品地址、完整目录计数、公开日期和图片清单；不隐藏付费章节，不迁入 Android 图片拦截器或账号令牌读取。NodeLane 修改以 GPL-3.0-only 分发。当前抽查的免费正文均为普通图片；遇到上游历史分块图片声明明确提示尚未支持，不输出错乱图片。
+
+另检索 Mangayomi 固定提交 `6004f1f8d1a56f882dadb734ce26f50c626a3850` 的 `javascript/manga/src/en/asurascans.js`（SHA-256 `25fe2a577a10e3babb5a628e04f6e8da01e6da217456643916c240162f5de2c4`）；其 asuracomic.net 列表实测跳转到新站首页，旧 Next.js 选择器不适用，未复制该实现。
+
+### 包子漫画移植
+
+来自 [Keiyoushi Baozi](https://github.com/keiyoushi/extensions-source/blob/48b291828458a32c97c3b167be453258c1bd5a86/src/zh/baozimanhua/src/eu/kanade/tachiyomi/extension/zh/baozimanhua/Baozi.kt)，固定提交 `48b291828458a32c97c3b167be453258c1bd5a86`。原版权为 2015 Javier Tomás 及贡献者，Apache-2.0。
+
+| 原文件 | SHA-256 | 使用方式 |
+| --- | --- | --- |
+| `Baozi.kt` | `98db7bc326d311b29c91c53df72e49b774272ec1c37a434d8675cad244f0a12e` | 分类、搜索、详情与目录选择器 |
+| `Dto.kt` | `483ab19e65ff8bd1b29c2b41d420d00c4d6b55bdd7acf7952fb66b3dad29bb87` | 作品与分类字段 |
+| `Filters.kt` | `9f374a5553eb8da1c81d9ff6d8d82e8c479058424f5d1bf07614e54a485a9c54` | 地区、状态、题材、首字母参数；选项按当前主站核对 |
+| `build.gradle.kts` | `0ab95a8c06f5b36d77ab9b8a44ed490d172dc33c11771882081912da3fe5ce4d` | 语言、镜像和 SAFE 标记 |
+| `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 全文保存在 src/baozimh/parser.js，随插件包分发 |
+
+NodeLane 改写为 MProvider／DOM 桥，按当前主站 AMP API 的 `next` 分页，使用实际跳转到 `cn.twbzmg.com` 的公开阅读器，串行合并一话全部分页，保留页位及目录日期语义。原 appcn／appgb 入口在本机被 CF 封禁；未迁入其图片裁切、替换图片和 Gatekeeper 自动解题拦截器，验证交由 App 网页会话。NodeLane 修改按 GPL-3.0-only 分发。
+
+Mangayomi 固定提交 `6004f1f8d1a56f882dadb734ce26f50c626a3850` 的完整代码树未检出包子漫画同站实现。网站 HTML、脚本及漫画图片不随仓库分发。
+
+当前图片选线协议另依据公开阅读器的 [page_runtime_v5.js?v=2025102603](https://cn.twbzmg.com/s/page_runtime_v5.js?v=2025102603)（SHA-256 `a46ce039ac9204122e622667eeceddf1035534d7a561dac051719a5a3dfe4325`）：地区节点和探测资源来自 `REQ_DOMAINS`／`REQ_FILES`；NodeLane 独立实现 HEAD 选线与域名映射，不复制、执行或打包网站脚本。此映射用于绕开故障节点，其他图片域名照常保留。
+
 ### 主机接口与协议资料
 
 - [Mangayomi JavaScript 插件指南](https://github.com/kodjodevf/mangayomi-extensions/blob/6004f1f8d1a56f882dadb734ce26f50c626a3850/CONTRIBUTING-JS.md)：`MProvider`、`Client`、分页、详情及图片返回格式。SHA-256 `fb9e59455c55d5a4cf1077a9e8251b9e19463eb62e1bd78eb39d40adfd12d146`。
@@ -83,8 +117,10 @@ NodeLane 改写为 `MProvider`／DOM 桥，补充页面身份、分页条件、�
 | [Read Comics Online](https://readcomicsonline.ru/) | [Mangayomi 固定提交中的 icon.png](https://raw.githubusercontent.com/kodjodevf/mangayomi-extensions/6004f1f8d1a56f882dadb734ce26f50c626a3850/dart/manga/multisrc/mmrcms/src/en/readcomicsonline/icon.png) | 96 × 96 | `38f9bad0d71e2561eb3d386d523a77990a86aeb4c61c2bd0000102d49de34a11` |
 | [Raw Otaku](https://rawotaku.com/) | [favicon.png](https://rawotaku.com/theme/mangareader/images/favicon.png) | 180 × 180 | `aafb004739c79e8aa70aa762d1fb19069bc25b4b260e6bc4364174581b141412` |
 | [Manga18fx](https://manga18fx.com/) | [favicon-160x160.jpg](https://manga18fx.com/images/favicon-160x160.jpg) | 160 × 160 | `b0a3018a46cdc4c0903059b4e9b740ef037f61b479af72c33c163a44fda79f3e` |
+| [Asura Scans](https://asurascans.com/) | [logo.webp](https://asurascans.com/images/logo.webp) | — | — |
+| [包子漫画](https://cn.baozimh.com/) | [Keiyoushi 固定提交中的 ic_launcher.png](https://raw.githubusercontent.com/keiyoushi/extensions-source/48b291828458a32c97c3b167be453258c1bd5a86/src/zh/baozimanhua/res/mipmap-xxxhdpi/ic_launcher.png) | 192 × 192 | `06d3e6ae8fd1e49673cfac258c15e149b1c402c0c844ae3abce36333fa33f8d7` |
 
-Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开的图标地址。
+Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开的图标地址。包子漫画的 static-tw 图标域名同样被 CF 拦截，使用 Keiyoushi 固定版本中的站点图标。
 
 ## 来源卡片资料依据
 
@@ -99,6 +135,8 @@ Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开
 | Read Comics Online | [搜索分类](https://readcomicsonline.ru/advanced-search) 及公开目录／阅读器：欧美页漫、原创与改编、免费阅读；上游当前内容标记 SAFE，不作为全年龄认证 |
 | Raw Otaku | [首页](https://rawotaku.com/) 的免费阅读声明、[分类](https://rawotaku.com/filter/) 的成人类别、公开日本页漫与改编作品目录；上游标记 MIXED |
 | Manga18fx | [首页](https://manga18fx.com/) 的免费阅读声明、Manhwa／Manhua 分类、Mature／Uncensored 题材及公开条漫正文；上述 `48b29182…` 提交明确标记 NSFW，原创／改编保持未知 |
+| Asura Scans | [浏览目录](https://asurascans.com/browse) 的 Manhwa／Manhua 分类、公开条漫和关联小说；免费与锁定章节并存。上游 `48b29182…` 提交标记 SAFE |
+| 包子漫画 | [分类](https://cn.baozimh.com/classify) 的国漫／日本／韩国／欧美选项、公开页漫与条漫、小说改编和 C103 同人搜索结果；抽查正文免费，上游标记 SAFE |
 
 本节其他 Keiyoushi 引用固定到上述 `b647c92f…` 提交。成人标记依据网站整体目录，不代表插件会扩展现有的非成人筛选。
 

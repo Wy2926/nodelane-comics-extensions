@@ -796,5 +796,139 @@
         "http://different.example.test:8080/changed/second.webp?sig=fixture"
       ]
     }
-  }
+  },
+{
+  "name": "Native filters",
+  "method": "filters",
+  "args": [],
+  "responses": [],
+  "expect": {
+    "count": 5,
+    "types": [
+      null,
+      "region",
+      "state",
+      "type",
+      "filter"
+    ],
+    "options": [
+      0,
+      5,
+      3,
+      26,
+      9
+    ],
+    "preferences": 0
+  },
+  "slug": "baozimh"
+},
+{
+  "name": "API list with native filter round trip",
+  "method": "search",
+  "args": [
+    "",
+    1
+  ],
+  "nativeFilters": true,
+  "responses": [
+    {
+      "jsonBody": {
+        "items": [
+          {
+            "comic_id": "fixture",
+            "name": "漫画🌊",
+            "topic_img": "book.jpg"
+          }
+        ]
+      }
+    }
+  ],
+  "expect": {
+    "count": 1,
+    "name": "漫画🌊",
+    "next": false,
+    "query": {
+      "type": "all",
+      "region": "all",
+      "state": "all",
+      "filter": "*",
+      "language": "cn"
+    }
+  },
+  "slug": "baozimh"
+},
+{
+  "name": "Explicit empty Unicode search",
+  "method": "search",
+  "args": [
+    "漫画 & + 🌊",
+    1
+  ],
+  "responses": [
+    {
+      "body": "<html><body>相近搜索结果(0)</body></html>"
+    }
+  ],
+  "expect": {
+    "count": 0,
+    "next": false,
+    "query": {
+      "q": "漫画 & + 🌊"
+    }
+  },
+  "slug": "baozimh"
+},
+{
+  "name": "Hidden complete catalog and source-local date",
+  "method": "detail",
+  "args": [
+    "https://cn.baozimh.com/comic/old-alias"
+  ],
+  "responses": [
+    {
+      "bodyFile": "baozimh-detail.html"
+    }
+  ],
+  "expect": {
+    "count": 3,
+    "name": "漫画🌊",
+    "status": "ongoing",
+    "hasCover": true
+  },
+  "slug": "baozimh"
+},
+{
+  "name": "All reader parts and source CDN selection through native AMP DOM",
+  "method": "pages",
+  "args": [
+    "https://cn.baozimh.com/user/page_direct?comic_id=fixture&section_slot=0&chapter_slot=0"
+  ],
+  "responses": [
+    {
+      "bodyFile": "baozimh-reader.html"
+    },
+    {
+      "body": "<html><head><link rel=\"canonical\" href=\"https://cn.twbzmg.com/comic/chapter/fixture/0_0_2.html\"></head><body><div class=\"header\"><a class=\"back\" href=\"https://cn.baozimh.com/comic/old-alias\">返回</a><a class=\"goto\" href=\"https://cn.baozimh.com/comic/fixture\">目录</a><div class=\"title\">第0话(2/2)</div></div>\n<div class=\"comic-contain\"><amp-img class=\"comic-contain__item\" data-src=\"//s2.bzcdn.net/new/path.jpg?fixture=1\"><noscript><img src=\"https://s2.bzcdn.net/new/path.jpg?fixture=1\"></noscript><img src=\"https://s2.bzcdn.net/new/path.jpg?fixture=1\"></amp-img><amp-img class=\"comic-contain__item\" data-src=\"https://s2.bzcdn.net/new/path.jpg?fixture=1\"><amp-img fallback src=\"https://cdn.example.test/fallback.png\"></amp-img></amp-img></div><a id=\"next-chapter\" href=\"/comic/chapter/fixture/0_1.html\">下一话</a></body></html>\n"
+    },
+    {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "image/jpeg"
+      },
+      "body": ""
+    }
+  ],
+  "expect": {
+    "count": 4,
+    "referer": "https://cn.baozimh.com/",
+    "urls": [
+      "https://cdn.example.test/one.jpg?signature=fixture",
+      "http://new-cdn.example.test/arbitrary/two.webp",
+      "https://s2-rsa1-usla.bzcdn.net/new/path.jpg?fixture=1",
+      "https://s2-rsa1-usla.bzcdn.net/new/path.jpg?fixture=1"
+    ]
+  },
+  "slug": "baozimh",
+  "setup": "extention.client.head = extention.client.get;"
+}
 ]

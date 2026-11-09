@@ -10,6 +10,7 @@ export async function mockPlugin(slug, respond, globals = {}) {
             return respond(request, requests.length);
         }
         get(url, headers) { return this.request('GET', url, headers); }
+        head(url, headers) { return this.request('HEAD', url, headers); }
         post(url, headers, body) { return this.request('POST', url, headers, body); }
     }, globals);
     return {plugin, requests};

@@ -21,9 +21,10 @@ export class Document extends Element {
 }
 export class Client {
   get(url,headers = {}) { return this.request('GET',url,headers); }
+  head(url,headers = {}) { return this.request('HEAD',url,headers); }
   post(url,headers = {},body = {}) { return this.request('POST',url,headers,body); }
   async request(method,url,headers,body) {
-    const args=['-sS','--max-time','30','--max-filesize','12582912','-D','-','-w','\n%{http_code}','-X',method];
+    const args=['-sS','--max-time','30','--max-filesize','12582912','-D','-','-w','\n%{http_code}',...(method==='HEAD'?['--head']:['-X',method])];
     for(const [key,value] of Object.entries(headers)) args.push('-H', key+': '+value);
     if(body !== undefined) {
       const jsonBody=Object.entries(headers).some(([k,v])=>k.toLowerCase()==='content-type'&&v.includes('application/json'));

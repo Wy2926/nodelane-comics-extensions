@@ -1,0 +1,61 @@
+{
+  "slug": "baozimh",
+  "id": 86001010,
+  "name": "包子漫画",
+  "baseUrl": "https://cn.baozimh.com",
+  "apiUrl": "",
+  "lang": "zh",
+  "version": "0.1.4",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/48b291828458a32c97c3b167be453258c1bd5a86/src/zh/baozimanhua/res/mipmap-xxxhdpi/ic_launcher.png",
+  "notes": "热门、最新上架、搜索与地区／状态／题材／首字母筛选；完整目录和整话分页。遇到网站验证请打开来源网页后重试。",
+  "license": "GPL-3.0-only",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "cn",
+      "jp",
+      "kr",
+      "western"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "adaptation",
+      "fan"
+    ],
+    "pricing": "free"
+  },
+  "files": [
+    "filters.js",
+    "parser.js",
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "cn.baozimh.com",
+    "cn.twbzmg.com",
+    "s1-rsa1-usla.bzcdn.net",
+    "s1-ogsm1-uspho.bzcdn.net",
+    "s1-dpa1-cnhk.bzcdn.net",
+    "s1-mha1-nlams.bzcdn.net",
+    "s1.baozimh.com"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

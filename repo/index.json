@@ -1,5 +1,118 @@
 [
   {
+    "id": 86001009,
+    "name": "Asura Scans",
+    "baseUrl": "https://asurascans.com",
+    "apiUrl": "https://api.asurascans.com/api",
+    "lang": "en",
+    "version": "0.1.1",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": false,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://asurascans.com/images/logo.webp",
+    "notes": "热门、最新、搜索与题材／类型／状态／作者／画师／章节数筛选；完整目录与免费正文。付费及提前阅读章节保留锁定标识。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "kr",
+        "cn"
+      ],
+      "formats": [
+        "vertical"
+      ],
+      "creations": [
+        "adaptation"
+      ],
+      "pricing": "partial"
+    },
+    "sourceCodeUrl": "packages/asurascans/0.1.1.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "asurascans",
+      "sha256": "3ff17839ad333217a8833684b942116dcf011ea9db6c4f129843e34b30a17410",
+      "size": 25297,
+      "requestHosts": [
+        "asurascans.com",
+        "api.asurascans.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001010,
+    "name": "包子漫画",
+    "baseUrl": "https://cn.baozimh.com",
+    "apiUrl": "",
+    "lang": "zh",
+    "version": "0.1.4",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": false,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/48b291828458a32c97c3b167be453258c1bd5a86/src/zh/baozimanhua/res/mipmap-xxxhdpi/ic_launcher.png",
+    "notes": "热门、最新上架、搜索与地区／状态／题材／首字母筛选；完整目录和整话分页。遇到网站验证请打开来源网页后重试。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "cn",
+        "jp",
+        "kr",
+        "western"
+      ],
+      "formats": [
+        "page",
+        "vertical"
+      ],
+      "creations": [
+        "adaptation",
+        "fan"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "packages/baozimh/0.1.4.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "baozimh",
+      "sha256": "8e3316bc93e0ae56a4fc01f77ae4a37ac43e917e3f8fb736b0f3c883edbc503c",
+      "size": 24878,
+      "requestHosts": [
+        "cn.baozimh.com",
+        "cn.twbzmg.com",
+        "s1-rsa1-usla.bzcdn.net",
+        "s1-ogsm1-uspho.bzcdn.net",
+        "s1-dpa1-cnhk.bzcdn.net",
+        "s1-mha1-nlams.bzcdn.net",
+        "s1.baozimh.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
     "id": 86001001,
     "name": "Comix",
     "baseUrl": "https://comix.to",
