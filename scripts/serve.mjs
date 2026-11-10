@@ -11,8 +11,9 @@ http.createServer(async (req, res) => {
     const file = path.resolve(base, '.' + relative);
     if (!file.startsWith(base + path.sep)) { res.writeHead(404).end(); return; }
     const bytes = await readFile(file);
-    const type = file.endsWith('.json') ? 'application/json' : file.endsWith('.js') ? 'text/javascript' : 'text/plain';
-    res.writeHead(200, {'Content-Type': type + '; charset=utf-8', 'Content-Length': bytes.length,
+    const type = file.endsWith('.apk') ? 'application/vnd.android.package-archive' :
+      (file.endsWith('.json') ? 'application/json' : file.endsWith('.js') ? 'text/javascript' : 'text/plain') + '; charset=utf-8';
+    res.writeHead(200, {'Content-Type': type, 'Content-Length': bytes.length,
       'Cache-Control': relative.startsWith('/packages/') ? 'public, max-age=31536000, immutable' : 'no-cache'});
     res.end(req.method === 'HEAD' ? undefined : bytes);
   } catch { res.writeHead(404).end(); }

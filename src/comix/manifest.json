@@ -2,7 +2,7 @@
   "id": 86001001,
   "name": "Comix",
   "baseUrl": "https://comix.to",
-  "apiUrl": "https://comix.to/api/v1",
+  "apiUrl": "",
   "lang": "en",
   "typeSource": "single",
   "iconUrl": "https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png",
@@ -11,26 +11,28 @@
   "isNsfw": true,
   "isFullData": false,
   "hasCloudflare": true,
-  "version": "0.2.3",
+  "version": "0.3.0",
   "itemType": 0,
-  "sourceCodeLanguage": 1,
+  "sourceCodeLanguage": 2,
   "appMinVerReq": "0.1.0",
-  "notes": "需要网站验证时在来源网页完成后重试。支持普通图片及已知网格还原协议。",
+  "notes": "直接使用 Keiyoushi Comix 1.6.63 原版 APK，不转换或重写。网站验证由原扩展处理；iOS 尚未验收。不兼容旧自研版保存的网址。",
   "slug": "comix",
-  "license": "GPL-3.0-only",
+  "license": "Apache-2.0",
   "files": [
-    "codec.js",
-    "protocol.js",
-    "protocol-source.js",
-    "extension.js"
+    "extension.apk"
   ],
-  "entryClass": "ComixExtension",
+  "additionalParams": "{\"mihonSourceId\":\"7537715367149829912\"}",
+  "upstream": {
+    "version": "1.6.63",
+    "commit": "d39cb746d483487855f261d9d06ff78c5c25a5a3",
+    "url": "https://github.com/keiyoushi/extensions/releases/download/2c02d07/tachiyomi-en.comix-v1.6.63.apk",
+    "sha256": "b9cf685a5f7724b0ec50e65fac5ca83bd2a4a94b6ee97c1febfbdfd1ebdbdc70",
+    "size": 137063
+  },
   "requestHosts": [
     "comix.to"
   ],
-  "requires": [
-    "image.tile-shuffle.v1"
-  ],
+  "requires": [],
   "capabilities": [
     "popular",
     "latest",

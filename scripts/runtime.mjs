@@ -50,6 +50,7 @@ export class Client {
 export async function loadPlugin(slug, ClientImpl=Client, globals={}) {
   const entry=(await json(path.join(root,'.build/index.json'))).find(e=>e.nodelane.slug===slug);
   if(!entry)throw Error('来源尚未构建');
+  if(entry.sourceCodeLanguage !== 1)throw Error('原生扩展须在 App 兼容桥中验证，不能在 JavaScript 测试器执行');
   const context=vm.createContext({MProvider:class { get source(){return entry;} },Client:ClientImpl,Document,
     NodeLane:{capabilities:['image.tile-shuffle.v1']},...globals});
   vm.runInContext(await readFile(path.join(root,'.build',entry.sourceCodeUrl),'utf8')+'\nglobalThis.plugin = new DefaultExtension();',context);

@@ -8,17 +8,13 @@
 
 ## 新增和修复
 
-每次适配前先检索主流仓库：[Keiyoushi/extensions-source](https://github.com/keiyoushi/extensions-source) 为优先协议参考，同时检查 [Mangayomi](https://github.com/kodjodevf/mangayomi-extensions) 是否已有可直接复用的实现。按域名、旧域名、站名和通用站点主题检查；固定提交并阅读实现与许可，不仅依据目录里有名字。
+新版本直接使用 [Keiyoushi](https://github.com/keiyoushi/extensions) 发布的原版扩展，由 App 既有兼容桥运行，不将其转换或重写为本仓库的 `MProvider` JavaScript 插件。按域名、旧域名和站名检查 [上游源码](https://github.com/keiyoushi/extensions-source)，核对版本与许可，不仅依据目录里有名字；可用即不改。
 
-先按上游请求实测热门、搜索／分页、完整目录、章节首尾图片及失败响应。验证通过后移植为本仓库的 `MProvider`、永久 ID、请求主机、错误和图片契约；只复用本站需要的逻辑，不将 APK、JVM 或上游仓库引入运行时。无实现或协议已经失效时，依据真实站点自行实现。网络封禁与解析失效分开记录，封禁时不能声称上游不可用或已通过真实阅读验收。
+直接实测原扩展的热门、搜索／分页、完整目录、章节首尾图片及失败恢复。先区分宿主兼容、网络封禁和上游站点实现问题；宿主问题修复通用兼容层，确需站点修订时基于上游做最小修改，不另维护等价 JS 实现。无上游实现的站点单独确认支持范围，不默认另起解析器。Android 与 iOS 分别验证，封禁或仅列表成功不能视为真实阅读通过。
 
-移植结果在本站 README 保留当前支持范围和验证边界，`THIRD_PARTY.md` 记录固定提交、文件摘要、原版权、许可及 NodeLane 修改。保留上游许可原文，不将 Apache 原始代码改标成只有 GPL；NodeLane 衍生修改按本仓库 GPL-3.0-only 分发。
+现有来源通过保留永久 ID、升版本、切换运行类型升级到原版 APK，不另建同名来源。目录的 `additionalParams.mihonSourceId` 保存上游 ID，与 NodeLane 数据库 ID 分开。Comix 按当前无需兼容旧版数据的要求，直接采用上游内部网址，不增加 App 旧网址映射、迁移或专用能力；若开发设备存在旧测试书籍，应从新来源重新打开，不承诺旧记录可读，也不主动删除用户数据。已替换的 JS 工作源码与专用测试删除，已发布产物、对应源码及许可继续保留；不能覆盖同版本产物或重分配 ID。
 
-```sh
-npm run new-source -- example 86001011 https://example.org Example
-```
-
-生成的插件默认 `enabled: false`，不进入目录。填好本站协议、范围说明与样本测试，通过后再启用。永久 ID 只分配一次；改名、换域名、换目录渠道或发布版本不改变 ID，移除站点也保留 `repository.json` 分配记录。`repo/registry.json` 保存已发布的分配，构建拒绝删除或重分配。仓库固定身份为 `net.nodelane.extensions`。
+新增原版来源参照 `src/comix/manifest.json`，记录上游信息并保存原版 APK 与许可；验收前设置 `enabled: false`，不进入目录。永久 ID 只分配一次；改名、换域名、换目录渠道或发布版本不改变 ID，移除站点也保留 `repository.json` 分配记录。`repo/registry.json` 保存已发布的分配，构建拒绝删除或重分配。仓库固定身份为 `net.nodelane.extensions`。
 
 按已核实的网站分类、收费说明和成人标记填写 `catalogMetadata`／`isNsfw`，未知项保持空或 `unknown`，不从域名、语言或广告推断收费。只改这两项可保持插件版本及包摘要，发布目录更新而首次源码归档保持不变；其他同版本元数据仍不可覆盖。卡片资料的协议只在 [CONTRACT.md](CONTRACT.md) 定义。
 
@@ -26,7 +22,7 @@ npm run new-source -- example 86001011 https://example.org Example
 
 目录去重使用规范化后的完整章节 URL，去重前仍核对每条记录的归属；相同名称或编号的不同 URL 不能合并。不要只验证一部作品：站点修复先把已发现变体转成合成样本，再用有上限的热门／最新抽样检查覆盖面。图片遵循契约中的源站返回地址，不因 CDN 换域、分片或路径迁移增加白名单。诊断错误细分地址格式、作品归属、目录完整性、图片清单与源站空正文，不能都归为“页面结构变化”。
 
-`npm run build` 按 `manifest.files` 生成单文件 JavaScript 和摘要索引。清单检查永久 ID、版本、路径、主机、声明能力和产物大小，执行 JavaScript 语法检查。代码在 `.build/` 内可反复改动；一旦发布到 `repo/packages/<slug>/<version>.js`，同版本不可覆盖。
+`npm run build` 按 `manifest.files` 生成单文件 JavaScript，或逐字节复制原版 APK，输出摘要索引到 `.build/`。原生包在本站目录保存 APK 与原始 `LICENSE`，`upstream` 记录固定版本、源码提交、下载地址、大小和 SHA-256；构建不联网下载、不转换字节码，也不修改 APK。清单检查永久 ID、版本、路径、主机、声明能力和产物大小；JS 另检查语法，APK 另核对上游摘要。发布路径分别为 `repo/packages/<slug>/<version>.js` 或 `.apk`，同版本不可覆盖。
 
 ## 验证
 
@@ -39,7 +35,7 @@ npm run test:app -- /明确选择的路径/nodelane-comics-app
 
 Node DOM 样本使用 LinkeDOM，实际 App 使用自己的 DOM 桥，两者均须验证。真实站点检查单独执行，避免站点波动或 CAPTCHA 让每次离线 CI 不可用。真实检查低并发、有数量与大小限制，只输出计数、错误和已脱敏诊断；不保存 Cookie、请求签名和图片签名地址。图片样本与截图只放忽略的 `artifacts/`。
 
-模拟器验收覆盖来源刷新、按需安装／更新、搜索与详情、章节首尾页、后台恢复和进度保持；真机、真实 CF 验证、翻译服务单独验收。Android 暂缓。不能用 Node 请求成功代替 App WebView／阅读器验收。
+模拟器验收覆盖来源刷新、按需安装／更新、搜索与详情、章节首尾页、后台恢复和进度保持；真机、真实 CF 验证、翻译服务单独验收。原版 Keiyoushi 先在本地 MuMu 检查，iOS 单独验收。不能用 Node 请求或原生桥调用成功代替 App WebView／阅读器全流程验收。
 
 ## 发布和恢复
 
@@ -59,7 +55,7 @@ npm run release -- stable
 npm run rollback -- comix 0.2.0 0.2.2 testing
 ```
 
-恢复命令核验归档产物及源码可重现性，保留其他插件和工作区源码，不通过降低索引版本假装回滚。恢复后同步修复工作区版本，避免后续发布被降版检查拒绝。每个已发布版本的 `sources/<slug>/<version>/rebuild.mjs` 可独立重建 `plugin.js`。
+恢复命令核验归档产物及源码可重现性，保留其他插件和工作区源码，不通过降低索引版本假装回滚。恢复后同步修复工作区版本，避免后续发布被降版检查拒绝。每个已发布版本的 `sources/<slug>/<version>/rebuild.mjs` 可独立重建 `plugin.js`；原生版本只还原原始 `plugin.apk`，不声称重新编译了上游源码。
 
 ## GitHub Pages 分发
 

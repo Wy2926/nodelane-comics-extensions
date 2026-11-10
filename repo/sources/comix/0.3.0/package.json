@@ -1,0 +1,59 @@
+{
+  "id": 86001001,
+  "name": "Comix",
+  "baseUrl": "https://comix.to",
+  "apiUrl": "",
+  "lang": "en",
+  "typeSource": "single",
+  "iconUrl": "https://comix.to/assets/uploads/35595e3de3c99889c1bd2c56f3e3714fc0c457.png",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": true,
+  "isFullData": false,
+  "hasCloudflare": true,
+  "version": "0.3.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 2,
+  "appMinVerReq": "0.1.0",
+  "notes": "直接使用 Keiyoushi Comix 1.6.63 原版 APK，不转换或重写。网站验证由原扩展处理；iOS 尚未验收。不兼容旧自研版保存的网址。",
+  "additionalParams": "{\"mihonSourceId\":\"7537715367149829912\"}",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp",
+      "kr",
+      "cn",
+      "western"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "original",
+      "fan",
+      "adaptation"
+    ],
+    "pricing": "free"
+  },
+  "sourceCodeUrl": "packages/comix/0.3.0.apk",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "comix",
+    "sha256": "b9cf685a5f7724b0ec50e65fac5ca83bd2a4a94b6ee97c1febfbdfd1ebdbdc70",
+    "size": 137063,
+    "requestHosts": [
+      "comix.to"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "Apache-2.0"
+  }
+}

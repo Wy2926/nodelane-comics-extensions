@@ -21,7 +21,7 @@ export async function rollback(slug, from, version, channel = 'testing', directo
     const built = await build({directory:temp});
     // Prior source must reproduce its archived code before being used as a recovery release.
     const originalHeader = `sources/${slug}/${from}/`, nextHeader = `sources/${slug}/${version}/`;
-    const restored = built.artifacts[0].bytes.toString().replace(nextHeader, originalHeader);
+    const restored = m.sourceCodeLanguage === 2 ? built.artifacts[0].bytes : built.artifacts[0].bytes.toString().replace(nextHeader, originalHeader);
     if (digest(restored) !== receipt.nodelane.sha256) throw Error('旧源码不能重现已归档产物');
     return await publish(built, {directory, channel, onlySlug:slug});
   } finally { await rm(temp, {recursive:true, force:true}); }

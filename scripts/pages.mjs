@@ -8,7 +8,8 @@ export async function preparePages({directory = root, out = path.join(directory,
     if (!Array.isArray(sources) || !sources.length) throw Error('发布目录为空');
     for (const entry of sources) {
       validateCatalogMetadata(entry.catalogMetadata);
-      if (!/^\.\.\/packages\/[a-z][a-z0-9-]*\/\d+\.\d+\.\d+\.js$/.test(entry.sourceCodeUrl)) throw Error('插件路径无效');
+      if (!/^\.\.\/packages\/[a-z][a-z0-9-]*\/\d+\.\d+\.\d+\.(js|apk)$/.test(entry.sourceCodeUrl) ||
+          !entry.sourceCodeUrl.endsWith(entry.sourceCodeLanguage === 2 ? '.apk' : '.js')) throw Error('插件路径无效');
       const file = path.resolve(directory, 'repo', channel, entry.sourceCodeUrl);
       const bytes = await readFile(file);
       if (bytes.length !== entry.nodelane.size || digest(bytes) !== entry.nodelane.sha256) throw Error('发布文件摘要不符');

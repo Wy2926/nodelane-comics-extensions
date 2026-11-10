@@ -46,12 +46,23 @@ export function validateManifest(m, slug, repo) {
   check(repo.sourceIds[slug] === m.id, '永久来源 ID 不匹配');
   check(semver.test(m.version) && semver.test(m.appMinVerReq), '版本必须是 x.y.z');
   check(typeof m.name === 'string' && m.name.trim().length > 0, '缺少名称');
-  check(m.itemType === 0 && m.sourceCodeLanguage === 1, '当前构建器仅发布 JavaScript 漫画插件');
+  check(m.itemType === 0 && [1, 2].includes(m.sourceCodeLanguage), '仅支持 JavaScript 或 Mihon 漫画插件');
   check(/^[a-z]{2,3}(-[a-zA-Z0-9]+)*$/.test(m.lang), '语言代码不合法');
-  check(m.license === 'GPL-3.0-only', '当前仓库分发许可为 GPL-3.0-only');
-  check(Array.isArray(m.files) && m.files.length > 0 && new Set(m.files).size === m.files.length &&
-    m.files.every(f => /^[a-z][a-z0-9-]*\.js$/.test(f)), '构建文件必须是本站目录内的独立文件');
-  check(/^[A-Za-z_$][\w$]*$/.test(m.entryClass), '入口类不合法');
+  if (m.sourceCodeLanguage === 2) {
+    check(m.license === 'Apache-2.0', '原版 Keiyoushi 扩展须保留 Apache-2.0 许可');
+    check(Array.isArray(m.files) && m.files.length === 1 && /^[a-z][a-z0-9-]*\.apk$/.test(m.files[0]) &&
+      m.entryClass === undefined, '原生扩展必须直接使用本站目录内的 APK');
+    check(m.upstream && semver.test(m.upstream.version) && /^[a-f0-9]{40}$/.test(m.upstream.commit) &&
+      /^[a-f0-9]{64}$/.test(m.upstream.sha256) && Number.isSafeInteger(m.upstream.size) && m.upstream.size > 0 &&
+      new URL(m.upstream.url).protocol === 'https:', '原生扩展缺少固定上游版本与摘要');
+    const params = JSON.parse(m.additionalParams);
+    check(typeof params.mihonSourceId === 'string' && /^[1-9]\d{0,18}$/.test(params.mihonSourceId), '缺少原始 Mihon 来源 ID');
+  } else {
+    check(m.license === 'GPL-3.0-only', 'JavaScript 插件分发许可为 GPL-3.0-only');
+    check(Array.isArray(m.files) && m.files.length > 0 && new Set(m.files).size === m.files.length &&
+      m.files.every(f => /^[a-z][a-z0-9-]*\.js$/.test(f)), '构建文件必须是本站目录内的独立文件');
+    check(/^[A-Za-z_$][\w$]*$/.test(m.entryClass), '入口类不合法');
+  }
   const url = new URL(m.baseUrl);
   check(url.protocol === 'https:' && !url.username && !url.password && url.pathname === '/', '来源必须使用 HTTPS origin');
   check(Array.isArray(m.requestHosts) && m.requestHosts.includes(url.hostname) &&
@@ -74,20 +85,23 @@ export async function build({directory = root, out = path.join(directory, '.buil
     const m = await json(path.join(dir, 'manifest.json'));
     validateManifest(m, slug, repo);
     if (m.enabled === false) continue;
-    const files = await Promise.all(m.files.map(file => readFile(path.join(dir, file), 'utf8')));
-    const code = `// SPDX-License-Identifier: ${m.license}\n// NodeLane ${slug}; corresponding source: sources/${slug}/${m.version}/\n` +
-      'const DefaultExtension = (() => {\n' + files.join('\n') + `\nreturn ${m.entryClass};\n})();\n`;
-    const bytes = Buffer.from(code);
+    const native = m.sourceCodeLanguage === 2;
+    const files = await Promise.all(m.files.map(file => readFile(path.join(dir, file))));
+    const bytes = native ? files[0] : Buffer.from(
+      `// SPDX-License-Identifier: ${m.license}\n// NodeLane ${slug}; corresponding source: sources/${slug}/${m.version}/\n` +
+      'const DefaultExtension = (() => {\n' + files.join('\n') + `\nreturn ${m.entryClass};\n})();\n`);
     check(bytes.length <= 1024 * 1024, '插件超出 1 MiB');
-    new vm.Script(code);
-    const {files: _, entryClass, slug: ignoredSlug, license, requestHosts, requires, capabilities: caps, enabled, ...source} = m;
-    const relative = `packages/${slug}/${m.version}.js`;
+    if (native) check(bytes.length === m.upstream.size && digest(bytes) === m.upstream.sha256, 'APK 与固定上游摘要不符');
+    else new vm.Script(bytes.toString());
+    const {files: _, entryClass, slug: ignoredSlug, license, requestHosts, requires, capabilities: caps, enabled, upstream, ...source} = m;
+    const relative = `packages/${slug}/${m.version}.${native ? 'apk' : 'js'}`;
     const entry = {...source, sourceCodeUrl: relative, nodelane: {
       schema: 1, repositoryId: repo.id, slug, sha256: digest(bytes), size: bytes.length,
       requestHosts, requires, capabilities: caps, license,
     }};
     entries.push(entry);
-    artifacts.push({entry, bytes, sourceDirectory: dir, sourceFiles: Object.fromEntries(m.files.map((file,i)=>[file,files[i]])), manifest: m});
+    const licenseBytes = await readFile(path.join(native ? dir : directory, 'LICENSE'));
+    artifacts.push({entry, bytes, licenseBytes, sourceDirectory: dir, sourceFiles: Object.fromEntries(m.files.map((file,i)=>[file,files[i]])), manifest: m});
     await mkdir(path.dirname(path.join(out, relative)), {recursive: true});
     await writeFile(path.join(out, relative), bytes);
   }
@@ -148,15 +162,17 @@ async function publishLocked(built, {directory = root, channel = 'testing', only
     try { check(digest(await readFile(file)) === digest(bytes), '已发布的同版本内容不同，必须升版'); }
     catch (error) { if (error.code !== 'ENOENT') throw error; }
   }
-  for (const {entry, bytes, sourceFiles, manifest} of built.artifacts) {
+  for (const {entry, bytes, licenseBytes, sourceFiles, manifest} of built.artifacts) {
     await immutable(path.join(dest, entry.sourceCodeUrl), bytes);
     const sources = path.join(dest, 'sources', manifest.slug, manifest.version);
     await archiveMetadata(path.join(sources, 'package.json'), entry);
     await archiveMetadata(path.join(sources, 'manifest.json'), manifest);
     for (const file of manifest.files) await immutable(path.join(sources, file), sourceFiles[file]);
-    const rebuild = `import {readFile,writeFile} from 'node:fs/promises';\nconst m=JSON.parse(await readFile(new URL('manifest.json',import.meta.url),'utf8'));\nconst parts=await Promise.all(m.files.map(f=>readFile(new URL(f,import.meta.url),'utf8')));\nconst code=${JSON.stringify(bytes.toString().split('const DefaultExtension = (() => {\n')[0])}+'const DefaultExtension = (() => {\\n'+parts.join('\\n')+'\\nreturn '+m.entryClass+';\\n})();\\n';\nawait writeFile(new URL('plugin.js',import.meta.url),code);\n`;
+    const rebuild = manifest.sourceCodeLanguage === 2
+      ? `// Restore the unmodified upstream binary; this does not recompile upstream.\nimport {copyFile} from 'node:fs/promises';\nawait copyFile(new URL(${JSON.stringify(manifest.files[0])},import.meta.url),new URL('plugin.apk',import.meta.url));\n`
+      : `import {readFile,writeFile} from 'node:fs/promises';\nconst m=JSON.parse(await readFile(new URL('manifest.json',import.meta.url),'utf8'));\nconst parts=await Promise.all(m.files.map(f=>readFile(new URL(f,import.meta.url),'utf8')));\nconst code=${JSON.stringify(bytes.toString().split('const DefaultExtension = (() => {\n')[0])}+'const DefaultExtension = (() => {\\n'+parts.join('\\n')+'\\nreturn '+m.entryClass+';\\n})();\\n';\nawait writeFile(new URL('plugin.js',import.meta.url),code);\n`;
     await immutable(path.join(sources, 'rebuild.mjs'), rebuild);
-    await immutable(path.join(sources, 'LICENSE'), await readFile(path.join(directory, 'LICENSE')));
+    await immutable(path.join(sources, 'LICENSE'), licenseBytes);
     // Shared notices can gain new sources without changing an old plugin.
     // Keep each version's original snapshot; new versions get the current notice.
     const notice = path.join(sources, 'THIRD_PARTY.md');
@@ -166,8 +182,10 @@ async function publishLocked(built, {directory = root, channel = 'testing', only
       await immutable(notice, await readFile(path.join(directory, 'THIRD_PARTY.md')));
     }
   }
-  const entries = onlySlug ? [...previous.filter(e => e.nodelane.slug !== onlySlug).map(e =>
-    ({...e, sourceCodeUrl: e.sourceCodeUrl.replace(/^\.\.\//, '')})), ...built.entries].sort((a,b) => a.id-b.id) : built.entries;
+  const entries = onlySlug ? [...new Map([
+    ...previous.map(e => [e.id, {...e, sourceCodeUrl: e.sourceCodeUrl.replace(/^\.\.\//, '')}]),
+    ...built.entries.map(e => [e.id, e]),
+  ]).values()] : built.entries;
   const meta = {id: built.repo.id, name: built.repo.name, channel, schema: 1};
   for (const file of ['LICENSE', 'THIRD_PARTY.md']) await copyFile(path.join(directory, file), path.join(dest, file));
   await atomicJson(path.join(dest, 'registry.json'), built.repo.sourceIds);

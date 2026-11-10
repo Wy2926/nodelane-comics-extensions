@@ -1,18 +1,13 @@
 # Comix
 
-支持 `https://comix.to/title/<hid>-<slug>` 及其章节地址。热门、最新、名称搜索、完整分页目录和图片清单沿用 `MProvider`；保留每个上传、扫描组、0 话和小数话。默认普通分级目录，未实现站点账号或付费操作。
+NodeLane 版本 0.3.0，来源 ID 仍为 `86001001`。直接分发 Keiyoushi Comix 1.6.63 原版 APK，通过 App 已有 Mihon 扩展桥执行，不转换、不改写、不重新签名。
 
-公开协议材料从源站 HTML 与已知 main/apicore 资源按需读取，只作为文本解析，不执行远程脚本。同一插件实例只缓存一份 1088 字节材料并合并加载；冷启动通常额外 3 次请求。仅 `key_retired` 刷新一次并加刷新参数避免 CDN 旧缓存；`captcha_required`、CF、未知协议和解码失败明确报错。目录上限 100 页／10000 条，串行读取；局部失败不返回半份目录。
+`manifest.json` 的 `sourceCodeLanguage: 2` 选择原生运行时，`additionalParams.mihonSourceId` 保留上游 ID `7537715367149829912`。上游下载地址、源码提交、文件大小和 SHA-256 固定在 `upstream`；构建离线核对摘要后复制 APK，原始 Apache-2.0 许可随包归档。
 
-普通图片直接返回清单；`s:1` 声明 `image.tile-shuffle.v1`，由 App 在图片响应后按算法 3 与已知种子掩码还原。较旧 App 会明确提示更新。此实现参考浏览器项目的已知协议，手机端真实图片与浏览器端应分别验收。
+按当前不需要兼容旧自研版数据的要求，直接采用上游作品／章节路径，不给 App 添加旧网址映射或迁移逻辑。旧测试书籍需从新来源重新打开；不主动删除设备中的旧数据。历史 JS 产物与对应源码仍保留在 `repo/sources/comix/`，不覆盖旧版本。
 
-```sh
-npm run check
-npm run test:app -- /明确选择的App路径
-npm run verify:live
-node scripts/verify-comix-images.mjs
-```
+`npm run check` 验证原版字节一致性、目录身份、包校验、归档许可及恢复流程。其余 JS 来源继续通过 `npm run test:app -- /明确选择的App路径` 验证；该 QuickJS 测试不代表 Comix 原生验收。
 
-Node 样本覆盖签名、Unicode、退休材料、完整目录及错误边界；App 契约样本覆盖实际 QuickJS 和图片参数传递。图片处理还有 App 的像素、边缘、失败、缓存隔离与 HTTP 阅读器入口测试。iOS 27 模拟器使用设备现有会话已加载热门及测试作品的完整 471 条目录，但章节接口仍返回 `captcha_required`；命令行环境也遇到该验证要求。需要设备内网页验证后继续，不能把目录或合成样本通过视为真实 CF、真机或图片显示验收。真实图片脚本仅保存最多 3 张到忽略目录，不输出签名地址。
+MuMu Android 12 x86_64 现有调试 App 的原生桥已实测原版 1.6.63 的热门分页、最新、搜索、空结果、详情和完整目录。第二章首、中、末页图片已取得并抽查显示正常，第一章末页仍触发站点验证码。不能据此认定 Cloudflare 已解决，也不能替代目录内升级、App 阅读器整章／跨章／后台恢复验收。iOS 与 ARM 真机未验证。
 
-来源、固定提交、摘要和 GPL-3.0-only 许可见根目录 [THIRD_PARTY.md](../../THIRD_PARTY.md)。
+来源和许可见 [THIRD_PARTY.md](../../THIRD_PARTY.md)，原许可全文见 [LICENSE](LICENSE)。

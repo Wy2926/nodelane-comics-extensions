@@ -1,6 +1,12 @@
 # 插件与 App 契约
 
-本契约适用于 NodeLane 的 JavaScript 漫画来源插件。插件提供站点数据与解析规则；App 管理界面、书架、阅读进度、下载、图片处理和翻译。
+本契约描述 NodeLane 目录分发及 JavaScript 漫画接口。原版 Keiyoushi APK 由既有 Mihon 兼容桥运行，不执行下述 JS 接口；其请求、解析和图片处理保留在原扩展中。App 管理界面、书架、阅读进度、下载和翻译。
+
+## 原版 APK 与同来源升级
+
+保留 `id` 与仓库身份，提升 `version`，设置 `sourceCodeLanguage: 2`、`sourceCodeUrl: packages/<slug>/<version>.apk`，包大小与摘要仍按同一分发规则校验。`additionalParams` 为 JSON 字符串，其中 `mihonSourceId` 必须是上游原始 64 位 ID 的字符串；不以该值替换本地数据库 ID。APK 原样分发并保留原许可，NodeLane 分发版本独立于上游 APK 版本。
+
+原生来源使用上游返回的内部路径和桥元数据，不转换成旧 JS 插件的完整网址。Comix 本次不承担旧自研版数据兼容，不新增 App 映射或迁移逻辑；来源 ID 不变本身不保证旧章节网址可用。Android 与 iOS 的兼容性分别验收。
 
 ## 运行与接口
 
@@ -63,7 +69,7 @@ App 在 QuickJS 中实例化 `DefaultExtension extends MProvider`，通过 `this
 | `name`、`lang`、`iconUrl` | 名称、语言代码、图标 URL |
 | `baseUrl`、`apiUrl` | 源站 HTTPS origin 与可选 API 入口 |
 | `version`、`appMinVerReq` | 插件版本与最低 App 版本，格式为 `x.y.z` |
-| `itemType`、`sourceCodeLanguage` | 当前契约为 `0`（漫画）、`1`（JavaScript） |
+| `itemType`、`sourceCodeLanguage` | `0`（漫画）；`1`（JavaScript）或 `2`（Mihon APK） |
 | `sourceCodeUrl` | 插件包地址，相对地址按目录索引解析；必须与索引同源 |
 | `catalogMetadata` | 可选的来源卡片资料，独立于包校验及执行参数，结构见下文 |
 | `isNsfw` | 可选布尔值；`true` 展示 18+ 并参与成人来源过滤，缺失不表示全年龄认证 |

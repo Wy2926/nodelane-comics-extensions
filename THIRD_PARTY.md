@@ -1,6 +1,12 @@
 # 插件来源与许可
 
-NodeLane 的 `src/` 与生成的 `repo/packages/` 衍生作品以 **GPL-3.0-only** 分发，全文见 [LICENSE](LICENSE)。移植代码保留原作者、许可及声明；其中 Apache-2.0 原始部分的许可原文随源码和包提供。应用自身的 Apache-2.0 基线与插件分开。仓库文件服务同时提供 LICENSE、THIRD_PARTY 和每个版本的对应源码／重建脚本。本仓库从 node-comics-app 工作区的 extensions 目录迁出，原插件 ID 与协议来源保留；该目录当时尚未提交，因此不虚构迁出提交号。
+NodeLane 自研及衍生 JavaScript 插件以 **GPL-3.0-only** 分发，全文见 [LICENSE](LICENSE)。直接分发的 Keiyoushi APK 保留原始 Apache-2.0 许可，不改标为 GPL。移植代码保留原作者、许可及声明；应用自身的 Apache-2.0 基线与插件分开。仓库文件服务提供 LICENSE、THIRD_PARTY 和每个版本的对应源码或原版二进制归档。本仓库从 node-comics-app 工作区的 extensions 目录迁出，原插件 ID 与协议来源保留；该目录当时尚未提交，因此不虚构迁出提交号。
+
+## Comix 原版扩展
+
+NodeLane Comix 0.3.0 保留 ID `86001001`，直接使用 Keiyoushi Comix **1.6.63**（上游 ID `7537715367149829912`），不转换、不反编译重写、不重新签名。下载来源为 [Keiyoushi 发布 APK](https://github.com/keiyoushi/extensions/releases/download/2c02d07/tachiyomi-en.comix-v1.6.63.apk)，对应 [上游源码](https://github.com/keiyoushi/extensions-source/tree/d39cb746d483487855f261d9d06ff78c5c25a5a3/src/en/comix)。版权与署名保留为 Keiyoushi/Tachiyomi 贡献者；原许可全文见 [src/comix/LICENSE](src/comix/LICENSE)。APK 内自带的第三方声明保持不变。
+
+`src/comix/extension.apk` 为 137063 字节，SHA-256：`b9cf685a5f7724b0ec50e65fac5ca83bd2a4a94b6ee97c1febfbdfd1ebdbdc70`。NodeLane 仅提供目录元数据与稳定来源身份，运行使用 App 既有原生桥；版本归档中的恢复脚本只复制原版 APK，不声称可重编译上游。旧 Comix JS 0.2.3 及以前的产物、源码和 GPL 声明保留在 `repo/sources/comix/`。
 
 ## 复用的协议实现
 
@@ -8,8 +14,8 @@ NodeLane 的 `src/` 与生成的 `repo/packages/` 衍生作品以 **GPL-3.0-only
 
 | 原文件 | 原始 SHA-256 | 本地文件 |
 | --- | --- | --- |
-| `protocol.ts` | `2110cc88e33a89cfa537853e04a4152cf08b6aa7850eb0d932f2f30dafc94da6` | `src/comix/protocol.js` |
-| `protocol-source.ts` | `290c35a646d2e0242a91f5103e88417cb30989b263107e8acef3a6787ea6a621` | `src/comix/protocol-source.js` |
+| `protocol.ts` | `2110cc88e33a89cfa537853e04a4152cf08b6aa7850eb0d932f2f30dafc94da6` | `repo/sources/comix/0.2.3/protocol.js` |
+| `protocol-source.ts` | `290c35a646d2e0242a91f5103e88417cb30989b263107e8acef3a6787ea6a621` | `repo/sources/comix/0.2.3/protocol-source.js` |
 | `LICENSE` | `3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986` | `LICENSE` |
 
 瓜子漫画适配参考并改写同一提交的 `apps/extension/src/sources/sites/guazimanhua/` 协议检查：用 `MProvider` 和 App DOM 桥实现作品绑定、结构化数据交叉核验与完整正文读取，增加分页筛选适配，不引入浏览器运行时。原代码归 NodeLane Comics 项目及贡献者，GPL-3.0-only。
