@@ -15,7 +15,10 @@ async function fixture(t) {
 }
 
 test('Comix upgrades the same ID using the exact upstream APK and preserves its license through archive/recovery', async t => {
-  const directory = await fixture(t), built = await build({directory});
+  const directory = await fixture(t);
+  // The native runtime remains supported for archived 0.3.0; current Comix is JS.
+  await cp(path.join(root, 'repo/sources/comix/0.3.0'), path.join(directory, 'src/comix'), {recursive:true});
+  const built = await build({directory});
   const native = built.artifacts.find(a => a.entry.id === 86001001);
   assert.equal(native.entry.version, '0.3.0');
   assert.equal(native.entry.sourceCodeLanguage, 2);
@@ -45,13 +48,14 @@ test('Comix upgrades the same ID using the exact upstream APK and preserves its 
 
 test('native packages require a fixed source identity and unchanged artifact', async () => {
   const repo = await json(path.join(root, 'repository.json'));
-  const m = await json(path.join(root, 'src/comix/manifest.json'));
+  const m = await json(path.join(root, 'repo/sources/comix/0.3.0/manifest.json'));
   for (const change of [
     {files:['../extension.apk']}, {files:['extension.js']}, {entryClass:'Wrapper'},
     {license:'GPL-3.0-only'}, {upstream:{...m.upstream, sha256:'unverified'}},
     {additionalParams:'{}'}, {additionalParams:JSON.stringify({mihonSourceId:123})},
   ]) assert.throws(() => validateManifest({...m, ...change}, 'comix', repo));
 });
+
 test('build is deterministic, relative, and independent from App or sibling repositories', async t => {
   const directory = await fixture(t);
   const a = await build({directory}), b = await build({directory});
@@ -59,6 +63,13 @@ test('build is deterministic, relative, and independent from App or sibling repo
   const entry = a.entries.find(e=>e.id===86001002);
   assert.match(entry.sourceCodeUrl, /^packages\/s2read\/[\d.]+\.js$/);
   assert.equal(entry.nodelane.size, a.artifacts.find(a=>a.entry.id===entry.id).bytes.length);
+  const comix = a.entries.find(e => e.id === 86001001);
+  assert.equal(comix.version, '0.4.0');
+  assert.equal(comix.sourceCodeLanguage, 1);
+  assert.equal(comix.sourceCodeUrl, 'packages/comix/0.4.0.js');
+  assert.equal(comix.additionalParams, undefined);
+  assert.equal(comix.nodelane.license, 'GPL-3.0-only');
+  assert.deepEqual(comix.nodelane.requires, ['image.tile-shuffle.v1']);
 });
 test('invalid ID, version, paths and host capabilities fail before publication', async () => {
   const repo = await json(path.join(root,'repository.json'));
