@@ -1,0 +1,37 @@
+{
+  "id": 86001011,
+  "name": "Hachiraw",
+  "baseUrl": "https://hachiraw.net",
+  "apiUrl": "",
+  "lang": "ja",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": true,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/hachiraw/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "NodeLane JS 来源；复用 App WebView 处理网站验证。需要人工验证时在 App 浏览器完成后重试。",
+  "sourceCodeUrl": "packages/hachiraw/0.1.0.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "hachiraw",
+    "sha256": "12e6ec6a7a91f2026c52a489c4c647637006a224e8064f78df05bfdc559662a6",
+    "size": 14317,
+    "requestHosts": [
+      "hachiraw.net"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}

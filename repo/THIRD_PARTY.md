@@ -8,6 +8,19 @@ NodeLane Comix 0.4.0 从本仓库 0.2.3 恢复 JS 协议实现，改为调用 Ap
 
 归档的 0.3.0 保留 ID `86001001` 和 Keiyoushi Comix **1.6.63**（上游 ID `7537715367149829912`），不转换、不反编译重写、不重新签名。下载来源为 [Keiyoushi 发布 APK](https://github.com/keiyoushi/extensions/releases/download/2c02d07/tachiyomi-en.comix-v1.6.63.apk)，对应 [上游源码](https://github.com/keiyoushi/extensions-source/tree/d39cb746d483487855f261d9d06ff78c5c25a5a3/src/en/comix)。版权与署名保留为 Keiyoushi/Tachiyomi 贡献者，原许可全文见 [归档 LICENSE](repo/sources/comix/0.3.0/LICENSE)。归档 `extension.apk` 为 137063 字节，SHA-256 `b9cf685a5f7724b0ec50e65fac5ca83bd2a4a94b6ee97c1febfbdfd1ebdbdc70`；APK 内第三方声明不变。恢复脚本只复制原版 APK，不声称可重编译上游。旧 0.2.x 产物、源码和 GPL 声明同样保留，不覆盖历史版本。
 
+## Hachiraw JS 实现
+
+改编自 [Wy2926/node-comics 的 Hachiraw 适配](https://github.com/Wy2926/node-comics/tree/04f40749ce9a69a798459764c2c994ebd5024404/apps/extension/src/sources/sites/hachiraw)，固定提交 `04f40749ce9a69a798459764c2c994ebd5024404`。版权归 NodeLane Comics 项目及贡献者，GPL-3.0-only，全文见本仓库 LICENSE。保留作品／章节身份、隐藏完整目录、正文导航与总页数、搜索分页校验，改为 MProvider 和设备 WebView 原生 DOM；不复制浏览器运行时，不依赖同级仓库。
+
+| 原文件 | SHA-256 |
+| --- | --- |
+| `definition.ts` | `8017f6d535c312fd9aa0e0f4a2a93191f843486c461754fb5e96a5c813c4accb` |
+| `html.ts` | `02e24029ea4f9e180ce9de90a9f2b2cf4ce88b624b6fbc1e24c8e00127a21242` |
+| `network.ts` | `36a58fe515a96302195ef823f62d8d2a14ccb6b43ae0ff7811aea69502b5ed2a` |
+| `search.ts` | `4d993e223538e3b9a97ae66deacb14b482bf6061521ba6fcbc251b131b2bbfdc` |
+
+排序参数和封面 CDN 以当前网站链接核对；日期使用页面公开的日-月-年字段。图标只引用 [Keiyoushi 固定提交中的站点图标](https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/hachiraw/res/mipmap-xhdpi/ic_launcher.png)，不打包图像。成人标记依据同一上游版本的 `ContentWarning.MIXED`。本实现不分发原版 APK 或其运行库，站点内容、Cookie 和签名图片地址不随包分发。
+
 ## 复用的协议实现
 
 来源：[Wy2926/node-comics](https://github.com/Wy2926/node-comics)，提交 `af3df6ee75276ba1970ba0a7dc22488d54712e18`。归属 NodeLane Comics 项目及贡献者，许可证 GPL-3.0-only。从 `apps/extension/src/sources/sites/comix/` 迁入以下两文件：去掉 TypeScript 类型、模块导入／导出，将应用专用异常改为普通 Error；不依赖同级仓库运行或构建。

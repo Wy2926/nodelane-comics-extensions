@@ -7,7 +7,7 @@ if (!app) throw Error('用法：npm run test:app -- /绝对路径/nodelane-comic
 await access(join(resolve(app), 'tool/source_plugin_contract_test.dart'));
 await build();
 const flutter = process.env.FLUTTER ?? 'flutter';
-const args = ['test','--no-pub','tool/source_plugin_contract_test.dart', join(root, 'test/comix_app_contract_test.dart')];
+const args = ['test','--no-pub','tool/source_plugin_contract_test.dart', join(root, 'test/webview_app_contract_test.dart')];
 // Windows Flutter is a batch launcher, which cannot be spawned directly by Node.
 const windows = process.platform === 'win32';
 const command = windows ? [flutter, ...args].map(arg => '"' + arg.replaceAll('"', '""') + '"').join(' ') : flutter;

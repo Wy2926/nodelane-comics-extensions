@@ -19,7 +19,7 @@ npm run check
 npm run test:app -- --app /绝对路径/nodelane-comics-app
 ```
 
-`check` 独立构建并运行离线测试，不依赖 App 或真实站点。`test:app` 通过所选 App 的 Flutter 工具执行通用 QuickJS 契约与现有 Comix 网页桥测试，输入为本仓库 `.build/` 和 `test/fixtures/`；可用 `FLUTTER` 指定 SDK。App 普通 CI 不读取插件仓库。
+`check` 独立构建并运行离线测试，不依赖 App 或真实站点。`test:app` 通过所选 App 的 Flutter 工具执行通用 QuickJS 契约与网页桥测试，输入为本仓库 `.build/` 和 `test/fixtures/`；可用 `FLUTTER` 指定 SDK。App 普通 CI 不读取插件仓库。
 
 ## 本地目录与发布
 
