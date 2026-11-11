@@ -849,5 +849,80 @@
   },
   "slug": "baozimh",
   "setup": "extention.client.head = extention.client.get;"
-}
+},
+  {
+    "slug": "weloma",
+    "name": "keyword encoding, native DOM and opaque pagination",
+    "method": "search",
+    "args": [
+      "漫画 & + 🌊",
+      1
+    ],
+    "responses": [
+      {
+        "bodyFile": "weloma-list.html"
+      }
+    ],
+    "expect": {
+      "count": 2,
+      "name": "契約漫画 🌊",
+      "next": true,
+      "query": {
+        "name": "漫画 & + 🌊",
+        "page": "1"
+      }
+    }
+  },
+  {
+    "slug": "weloma",
+    "name": "Base64 UTF-8 title and complete reader menu with upload dates",
+    "setup": "Date.now = () => Date.UTC(2026, 2, 31, 12);",
+    "method": "detail",
+    "args": [
+      "https://weloma.net/m/M1"
+    ],
+    "responses": [
+      {
+        "bodyFile": "weloma-detail.html"
+      },
+      {
+        "bodyFile": "weloma-reader.html"
+      }
+    ],
+    "expect": {
+      "count": 4,
+      "name": "契約漫画 🌊",
+      "author": "作者 A",
+      "status": "ongoing",
+      "hasCover": true,
+      "uploadDates": [
+        "2026-02-28",
+        "2024-02-29",
+        null,
+        null
+      ]
+    }
+  },
+  {
+    "slug": "weloma",
+    "name": "Base64 image URLs, chapter Referer and duplicate slots",
+    "method": "pages",
+    "args": [
+      "https://weloma.net/c/C3#nodelane-weloma=https%3A%2F%2Fweloma.net%2Fm%2FM1"
+    ],
+    "responses": [
+      {
+        "bodyFile": "weloma-reader.html"
+      }
+    ],
+    "expect": {
+      "count": 3,
+      "referer": "https://weloma.net/c/C3",
+      "urls": [
+        "https://images.fixture.test/一.jpg?v=1&size=full",
+        "https://other.fixture.test/page.jpg?x=1&y=2",
+        "https://other.fixture.test/page.jpg?x=1&y=2"
+      ]
+    }
+  }
 ]

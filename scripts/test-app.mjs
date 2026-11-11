@@ -5,7 +5,7 @@ import {build, root} from './catalog.mjs';
 const app = process.argv[2] === '--app' ? process.argv[3] : process.argv[2];
 if (!app) throw Error('用法：npm run test:app -- /绝对路径/nodelane-comics-app');
 await access(join(resolve(app), 'tool/source_plugin_contract_test.dart'));
-await build();
+await build({includeDisabled:true});
 const flutter = process.env.FLUTTER ?? 'flutter';
 const args = ['test','--no-pub','tool/source_plugin_contract_test.dart', join(root, 'test/webview_app_contract_test.dart')];
 // Windows Flutter is a batch launcher, which cannot be spawned directly by Node.
