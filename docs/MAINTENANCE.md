@@ -1,72 +1,51 @@
-# 插件维护与发布
+# 插件维护与分发
 
-## 目录与职责
+新增或修复网站使用 [nodelane-source-adapter 技能](../.agents/skills/nodelane-source-adapter/SKILL.md)。接口与数据格式只在 [CONTRACT.md](CONTRACT.md) 定义；本站支持范围和验证边界放 `src/<slug>/README.md`。
 
-`src/<slug>/manifest.json` 声明来源及构建文件，本站协议留在同一目录。`test/` 使用合成数据与真实 App 的契约样本。`scripts/` 提供构建、校验、本地发布、恢复与开发服务器。`.build/` 是可重建的暂存输出，`repo/` 是供 App 下载的发布内容，二者不混用。
+## 目录与检查
 
-本仓库没有 App／浏览器项目的目录依赖；移植代码须记录固定版本、摘要与许可。只有多个实际站点证明相同实现可复用时才提取共享模块，并在构建时打包到站点插件；不在运行时下载共享代码。不复制全站点列表作为“已支持”名单。
-
-## 新增和修复
-
-新版本直接使用 [Keiyoushi](https://github.com/keiyoushi/extensions) 发布的原版扩展，由 App 既有兼容桥运行，不将其转换或重写为本仓库的 `MProvider` JavaScript 插件。按域名、旧域名和站名检查 [上游源码](https://github.com/keiyoushi/extensions-source)，核对版本与许可，不仅依据目录里有名字；可用即不改。
-
-直接实测原扩展的热门、搜索／分页、完整目录、章节首尾图片及失败恢复。先区分宿主兼容、网络封禁和上游站点实现问题；宿主问题修复通用兼容层，确需站点修订时基于上游做最小修改，不另维护等价 JS 实现。无上游实现的站点单独确认支持范围，不默认另起解析器。Android 与 iOS 分别验证，封禁或仅列表成功不能视为真实阅读通过。
-
-现有来源通过保留永久 ID、升版本、切换运行类型升级到原版 APK，不另建同名来源。目录的 `additionalParams.mihonSourceId` 保存上游 ID，与 NodeLane 数据库 ID 分开。Comix 按当前无需兼容旧版数据的要求，直接采用上游内部网址，不增加 App 旧网址映射、迁移或专用能力；若开发设备存在旧测试书籍，应从新来源重新打开，不承诺旧记录可读，也不主动删除用户数据。已替换的 JS 工作源码与专用测试删除，已发布产物、对应源码及许可继续保留；不能覆盖同版本产物或重分配 ID。
-
-新增原版来源参照 `src/comix/manifest.json`，记录上游信息并保存原版 APK 与许可；验收前设置 `enabled: false`，不进入目录。永久 ID 只分配一次；改名、换域名、换目录渠道或发布版本不改变 ID，移除站点也保留 `repository.json` 分配记录。`repo/registry.json` 保存已发布的分配，构建拒绝删除或重分配。仓库固定身份为 `net.nodelane.extensions`。
-
-按已核实的网站分类、收费说明和成人标记填写 `catalogMetadata`／`isNsfw`，未知项保持空或 `unknown`，不从域名、语言或广告推断收费。只改这两项可保持插件版本及包摘要，发布目录更新而首次源码归档保持不变；其他同版本元数据仍不可覆盖。卡片资料的协议只在 [CONTRACT.md](CONTRACT.md) 定义。
-
-新增来源至少覆盖热门／搜索、空结果、分页、章节归属、重复条目、图片顺序、服务器错误与验证页；修复须有能够复现故障的用例，优先补充现有回归测试，避免重复测试同一行为。目录只交付可靠完整快照，不能用失败、被截断的页面或验证码页面代替空结果。保留原上传、0 话、小数话与必要查询参数；不按作品名称推断身份。
-
-目录去重使用规范化后的完整章节 URL，去重前仍核对每条记录的归属；相同名称或编号的不同 URL 不能合并。不要只验证一部作品：站点修复先把已发现变体转成合成样本，再用有上限的热门／最新抽样检查覆盖面。图片遵循契约中的源站返回地址，不因 CDN 换域、分片或路径迁移增加白名单。诊断错误细分地址格式、作品归属、目录完整性、图片清单与源站空正文，不能都归为“页面结构变化”。
-
-`npm run build` 按 `manifest.files` 生成单文件 JavaScript，或逐字节复制原版 APK，输出摘要索引到 `.build/`。原生包在本站目录保存 APK 与原始 `LICENSE`，`upstream` 记录固定版本、源码提交、下载地址、大小和 SHA-256；构建不联网下载、不转换字节码，也不修改 APK。清单检查永久 ID、版本、路径、主机、声明能力和产物大小；JS 另检查语法，APK 另核对上游摘要。发布路径分别为 `repo/packages/<slug>/<version>.js` 或 `.apk`，同版本不可覆盖。
-
-## 验证
+| 位置 | 用途 |
+| --- | --- |
+| `src/<slug>/` | 站点实现或原版 APK、manifest、站点说明；APK 自带原始 LICENSE |
+| `repository.json` | 永久仓库身份与来源 ID 分配，删除来源也保留分配记录 |
+| `test/` | 行为回归和合成／脱敏契约样本 |
+| `.build/` | 可重建的包与摘要索引，不是发布目录 |
+| `repo/` | 渠道索引、不可变包、对应源码与许可；`registry.json` 记录已发布 ID |
 
 ```sh
+npm ci
 npm run check
-npm run test:app -- /明确选择的路径/nodelane-comics-app
+# JS 与明确选择的 App 联调；APK 需单独通过 Mihon 桥验收：
+npm run test:app -- --app /绝对路径/nodelane-comics-app
 ```
 
-普通 CI 只依赖本仓库与 Node。`test:app` 是显式的跨仓库兼容检查：调用所选 App 的 Flutter 工具，将本次 `.build` 和 `test/fixtures/contracts.json` 交给通用 QuickJS 测试入口；App 的普通测试和运行都不读取本仓库。新增接口样本应加入该契约文件，不在 App 测试中添加网站分支。
+`check` 独立构建并运行离线测试，不依赖 App 或真实站点。`test:app` 通过所选 App 的 Flutter 工具执行通用 QuickJS 契约与现有 Comix 网页桥测试，输入为本仓库 `.build/` 和 `test/fixtures/`；可用 `FLUTTER` 指定 SDK。App 普通 CI 不读取插件仓库。
 
-Node DOM 样本使用 LinkeDOM，实际 App 使用自己的 DOM 桥，两者均须验证。真实站点检查单独执行，避免站点波动或 CAPTCHA 让每次离线 CI 不可用。真实检查低并发、有数量与大小限制，只输出计数、错误和已脱敏诊断；不保存 Cookie、请求签名和图片签名地址。图片样本与截图只放忽略的 `artifacts/`。
-
-模拟器验收覆盖来源刷新、按需安装／更新、搜索与详情、章节首尾页、后台恢复和进度保持；真机、真实 CF 验证、翻译服务单独验收。原版 Keiyoushi 先在本地 MuMu 检查，iOS 单独验收。不能用 Node 请求或原生桥调用成功代替 App WebView／阅读器全流程验收。
-
-## 发布和恢复
+## 本地目录与发布
 
 ```sh
 npm run release -- testing
-# 完成目标平台验收后，才推广同一构建：
+npm run serve
+# 目标平台验收后，且本次任务已授权正式发布时：
 npm run release -- stable
 ```
 
-发布先构建并运行离线测试，再校验整个批次，写入不可变版本文件、对应源码和许可，最后原子替换该渠道的索引。逐版本 `THIRD_PARTY.md` 保留首次发布时的快照，新增来源声明更新公共文件及新版本归档。发布锁阻止并发写入；重复发布同一内容可重入。原子落盘避免中断留下半份活动文件。进程中断留下 `.publish-lock` 时，先核实发布进程已经结束，再移除锁并重新执行；保留已完成的版本文件。
+`release` 构建并测试所有启用来源，写入本地 `repo/`。`testing` 同时更新开发用的根索引；`stable` 只更新正式索引。两渠道独立，但包与源码归档共用。它会重新构建，不自动复用测试包；推广前核对版本与摘要和已验收包一致，并检查整个目录差异，避免顺带发布其他来源。
 
-正式与测试渠道具有独立索引，根目录索引仅供本地开发。HTTP 仅用于本机或局域网开发，远程必须 HTTPS。App 默认使用正式域名，测试时显式设置 `NODELANE_CATALOG_URL`。静态服务不代理源站或接收设备 Cookie。
+本地服务仅暴露 `repo/`，默认地址 `http://127.0.0.1:8787/index.json`。App 以 `--dart-define=NODELANE_CATALOG_URL=目录地址` 切换；真机联调使用 `HOST=0.0.0.0 npm run serve` 和开发机局域网 IP。正式／测试入口为 `https://comics-extensions.nodelane.net/{stable,testing}/index.json`，远程目录使用 HTTPS，不代理源站或接收设备 Cookie。
 
-来源更新时 App 校验元数据、同源下载地址、文件大小和 SHA-256，初始化成功才保存；失败保留旧代码、来源 ID、固定状态与书架关系。站点改版导致已经安装的新插件运行故障时，用更高版本重新发布归档实现：
+发布前整批校验版本、身份和摘要；同版本包不可覆盖。仅 `catalogMetadata`、`isNsfw` 可在不改包版本的情况下更新，首次源码归档保持不变。包、源码及许可先写入，渠道索引最后原子替换；失败可重试，不删除已写入的不可变文件。若遗留 `repo/.publish-lock`，确认原进程结束后再移除锁。
+
+提交、推送与发布按本次授权执行。推送 `main` 会触发现有 GitHub Actions，检查后将 `npm run pages` 生成的 `.pages/` 部署到 Pages；PR 只检查。提交发布内容时带齐源码、`repo/` 产物和许可，并检查 `git diff -- repo/stable/index.json repo/testing/index.json`。只改文档不需要运行 `release` 或改变目录。
+
+## 恢复与迁移
+
+恢复已安装的坏版本需用**更高版本**重新发布归档实现，不能降低索引版本：
 
 ```sh
-npm run rollback -- comix 0.2.0 0.2.2 testing
+npm run rollback -- <slug> <归档版本> <高于当前渠道的版本> testing
 ```
 
-恢复命令核验归档产物及源码可重现性，保留其他插件和工作区源码，不通过降低索引版本假装回滚。恢复后同步修复工作区版本，避免后续发布被降版检查拒绝。每个已发布版本的 `sources/<slug>/<version>/rebuild.mjs` 可独立重建 `plugin.js`；原生版本只还原原始 `plugin.apk`，不声称重新编译了上游源码。
+该命令验证归档可重现性并保留其他来源，不改变工作区源码；恢复后同步工作区版本，避免后续发布降版。归档内 `rebuild.mjs` 可单独重建 JS；APK 只还原原始二进制，不代表重新编译上游源码。历史包、对应源码和许可证继续保留。
 
-## GitHub Pages 分发
-
-正式域名为 `comics-extensions.nodelane.net`，DNS CNAME 指向 `wy2926.github.io`，仓库 Pages 使用 GitHub Actions 发布模式。工作流只在 `main` 或其手动运行时部署；PR 只检查。发布内容限于 `.pages/`，包含正式与测试目录、不可变插件、对应源码及许可。Actions 产物只保留一天，不使用付费大规格运行器或独立服务。
-
-维护者升版、完成验收并运行 `npm run release -- stable` 后，按 [AGENTS.md](../AGENTS.md) 的授权要求将源码和 `repo/` 产物一起提交推送。自动流程检查代码、校验目录与文件摘要，再一次部署整个快照；失败不会替换线上目录。未经推广的测试版本不会自动进入正式目录。发布前核对 `git diff -- repo/stable/index.json`；恢复旧实现仍须使用更高版本。
-
-`npm run pages` 将已记录的 `repo/stable` 和 `repo/testing` JSON 目录连同插件、源码及许可准备为静态站点。App 沿用来源数组解析与插件大小、SHA-256 检查。目录不依赖 GitHub API，也不要求用户登录。
-
-换托管服务时保留正式域名、路径、仓库身份、来源 ID、插件 slug 和现有文件。不要把包路径改成跨域下载或重定向。换域名需要更新 App 的官方地址；旧域名应保留服务直到旧客户端退出使用。
-
-源码与许可随插件版本提供，App 的 Apache-2.0 基线与 GPL 插件保持独立。
-
-故障报告至少带来源名／版本、App／iOS 版本、失败步骤、可公开作品或章节链接、错误类型。区分 CF、站点验证码、限流、网络失败、协议变化和不支持的图片；不要提交认证信息或完整请求日志。
+更换托管保留域名、路径、仓库身份、来源 ID、slug 与已有文件，包地址与目录同源且不重定向。换域名须同步 App 官方地址并保留旧入口兼容期。App 安装失败保留旧版本与关联数据；具体安装行为见 [App 来源文档](https://github.com/Wy2926/node-comics-app/blob/main/docs/SOURCE_PLUGINS.md)。

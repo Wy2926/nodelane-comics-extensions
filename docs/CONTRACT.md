@@ -6,7 +6,7 @@
 
 保留 `id` 与仓库身份，提升 `version`，设置 `sourceCodeLanguage: 2`、`sourceCodeUrl: packages/<slug>/<version>.apk`，包大小与摘要仍按同一分发规则校验。`additionalParams` 为 JSON 字符串，其中 `mihonSourceId` 必须是上游原始 64 位 ID 的字符串；不以该值替换本地数据库 ID。APK 原样分发并保留原许可，NodeLane 分发版本独立于上游 APK 版本。
 
-原生来源使用上游返回的内部路径和桥元数据，不转换成旧 JS 插件的完整网址。Comix 本次不承担旧自研版数据兼容，不新增 App 映射或迁移逻辑；来源 ID 不变本身不保证旧章节网址可用。Android 与 iOS 的兼容性分别验收。
+原生来源使用上游返回的内部路径和桥元数据。来源 ID 不变不保证另一运行类型保存的 URL 可用；切换运行类型时须说明旧数据兼容性，不自动添加网址映射或删除数据。Android 与 iOS 的兼容性分别验收。
 
 ## 运行与接口
 
@@ -101,6 +101,8 @@ App 将缺失资料、未知收费枚举和不支持的版本视为未标注，�
 | `Client` | 可用方法为 `get(url, headers)`、`head(url, headers)`、`post(url, headers, body)`；响应含 `statusCode`、`headers`、文本 `body`，JSON 由插件解析 |
 | `Document(html)` | 提供 CSS `select/selectFirst`、文本与属性读取等解析接口，不执行网页脚本 |
 | 设备 WebView | App 处理 CF 验证入口及设备端 Cookie／UA；插件报告验证需求，不自动解题 |
+
+既有 JS 可调用 `evaluateJavascriptViaWebview(url, headers, scripts, time)` 执行临时隐藏网页脚本，`scripts` 为脚本字符串数组，`time` 单位为秒。页面以 `window.flutter_inappwebview.callHandler('setResponse', JSON.stringify(value))` 返回字符串，插件再解析。等待真实页面就绪，成功或超时后释放页面；不能假定隐藏页与可见浏览器共享验证状态，也不能把 Node 模拟执行当作设备验证通过。
 
 `Client` 仅允许 HTTPS、443 端口、无 URL 用户凭据及 `requestHosts` 中的精确主机，不支持通配符。最多 4 次跳转，每次重新校验；GET／HEAD 可跳转，POST 遇到跳转失败。请求体上限 1 MiB，文本响应上限 4 MiB，等待响应及流空闲超时各 30 秒。插件自行限制分页、并发、重试和缓存生命周期。
 

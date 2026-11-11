@@ -1,10 +1,10 @@
 # NodeLane 插件仓库开发约定
 
-先读 README，再按需读 docs/MAINTENANCE.md 与站点说明。插件通过静态目录供 App 下载，禁止依赖同级仓库构建或运行。
+先读 README。新增或修复网站使用 [nodelane-source-adapter](.agents/skills/nodelane-source-adapter/SKILL.md)，分发操作见 [维护说明](docs/MAINTENANCE.md)。插件通过静态目录供 App 下载，禁止依赖同级仓库构建或运行。
 
 - 保留 repository.json 中的永久来源 ID；删除站点也保留其分配记录。修改已发布代码必须升版，禁止覆盖 repo/packages 的同版本产物。
 - 站点实现、协议与域名留在 src/<slug>/；共享模块仅在多个实际站点验证后提取，构建时打包，运行时不下载共用代码。
-- 新版本网站来源直接使用 Keiyoushi 原版扩展，不转换或重写为本仓库的 JavaScript 插件；可用即不改。优先修复 App 通用兼容层，确需站点修订时在上游实现上做最小修改并保留来源与许可；已替换插件的发布产物、对应源码和许可继续保留，流程见 docs/MAINTENANCE.md。
+- 新增网站先实测 Keiyoushi 原版扩展，可用即复用，不重写等价 JS；宿主问题修复通用兼容层，站点问题基于上游做最小修改。既有 JS 来源沿用自身契约维护，更换运行类型须核对本次需求与数据影响。
 - 沿用 Mangayomi MProvider 与 NodeLane 有版本的主机能力契约；不把翻译、账号、计费逻辑加入来源插件。
 - 不提交 Cookie、账号凭据、签名图片 URL 或源站私密响应。样本使用合成或脱敏数据；真实检查只输出摘要。
 - 请求限时；自动分页和重试须有明确终止条件。验证／限流与解析故障必须区别，不以空结果伪装失败，部分目录不能覆盖完整数据。
