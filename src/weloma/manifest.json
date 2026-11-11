@@ -22,5 +22,5 @@
   "requestHosts": ["weloma.net"],
   "requires": [],
   "capabilities": ["popular","latest","search","details","pages"],
-  "enabled": false
+  "enabled": true
 }

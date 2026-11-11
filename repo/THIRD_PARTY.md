@@ -41,6 +41,21 @@ NodeLane Comix 0.4.0 从本仓库 0.2.3 恢复 JS 协议实现，改为调用 Ap
 
 ## 接口参考
 
+### WeLoveManga（Weloma）JS 实现
+
+参考 [Keiyoushi WeLoveManga](https://github.com/keiyoushi/extensions-source/blob/5240ce7bec6e0dfbc871318f19884961bc1032e9/src/ja/rawlh/src/eu/kanade/tachiyomi/extension/ja/rawlh/WeLoveManga.kt) 与同一提交的 [FMReader](https://github.com/keiyoushi/extensions-source/blob/5240ce7bec6e0dfbc871318f19884961bc1032e9/lib-multisrc/fmreader/src/eu/kanade/tachiyomi/multisrc/fmreader/FMReader.kt)，固定提交 `5240ce7bec6e0dfbc871318f19884961bc1032e9`。原版权为 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者，Apache-2.0 全文保留在 `src/weloma/extension.js`，随单文件包分发。
+
+| 原文件 | SHA-256 | 使用方式 |
+| --- | --- | --- |
+| `WeLoveManga.kt` | `2f28a8c5f42806aa62489c13be0a97ee0e0762eb610635ba9f3b450082823f3b` | 背景封面、Base64 图片与章节 Referer |
+| `FMReader.kt` | `86f6acd45e142bd8a04d6ec5ab3287bc43781dee9d3b801b5c102dde7314a046` | 列表／搜索参数、详情、目录及正文选择器 |
+| `src/ja/rawlh/build.gradle.kts` | `17fcd639da966ce4806f30f646c6f3a2ce3bc9969b1b36f50bb8444e101b2309` | 日语、当前域名、MIXED 标记及上游 ID `7595224096258102519` |
+| `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 保留原文与署名 |
+
+NodeLane 按请求改为 MProvider／DOM 桥；依据公开 HTML 独立实现 UTF-8 标题解码、阅读菜单核对、作品归属、完整 URL 与重复页槽保留、日期及失败语义。这些改动以 GPL-3.0-only 分发，不打包原 APK、JVM 或网站脚本。站点首页的免费阅读声明及公开日语页漫支持相应卡片资料，其他分类保持未知。
+
+源站 favicon 返回 404，图标引用同一固定提交的 [ic_launcher.png](https://raw.githubusercontent.com/keiyoushi/extensions-source/5240ce7bec6e0dfbc871318f19884961bc1032e9/src/ja/rawlh/res/mipmap-xxxhdpi/ic_launcher.png)，192 × 192，SHA-256 `dba5489867784680c04286bbdd61055153f41e41b9931d4cfee1ee271c34d217`；图像不打包，权利仍归原权利人。
+
 ### Read Comics Online 移植
 
 来自 [Keiyoushi/extensions-source](https://github.com/keiyoushi/extensions-source/blob/b647c92fd14801fda23e866d5a7da7d5fdd7ec92/src/en/readcomicsonline/src/eu/kanade/tachiyomi/extension/en/readcomicsonline/ReadComicsOnline.kt)，固定提交 `b647c92fd14801fda23e866d5a7da7d5fdd7ec92`。上游项目版权为 2015 Javier Tomás 及贡献者，Apache-2.0。
