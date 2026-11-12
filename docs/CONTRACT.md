@@ -100,7 +100,7 @@ App 将缺失资料、未知收费枚举和不支持的版本视为未标注，�
 | --- | --- |
 | `Client` | 可用方法为 `get(url, headers)`、`head(url, headers)`、`post(url, headers, body)`；响应含 `statusCode`、`headers`、文本 `body`，JSON 由插件解析 |
 | `Document(html)` | 提供 CSS `select/selectFirst`、文本与属性读取等解析接口，不执行网页脚本 |
-| 设备 WebView | App 处理 CF 验证入口及设备端 Cookie／UA；插件报告验证需求，不自动解题 |
+| 设备 WebView | App 提供可见验证入口及 `evaluateJavascriptViaWebview(url, headers, scripts, time)` 临时网页接口，管理设备端 Cookie／UA；站点可在网页内运行自身验证，插件等待状态并取回结果 |
 
 既有 JS 可调用 `evaluateJavascriptViaWebview(url, headers, scripts, time)` 执行临时隐藏网页脚本，`scripts` 为脚本字符串数组，`time` 单位为秒。页面以 `window.flutter_inappwebview.callHandler('setResponse', JSON.stringify(value))` 返回字符串，插件再解析。等待真实页面就绪，成功或超时后释放页面；不能假定隐藏页与可见浏览器共享验证状态，也不能把 Node 模拟执行当作设备验证通过。
 
@@ -108,7 +108,7 @@ App 将缺失资料、未知收费枚举和不支持的版本视为未标注，�
 
 上述请求限制不等于完整 JavaScript 沙箱，也不自动约束原生图片请求。封面与正文图片接受源站页面或接口返回的有效 HTTP(S) 地址，不使用固定 CDN 域名、存储桶或路径模板作为准入条件；相对地址按源站解析，查询参数与页位保留。章节归属由页面身份、阅读导航或接口中的作品／章节数据确认，不从图片 CDN 路径猜测。
 
-成功空结果与失败必须区分。失败通过抛出 `Error` 传播，说明验证、限流、网络、归属、目录完整性或图片协议等原因；不以空列表掩盖失败。验证由用户在设备端完成后重试，`hasCloudflare` 不保证验证通过。错误和日志不得包含 Cookie、令牌、签名图片地址或私密响应。
+成功空结果与失败必须区分。失败通过抛出 `Error` 传播，说明验证、限流、网络、归属、目录完整性或图片协议等原因；不以空列表掩盖失败。使用临时网页的插件须限制验证等待与后续请求时间，通过 `setResponse` 返回完整结果，交由宿主销毁网页；需要人工交互时提示用户在设备端完成后重试。`hasCloudflare` 不保证验证通过。错误和日志不得包含 Cookie、令牌、签名图片地址或私密响应。
 
 ## 图片处理
 

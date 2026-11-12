@@ -4,6 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {mockPlugin} from './helpers/runtime.mjs';
 const origin='https://cn.baozimh.com',book=origin+'/comic/fixture',chapter=origin+'/user/page_direct?comic_id=fixture&section_slot=0&chapter_slot=0';
 const [detail,reader]=await Promise.all(['detail','reader'].map(n=>readFile(new URL('./fixtures/baozimh-'+n+'.html',import.meta.url),'utf8')));
+const shortDetail=await readFile(new URL('./fixtures/baozimh-short-detail.html',import.meta.url),'utf8');
 const last=reader.replace('0_0.html','0_0_2.html').replace('(1/2)','(2/2)').replace('0_0_2.html">下一页','0_1.html">下一话');
 const list=JSON.stringify({items:[{comic_id:'fixture',name:'漫画🌊',topic_img:'book.jpg'}],next:'/api/bzmhq/amp_comic_list?page=2'});
 const runtime=responses=>mockPlugin('baozimh',(_,n)=>{const r=responses[n-1];assert.ok(r,'unexpected request');return typeof r==='string'?{statusCode:200,body:r}:r;});
@@ -30,6 +31,15 @@ test('Baozi collects all reader parts, preserves duplicate slots and stops befor
   const {plugin,requests}=await runtime([reader,last]);const pages=await plugin.getPageList(url);assert.equal(pages.length,4);assert.equal(pages[0].url,pages[2].url);assert.equal(pages[1].url,'http://new-cdn.example.test/arbitrary/two.webp');assert.equal(pages[0].headers.Referer,origin+'/');assert.equal(requests[0].url,'https://tw.twbzmg.com/comic/chapter/fixture/0_0.html');assert.equal(requests[1].url,'https://tw.twbzmg.com/comic/chapter/fixture/0_0_2.html');
  }
  assert.equal((await (await runtime([reader,last])).plugin.getPageList(chapter.replace('comic_id=fixture','comic_id=old-alias'))).length,4);
+});
+test('Baozi latest-only short catalogs retain newest-first order and never replace a missing full catalog',async()=>{
+ const result=await (await runtime([shortDetail])).plugin.getDetail(book);
+ assert.deepEqual(Array.from(result.chapters,c=>c.name),['第2话','第1话','序章']);
+ assert.deepEqual(Array.from(result.chapters,c=>c.dateUpload),[String(Date.UTC(2024,1,28,16)),'','']);
+ const button='<button id="button_show_all_chatper">查看全部3章节</button>';
+ assert.equal((await (await runtime([detail.replace('</body>',button+'</body>')])).plugin.getDetail(book)).chapters.length,3);
+ for(const body of [shortDetail.replace('</body>',button+'</body>'),shortDetail.replace('</body>','<div id="chapter-items"></div></body>'),detail.replace('</body>',button.replace('全部3','全部4')+'</body>'),shortDetail.replace('chapter_slot=2','chapter_slot=4')]) await assert.rejects((await runtime([body])).plugin.getDetail(book),/BAOZI:catalog/);
+ await assert.rejects((await runtime([shortDetail.replace('comic_id=fixture','comic_id=foreign')])).plugin.getDetail(book),/BAOZI:chapter-owner/);
 });
 test('Baozi reader rejects missing, repeated, foreign parts and invalid image protocols without returning partial pages',async()=>{
  for(const body of [last.replace('(2/2)','(1/2)'),last.replace('0_0_2.html','0_1_2.html'),last.replaceAll('/fixture','/foreign')]) await assert.rejects((await runtime([reader,body])).plugin.getPageList(chapter),/BAOZI:(pagination|chapter-owner)/);

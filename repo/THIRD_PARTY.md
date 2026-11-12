@@ -121,10 +121,13 @@ NodeLane 改写为 MProvider／DOM 桥，使用稳定作品地址、完整目录
 | `Baozi.kt` | `98db7bc326d311b29c91c53df72e49b774272ec1c37a434d8675cad244f0a12e` | 分类、搜索、详情与目录选择器 |
 | `Dto.kt` | `483ab19e65ff8bd1b29c2b41d420d00c4d6b55bdd7acf7952fb66b3dad29bb87` | 作品与分类字段 |
 | `Filters.kt` | `9f374a5553eb8da1c81d9ff6d8d82e8c479058424f5d1bf07614e54a485a9c54` | 地区、状态、题材、首字母参数；选项按当前主站核对 |
+| `GatekeeperInterceptor.kt` | `767a49d6220f472ccc61acf7a62b2c4b47aa66731ffd892776c3d24e3c2a6870` | 核对挑战检测、同会话验证和重新请求流程；未移植 Kotlin 拦截器或解题算法 |
 | `build.gradle.kts` | `0ab95a8c06f5b36d77ab9b8a44ed490d172dc33c11771882081912da3fe5ce4d` | 语言、镜像和 SAFE 标记 |
 | `LICENSE` | `b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1` | 全文保存在 src/baozimh/parser.js，随插件包分发 |
 
-NodeLane 改写为 MProvider／DOM 桥，按当前主站 AMP API 的 `next` 分页，按章节身份使用 `tw.twbzmg.com` 的公开阅读器，串行合并一话全部分页，保留已保存的章节 URL、页位及目录日期语义。未迁入原 App 镜像的图片裁切、替换图片和 Gatekeeper 自动解题拦截器，验证交由 App 网页会话。NodeLane 修改按 GPL-3.0-only 分发。
+NodeLane 改写为 MProvider／DOM 桥，按当前主站 AMP API 的 `next` 分页，按章节身份使用 `tw.twbzmg.com` 的公开阅读器，串行合并一话全部分页，保留已保存的章节 URL、页位及目录日期语义。Gatekeeper 通过现有 App 临时网页接口运行源站自身验证，再在同一会话请求原地址；网页执行本站 PoW 脚本，插件只等待验证状态并返回响应。未迁入原 App 镜像的图片裁切或替换图片。NodeLane 修改按 GPL-3.0-only 分发。
+
+短目录布局、章节顺序和“查看全部”计数另参考 [node-comics 的包子适配](https://github.com/Wy2926/node-comics/blob/98f1c6223909885ffbf6cd3fc7cbff1641a0710f/apps/extension/src/sources/sites/baozimh/network.ts)，提交 `98f1c6223909885ffbf6cd3fc7cbff1641a0710f`，文件 SHA-256 `01c3f59a955a471d8c9e981fbb6fc6422bf30aa07f66f20fc5930244e5cea2c5`，GPL-3.0-only；按本仓库 DOM 契约实现，不引入同级目录依赖。
 
 Mangayomi 固定提交 `6004f1f8d1a56f882dadb734ce26f50c626a3850` 的完整代码树未检出包子漫画同站实现。网站 HTML、脚本及漫画图片不随仓库分发。
 
