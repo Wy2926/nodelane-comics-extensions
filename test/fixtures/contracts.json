@@ -817,6 +817,23 @@
   "slug": "baozimh"
 },
 {
+  "name": "Latest-only short catalog through native DOM",
+  "method": "detail",
+  "args": ["https://cn.baozimh.com/comic/fixture"],
+  "responses": [{"bodyFile": "baozimh-short-detail.html"}],
+  "expect": {"count": 3, "name": "短目录🌊"},
+  "slug": "baozimh"
+},
+{
+  "name": "Gatekeeper fallback serializes the real QuickJS program and resumes the original API request",
+  "method": "popular",
+  "args": [1],
+  "responses": [{"statusCode": 403, "jsonBody": {"error": "challenge_required", "challenge_url": "/__gatekeeper_challenge/start?return=%2Fapi%2Fbzmhq%2Famp_comic_list"}}],
+  "setup": "globalThis.evaluateJavascriptViaWebview = async (url, headers, scripts, time) => { if (!url.includes('/__gatekeeper_challenge/start?') || time !== 180 || scripts.length !== 1 || scripts[0].includes('[native code]') || !scripts[0].includes('amp_comic_list?') || !scripts[0].includes('credentials:')) throw Error('invalid verification bridge call'); return JSON.stringify({ok:true,response:{statusCode:200,body:JSON.stringify({items:[{comic_id:'fixture',name:'短目录🌊'}]})}}); };",
+  "expect": {"count": 1},
+  "slug": "baozimh"
+},
+{
   "name": "All reader parts and source CDN selection through native AMP DOM",
   "method": "pages",
   "args": [

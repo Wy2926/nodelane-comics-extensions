@@ -8,13 +8,34 @@ class SourceExtension extends MProvider {
     return [{type_name:'HeaderFilter',name:'关键词搜索不应用筛选；最新为网站最新上架'},...BZ_FILTERS.map(([type,name,values])=>({type,name,type_name:'SelectFilter',state:0,values:values.map(([name,value])=>({name,value,type_name:'SelectOption'}))}))];
   }
   async read(url) {
-    const response=await this.client.get(url,this.getHeaders()),body=response.body||'',headers=Object.fromEntries(Object.entries(response.headers||{}).map(([k,v])=>[k.toLowerCase(),v]));
-    if (headers['x-gatekeeper-challenge']==='required' || /"error"\s*:\s*"challenge_required"|__gatekeeper_challenge\/start/.test(body)) throw bzError('verification','网站需要 Gatekeeper 验证，请打开来源网页完成后重试');
+    let response=await this.client.get(url,this.getHeaders());
+    if (bzGatekeeperRequired(response)) response=await this.readVerified(url,response);
+    const body=response.body||'',headers=Object.fromEntries(Object.entries(response.headers||{}).map(([k,v])=>[k.toLowerCase(),v]));
+    if (bzGatekeeperRequired(response)) throw bzError('verification','Gatekeeper 验证后仍拒绝访问，请打开来源网页完成后重试');
     if (headers['cf-mitigated']==='challenge' || /<title>\s*Just a moment|id=["']challenge-form["']|Sorry, you have been blocked/i.test(body)) throw bzError('verification','Cloudflare 验证或封禁，请在来源网页处理后重试');
     if (response.statusCode===429) throw bzError('rate-limit','请求过于频繁，请稍后重试');
     if (response.statusCode===401 || response.statusCode===403) throw bzError('access','源站拒绝访问，请在来源网页核对');
     if (response.statusCode!==200) throw bzError('http','请求失败（HTTP '+response.statusCode+'）');
     return body;
+  }
+  async readVerified(url,response) {
+    bzRequire(typeof evaluateJavascriptViaWebview==='function','verification','网站需要 Gatekeeper 验证，请更新 App 或打开来源网页完成后重试');
+    let pageUrl=url,data;
+    try {data=JSON.parse(response.body);} catch (_) { /* Navigation challenges are HTML. */ }
+    if(data?.challenge_url)pageUrl=bzUrl(data.challenge_url,url);
+    const origin=/^https?:\/\/[^/]+/i.exec(url)[0];
+    bzRequire(pageUrl.startsWith(origin+'/'),'verification','Gatekeeper 验证地址与来源不一致');
+    // Serialize challenged requests so multiple workers cannot invalidate the same browser ticket.
+    const pending=(this.verification||Promise.resolve()).catch(()=>{}).then(async()=>{
+      const script='('+bzRunVerifiedPage.toString()+')('+JSON.stringify(url)+');';
+      const raw=await evaluateJavascriptViaWebview(pageUrl,this.getHeaders(),[script],180);
+      bzRequire(raw,'verification','Gatekeeper 自动验证未返回结果或已超时，请在来源网页处理后重试');
+      let result;try {result=JSON.parse(raw);} catch (_) {throw bzError('verification','验证网页返回的数据无法解析');}
+      bzRequire(result && result.ok===true && result.response && Number.isInteger(result.response.statusCode) && typeof result.response.body==='string','verification',result?.error||'验证网页返回的数据不完整');
+      return result.response;
+    });
+    this.verification=pending;
+    try {return await pending;} finally {if(this.verification===pending)this.verification=null;}
   }
   async listing(page,filters=[]) {
     bzRequire(Number.isInteger(page) && page>=1,'page','页码应从 1 开始');

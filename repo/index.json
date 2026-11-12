@@ -57,7 +57,7 @@
     "baseUrl": "https://cn.baozimh.com",
     "apiUrl": "",
     "lang": "zh",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "itemType": 0,
     "sourceCodeLanguage": 1,
     "appMinVerReq": "0.1.0",
@@ -66,7 +66,7 @@
     "isFullData": false,
     "typeSource": "single",
     "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/48b291828458a32c97c3b167be453258c1bd5a86/src/zh/baozimanhua/res/mipmap-xxxhdpi/ic_launcher.png",
-    "notes": "热门、最新上架、搜索与地区／状态／题材／首字母筛选；完整目录和整话分页。遇到网站验证请打开来源网页后重试。",
+    "notes": "热门、最新上架、搜索与筛选；兼容短目录和整话分页。Gatekeeper 通过临时网页自动验证，失败时请打开来源网页后重试。",
     "catalogMetadata": {
       "schema": 1,
       "regions": [
@@ -85,13 +85,13 @@
       ],
       "pricing": "free"
     },
-    "sourceCodeUrl": "packages/baozimh/0.1.5.js",
+    "sourceCodeUrl": "packages/baozimh/0.1.6.js",
     "nodelane": {
       "schema": 1,
       "repositoryId": "net.nodelane.extensions",
       "slug": "baozimh",
-      "sha256": "ab26ad85205e7439f36a7236a286feb999a5ca3f8162e2a80db1d199aa62a718",
-      "size": 25147,
+      "sha256": "e00601876f6470ee0401bc3d8b5c807eb2290fe10bbb8deaf54f762fcd944b50",
+      "size": 30486,
       "requestHosts": [
         "cn.baozimh.com",
         "tw.twbzmg.com",

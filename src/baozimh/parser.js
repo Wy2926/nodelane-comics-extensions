@@ -76,7 +76,12 @@ function bzDetail(body,requested) {
   bzRequire(aliases.includes(requested.id),'identity','作品页面归属与请求不一致');
   bzRequire(name,'detail','作品名称缺失');
   if (/章节数据缺少[\s\S]*屏蔽处理/.test(doc.selectFirst('body').text)) throw bzError('access','源站已屏蔽此作品，当前没有可读目录');
-  const nodes=doc.select('#chapter-items .comics-chapters a[href], #chapters_other_list .comics-chapters a[href]');
+  const full=doc.select('#chapter-items, #chapters_other_list').length>0;
+  const buttons=doc.select('#button_show_all_chatper');
+  // Short series only render the newest-first latest block (Keiyoushi / node-comics).
+  // An announced full catalog must never fall back to its latest-chapter preview.
+  bzRequire(full || !buttons.length,'catalog','完整章节目录缺失，请重试');
+  const nodes=doc.select(full?'#chapter-items .comics-chapters a[href], #chapters_other_list .comics-chapters a[href]':'.comics-chapters a[href]');
   bzRequire(nodes.length,'catalog','未取得完整章节目录，请在来源网页核对');
   const date=bzDate(doc.selectFirst('.comics-detail em').text),seen=new Set(),chapters=[];let hasLatest=false;
   for(const node of nodes) {
@@ -90,8 +95,12 @@ function bzDetail(body,requested) {
     chapters.push({name:title,url:loc.url,dateUpload:isLatest?date:''});
   }
   bzRequire(!latest || hasLatest,'catalog','目录缺少页面声明的最新章节，请重试');
+  for(const button of buttons) {
+    const count=/查看全部\s*(\d+)\s*[章節节]/.exec(button.text);
+    bzRequire(count && Number(count[1])===chapters.length,'catalog','章节数量与源站声明不一致，请重试');
+  }
   const tags=doc.select('.tag-list .tag').map(n=>n.text.trim()).filter(Boolean),image=bzMeta(doc,'og:image');
-  return {name,link:requested.url,imageUrl:image?bzUrl(image):'',author:doc.selectFirst('h2.comics-detail__author').text.trim(),description:doc.selectFirst('p.comics-detail__desc').text.trim(),genre:tags.filter(t=>!['连载中','已完结'].includes(t)),status:tags.includes('已完结')?1:tags.includes('连载中')?0:5,chapters:chapters.reverse()};
+  return {name,link:requested.url,imageUrl:image?bzUrl(image):'',author:doc.selectFirst('h2.comics-detail__author').text.trim(),description:doc.selectFirst('p.comics-detail__desc').text.trim(),genre:tags.filter(t=>!['连载中','已完结'].includes(t)),status:tags.includes('已完结')?1:tags.includes('连载中')?0:5,chapters:full?chapters.reverse():chapters};
 }
 function bzReader(body,requested,part,total) {
   const doc=new Document(body),canonical=bzLocation(doc.selectFirst('link[rel=canonical]').attr('href'),true);

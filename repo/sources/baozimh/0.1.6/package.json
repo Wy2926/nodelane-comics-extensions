@@ -1,0 +1,61 @@
+{
+  "id": 86001010,
+  "name": "包子漫画",
+  "baseUrl": "https://cn.baozimh.com",
+  "apiUrl": "",
+  "lang": "zh",
+  "version": "0.1.6",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": false,
+  "hasCloudflare": true,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/48b291828458a32c97c3b167be453258c1bd5a86/src/zh/baozimanhua/res/mipmap-xxxhdpi/ic_launcher.png",
+  "notes": "热门、最新上架、搜索与筛选；兼容短目录和整话分页。Gatekeeper 通过临时网页自动验证，失败时请打开来源网页后重试。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "cn",
+      "jp",
+      "kr",
+      "western"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "adaptation",
+      "fan"
+    ],
+    "pricing": "free"
+  },
+  "sourceCodeUrl": "packages/baozimh/0.1.6.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "baozimh",
+    "sha256": "e00601876f6470ee0401bc3d8b5c807eb2290fe10bbb8deaf54f762fcd944b50",
+    "size": 30486,
+    "requestHosts": [
+      "cn.baozimh.com",
+      "tw.twbzmg.com",
+      "s1-rsa1-usla.bzcdn.net",
+      "s1-ogsm1-uspho.bzcdn.net",
+      "s1-dpa1-cnhk.bzcdn.net",
+      "s1-mha1-nlams.bzcdn.net",
+      "s1.baozimh.com"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}
