@@ -229,6 +229,43 @@
     }
   },
   {
+    "id": 86001011,
+    "name": "Hachiraw",
+    "baseUrl": "https://hachiraw.net",
+    "apiUrl": "",
+    "lang": "ja",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": true,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/hachiraw/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "NodeLane JS 来源；复用 App WebView 处理网站验证。需要人工验证时在 App 浏览器完成后重试。",
+    "sourceCodeUrl": "../packages/hachiraw/0.1.0.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "hachiraw",
+      "sha256": "12e6ec6a7a91f2026c52a489c4c647637006a224e8064f78df05bfdc559662a6",
+      "size": 14317,
+      "requestHosts": [
+        "hachiraw.net"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
     "id": 86001008,
     "name": "Manga18fx",
     "baseUrl": "https://manga18fx.com",
@@ -476,6 +513,53 @@
       "size": 9975,
       "requestHosts": [
         "s2read.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001012,
+    "name": "WeLoveManga",
+    "baseUrl": "https://weloma.net",
+    "apiUrl": "",
+    "lang": "ja",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": true,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/5240ce7bec6e0dfbc871318f19884961bc1032e9/src/ja/rawlh/res/mipmap-xxxhdpi/ic_launcher.png",
+    "notes": "热门、最新、关键词搜索及分页；读取网站当前公开目录和正文。部分长篇网站仅公开最近 200 章，移动端待验收。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "../packages/weloma/0.1.0.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "weloma",
+      "sha256": "aff71cfc78ce3b2299472f2115e4c2fd3e9a266f53ceef59268d8efa622dd7b4",
+      "size": 23126,
+      "requestHosts": [
+        "weloma.net"
       ],
       "requires": [],
       "capabilities": [

@@ -11,9 +11,9 @@ void main() {
   final build = Platform.environment['NODELANE_PLUGIN_BUILD']!;
   final catalog =
       jsonDecode(File('$build/index.json').readAsStringSync()) as List;
-  final entry = (catalog.singleWhere((e) => e['id'] == 86001001) as Map)
-      .cast<String, dynamic>();
-  JsExtensionService create() {
+  JsExtensionService create([String slug = 'comix']) {
+    final entry = (catalog.singleWhere((e) => e['nodelane']['slug'] == slug) as Map)
+        .cast<String, dynamic>();
     final source = Source.fromJson(entry)
       ..sourceCode = File('$build/${entry['sourceCodeUrl']}')
           .readAsStringSync();
@@ -131,5 +131,38 @@ void main() {
       service.getDetail('/title/test-fixture'),
       throwsA(predicate((e) => e.toString().contains('超时'))),
     );
+  });
+  test('Hachiraw page program crosses real QuickJS and App deserialization', () async {
+    final service = create('hachiraw');
+    final fixtures = Platform.environment['NODELANE_PLUGIN_FIXTURES']!;
+    final detailHtml = File('$fixtures/hachiraw-detail.html').readAsStringSync();
+    final readerHtml = File('$fixtures/hachiraw-reader.html').readAsStringSync();
+    await host((args) async {
+      expect(args[0], 'https://hachiraw.net/manga/sample-book');
+      expect(args[3], 35);
+      final process = await Process.start('node', [
+        '$fixtures/../helpers/hachiraw-page.mjs', '--stdin',
+      ]);
+      process.stdin.write(jsonEncode({
+        'script': (args[2] as List).single,
+        'url': args[0], 'html': detailHtml, 'reader': readerHtml,
+      }));
+      await process.stdin.close();
+      final output = await utf8.decoder.bind(process.stdout).join();
+      final errors = await utf8.decoder.bind(process.stderr).join();
+      expect(await process.exitCode, 0, reason: errors);
+      return output;
+    });
+    const work = 'https://hachiraw.net/manga/sample-book';
+    final detail = await service.getDetail(work);
+    expect(detail.name, 'Sample & Book 🌊');
+    expect(detail.chapters!.length, 4);
+    expect(detail.chapters!.last.url, '$work/chapter-1');
+    expect(detail.chapters!.last.dateUpload, '1791763200000');
+    final pages = await service.getPageList('$work/chapter-1');
+    expect(pages.length, 2);
+    expect(pages.first.url, pages.last.url);
+    expect(pages.first.headers!['Referer'], 'https://hachiraw.net/');
+    expect(pages.first.headers!['User-Agent'], 'Fixture device WebView');
   });
 }

@@ -71,6 +71,17 @@ test('build is deterministic, relative, and independent from App or sibling repo
   assert.equal(comix.nodelane.license, 'GPL-3.0-only');
   assert.deepEqual(comix.nodelane.requires, ['image.tile-shuffle.v1']);
 });
+test('unaccepted sources are testable locally but stay out of release catalogs', async t => {
+  const directory = await fixture(t);
+  const file = path.join(directory,'src/s2read/manifest.json');
+  await writeFile(file, JSON.stringify({...await json(file), enabled:false}));
+  const local = await build({directory, includeDisabled:true});
+  assert.ok(local.entries.some(e => e.nodelane.slug === 's2read'));
+  const release = await build({directory});
+  assert.ok(!release.entries.some(e => e.nodelane.slug === 's2read'));
+  await publish(release, {directory});
+  assert.ok(!(await json(path.join(directory,'repo/index.json'))).some(e => e.nodelane.slug === 's2read'));
+});
 test('invalid ID, version, paths and host capabilities fail before publication', async () => {
   const repo = await json(path.join(root,'repository.json'));
   const m = await json(path.join(root,'src/s2read/manifest.json'));
@@ -128,7 +139,7 @@ test('stable is independent; recovery republishes archived source with a newer v
   assert.equal(await readFile(source,'utf8'),before);
   await assert.rejects(rollback('s2read',version,version,'testing',directory),/高于/);
   const registry = await json(path.join(directory,'repository.json'));
-  registry.sourceIds.s2read+=10;
+  registry.sourceIds.s2read = Math.max(...Object.values(registry.sourceIds)) + 1;
   await writeFile(path.join(directory,'repository.json'),JSON.stringify(registry));
   await assert.rejects(build({directory}),/永久 ID/);
 });

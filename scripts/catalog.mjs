@@ -72,7 +72,7 @@ export function validateManifest(m, slug, repo) {
   check(m.isNsfw === undefined || typeof m.isNsfw === 'boolean', '成人标记必须为布尔值');
   validateCatalogMetadata(m.catalogMetadata);
 }
-export async function build({directory = root, out = path.join(directory, '.build')} = {}) {
+export async function build({directory = root, out = path.join(directory, '.build'), includeDisabled = false} = {}) {
   const repo = await json(path.join(directory, 'repository.json'));
   validateRepository(repo);
   try {
@@ -84,7 +84,7 @@ export async function build({directory = root, out = path.join(directory, '.buil
     const dir = path.join(directory, 'src', slug);
     const m = await json(path.join(dir, 'manifest.json'));
     validateManifest(m, slug, repo);
-    if (m.enabled === false) continue;
+    if (m.enabled === false && !includeDisabled) continue;
     const native = m.sourceCodeLanguage === 2;
     const files = await Promise.all(m.files.map(file => readFile(path.join(dir, file))));
     const bytes = native ? files[0] : Buffer.from(
