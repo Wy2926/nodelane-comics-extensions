@@ -1,0 +1,48 @@
+{
+  "id": 86001013,
+  "name": "New XTOON",
+  "baseUrl": "https://newxtoon5.com",
+  "apiUrl": "",
+  "lang": "ko",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": true,
+  "hasCloudflare": false,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://newxtoon5.com/favicon.ico",
+  "notes": "韩文热门、最新、搜索及分类；完整分页目录与原图阅读。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "kr"
+    ],
+    "formats": [
+      "vertical"
+    ],
+    "creations": [],
+    "pricing": "free"
+  },
+  "sourceCodeUrl": "packages/newxtoon/0.1.0.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "newxtoon",
+    "sha256": "4fbca6e0e3e4e2e334ac3797963fe778de7c39ef2cde9f2053096069d44f6587",
+    "size": 10265,
+    "requestHosts": [
+      "newxtoon5.com"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}
