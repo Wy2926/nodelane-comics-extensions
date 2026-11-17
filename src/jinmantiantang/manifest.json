@@ -21,5 +21,5 @@
   "requestHosts": ["18comic.vip", "www.cdngwc.net"],
   "requires": ["crypto.md5.v1", "crypto.aes-ecb.v1", "image.strip-reverse.v1"],
   "capabilities": ["popular", "latest", "search", "details", "pages"],
-  "enabled": true
+  "enabled": false
 }

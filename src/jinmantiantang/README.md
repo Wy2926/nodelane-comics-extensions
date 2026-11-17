@@ -4,7 +4,7 @@
 
 - 章节使用 `/photo/<id>?album_id=<作品ID>` 保存归属；正文交叉核对作品、章节、总页数和页序，保留重复图片页槽。目录保留源站特殊章名；仅末章使用接口已知的更新时间，其余日期明确未知。
 - API 请求和解码在 QuickJS／App 通用桥完成。图片条带数量由插件计算，App 执行还原并保留 GIF 动画；无须登录，账号功能不在本插件范围。
-- 需 App 声明 `crypto.md5.v1`、`crypto.aes-ecb.v1`、`image.strip-reverse.v1`。旧 App 会拒绝安装；`0.1.0` 分发于 `stable`，验收范围见下。新增来源没有已有书籍需要迁移。
+- 需 App 声明 `crypto.md5.v1`、`crypto.aes-ecb.v1`、`image.strip-reverse.v1`。旧 App 会拒绝安装；JS `0.1.0` 已从活动目录撤下，当前禁用，正在准备原版 APK 替代。永久 ID 与已发布源码、包和许可归档保留。
 - API 当前使用固定上游节点；节点或加密协议变更时请求会明确失败，需要更新来源。网页入口自身的 Cloudflare 验证不等于 API 阅读失败。
 
 运行沿用根目录 `npm run check` 和 `npm run test:app -- --app <App绝对路径>`。来源和许可见根目录 `THIRD_PARTY.md`。

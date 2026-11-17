@@ -266,48 +266,6 @@
     }
   },
   {
-    "id": 86001014,
-    "name": "禁漫天堂",
-    "baseUrl": "https://18comic.vip",
-    "apiUrl": "https://www.cdngwc.net",
-    "lang": "zh",
-    "version": "0.1.0",
-    "itemType": 0,
-    "sourceCodeLanguage": 1,
-    "appMinVerReq": "0.1.2",
-    "isNsfw": true,
-    "hasCloudflare": true,
-    "isFullData": false,
-    "typeSource": "single",
-    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/zh/jinmantiantang/res/mipmap-xhdpi/ic_launcher.png",
-    "notes": "本地 JS；热门、最新、关键词／JM 编号搜索、完整目录及图片条带还原。需支持声明能力的新版 App；Android MuMu 已验收，iOS／真机及完整离线下载待验收。",
-    "sourceCodeUrl": "../packages/jinmantiantang/0.1.0.js",
-    "nodelane": {
-      "schema": 1,
-      "repositoryId": "net.nodelane.extensions",
-      "slug": "jinmantiantang",
-      "sha256": "633cd8eda167719bc6d439ac17e3a14529870ed0fe098188c334502a105b0e2b",
-      "size": 10419,
-      "requestHosts": [
-        "18comic.vip",
-        "www.cdngwc.net"
-      ],
-      "requires": [
-        "crypto.md5.v1",
-        "crypto.aes-ecb.v1",
-        "image.strip-reverse.v1"
-      ],
-      "capabilities": [
-        "popular",
-        "latest",
-        "search",
-        "details",
-        "pages"
-      ],
-      "license": "GPL-3.0-only"
-    }
-  },
-  {
     "id": 86001008,
     "name": "Manga18fx",
     "baseUrl": "https://manga18fx.com",
