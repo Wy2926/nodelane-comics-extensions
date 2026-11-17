@@ -1,0 +1,13 @@
+{
+  "html": "<a data-chapter-id=\"12\" href=\"/comics/42/chapters/12?edition=extra\">1.5화</a><a data-chapter-id=\"12\" href=\"https://newxtoon5.com/comics/42/chapters/12?edition=extra\">1.5화</a><a data-chapter-id=\"11\" href=\"/comics/42/chapters/11\">1.5화</a>",
+  "chapters": [
+    {"id":12,"title":"1.5화","date":"2024.02.29"},
+    {"id":12,"title":"1.5화","date":"2024.02.29"},
+    {"id":11,"title":"1.5화","date":"2023.02.29"}
+  ],
+  "current_page": 1,
+  "last_page": 2,
+  "total": 3,
+  "has_more": true,
+  "next_page": 2
+}

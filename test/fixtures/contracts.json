@@ -1,5 +1,45 @@
 [
   {
+    "slug": "newxtoon",
+    "name": "Korean search, native DOM excludes advertisement cards",
+    "method": "search",
+    "args": ["마법 & +", 1],
+    "responses": [{"bodyFile":"newxtoon-list.html"}],
+    "expect": {"count":1,"name":"마법 🌊","next":true,"query":{"q":"마법 & +"}}
+  },
+  {
+    "slug": "newxtoon",
+    "name": "complete paged catalog and original date semantics",
+    "method": "detail",
+    "args": ["https://newxtoon5.com/comics/42"],
+    "responses": [{"bodyFile":"newxtoon-detail.html"},{"bodyFile":"newxtoon-chapters-1.json"},{"bodyFile":"newxtoon-chapters-2.json"}],
+    "expect": {"count":3,"name":"마법 🌊","author":"작가, 그림","hasCover":true,"uploadDates":["2024-02-29",null,null]}
+  },
+  {
+    "slug": "newxtoon",
+    "name": "reader identity and duplicate image slots",
+    "method": "pages",
+    "args": ["https://newxtoon5.com/comics/42/chapters/10"],
+    "responses": [{"bodyFile":"newxtoon-reader.html"}],
+    "expect": {"count":3,"referer":"https://newxtoon5.com/","urls":["https://cdn.example.test/page.webp?size=full&v=1","https://cdn.example.test/page.webp?size=full&v=1","http://another-cdn.example.test/any/path.webp"]}
+  },
+  {
+    "slug": "newxtoon",
+    "name": "category filter uses the native SelectFilter contract",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {"count":1,"types":["category"],"options":[3],"preferences":0}
+  },
+  {
+    "slug": "newxtoon",
+    "name": "failed later catalog page never returns a partial snapshot",
+    "method": "detail",
+    "args": ["https://newxtoon5.com/comics/42"],
+    "responses": [{"bodyFile":"newxtoon-detail.html"},{"bodyFile":"newxtoon-chapters-1.json"},{"statusCode":503,"body":"Unavailable"}],
+    "expectError": "NX:http"
+  },
+  {
     "slug": "s2read",
     "name": "missing optional cover in search",
     "method": "search",
