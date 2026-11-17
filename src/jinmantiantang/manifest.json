@@ -16,6 +16,13 @@
   "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/zh/jinmantiantang/res/mipmap-xhdpi/ic_launcher.png",
   "notes": "Keiyoushi 1.6.64 原版 APK；热门、最新、搜索、目录和图片还原由原扩展完成。旧 JS 网址不兼容，需重新搜索添加；App 内切章待排查，iOS／真机及完整离线下载待验收。",
   "license": "Apache-2.0",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": ["jp", "kr"],
+    "formats": ["page", "vertical"],
+    "creations": ["fan"],
+    "pricing": "free"
+  },
   "files": ["extension.apk"],
   "additionalParams": "{\"mihonSourceId\":\"6286738698187452081\"}",
   "upstream": {

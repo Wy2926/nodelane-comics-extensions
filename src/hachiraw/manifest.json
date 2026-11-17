@@ -16,6 +16,13 @@
   "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/hachiraw/res/mipmap-xhdpi/ic_launcher.png",
   "notes": "NodeLane JS 来源；复用 App WebView 处理网站验证。需要人工验证时在 App 浏览器完成后重试。",
   "license": "GPL-3.0-only",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": ["jp"],
+    "formats": ["page"],
+    "creations": ["original"],
+    "pricing": "free"
+  },
   "files": [
     "page.js",
     "extension.js"
