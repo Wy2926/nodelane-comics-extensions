@@ -8,6 +8,14 @@ NodeLane Comix 0.4.0 从本仓库 0.2.3 恢复 JS 协议实现，改为调用 Ap
 
 归档的 0.3.0 保留 ID `86001001` 和 Keiyoushi Comix **1.6.63**（上游 ID `7537715367149829912`），不转换、不反编译重写、不重新签名。下载来源为 [Keiyoushi 发布 APK](https://github.com/keiyoushi/extensions/releases/download/2c02d07/tachiyomi-en.comix-v1.6.63.apk)，对应 [上游源码](https://github.com/keiyoushi/extensions-source/tree/d39cb746d483487855f261d9d06ff78c5c25a5a3/src/en/comix)。版权与署名保留为 Keiyoushi/Tachiyomi 贡献者，原许可全文见 [归档 LICENSE](repo/sources/comix/0.3.0/LICENSE)。归档 `extension.apk` 为 137063 字节，SHA-256 `b9cf685a5f7724b0ec50e65fac5ca83bd2a4a94b6ee97c1febfbdfd1ebdbdc70`；APK 内第三方声明不变。恢复脚本只复制原版 APK，不声称可重编译上游。旧 0.2.x 产物、源码和 GPL 声明同样保留，不覆盖历史版本。
 
+## 禁漫天堂原版 APK
+
+NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包，永久 ID `86001014`，上游来源 ID 字符串 `6286738698187452081`。来源为 [Keiyoushi 发布 APK](https://github.com/keiyoushi/extensions/releases/download/b035310-3/tachiyomi-zh.jinmantiantang-v1.6.64.apk)，对应 [源码提交 b0353107338f4d7eb110a70f0c5ff83f83f75fba](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/zh/jinmantiantang)。版权归 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者，原始 Apache-2.0 全文见 [本站 LICENSE](src/jinmantiantang/LICENSE)。
+
+`extension.apk` 为 152067 字节，SHA-256 `d3678778088c3e126f7ceef1d47de1c175b2a7df60260dd725adbbfb22a5fac9`；原样保存与分发，不重新签名，APK 内第三方声明不变。构建只复制并校验原包，归档恢复脚本不代表重新编译上游。`build.gradle.kts` 的 `NSFW` 标记作为成人标记依据；图标引用同一提交的 `res/mipmap-xhdpi/ic_launcher.png`，权利归原权利人。其他卡片分类与收费保持未标注。
+
+已撤下的 JS `0.1.0` 仍保留 [源码、GPL-3.0-only 许可及协议参考声明](repo/sources/jinmantiantang/0.1.0/)，不改标为 Apache-2.0。站点内容、真实响应、Cookie 和签名图片地址不随插件分发。
+
 ## Hachiraw JS 实现
 
 改编自 [Wy2926/node-comics 的 Hachiraw 适配](https://github.com/Wy2926/node-comics/tree/04f40749ce9a69a798459764c2c994ebd5024404/apps/extension/src/sources/sites/hachiraw)，固定提交 `04f40749ce9a69a798459764c2c994ebd5024404`。版权归 NodeLane Comics 项目及贡献者，GPL-3.0-only，全文见本仓库 LICENSE。保留作品／章节身份、隐藏完整目录、正文导航与总页数、搜索分页校验，改为 MProvider 和设备 WebView 原生 DOM；不复制浏览器运行时，不依赖同级仓库。
@@ -183,7 +191,6 @@ Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开
 - S2READ 依据 [s2read.com](https://s2read.com/) 当前原始响应与同一提交的 `sites/s2manga/README.md`（SHA-256 `ceaaf52a083fec840cb29fc18cac59f42bf813d8a3a338d3c341d77a82667ced`）及 `shared/madara/search.ts`（SHA-256 `3676260b1908a7d30a020d04ead94c6ff1715d43671dde9801ce160cdebb81fb`）核对协议，独立实现 Mangayomi DOM 适配器，未复制共享引擎代码。网站 HTML 和图片未进入发布包。
 - RIDI 依据 [官方站点](https://ridibooks.com/) 的公开 HTML、只读 GraphQL 和阅读器响应独立实现。参考官方前端版本 `b28d6b` 的 [目录查询](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/chunks/03ezojnr9-n3s.js)（SHA-256 `40a28b9fa5eb0480ff2ae336a63a711bdb9d12fa552c88365d040d485cf7946b`）、[搜索查询](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/chunks/0vui-y-2njyvl.js)（`e9d9bd7300436063ced97a7ac4bca2e40fe7cc282b6118406a2a600384271895`），以及阅读器版本 `e8fef6` 的 [index-CErQqw3J.js](https://static.ridicdn.net/web-viewer/p/e8fef6/assets/index-CErQqw3J.js)（`0292a67b41233bed5475fc99ba984f40155ec92e6971016835e5b1de9365fce1`）。官方脚本未声明开源许可，仅核对字段、请求路径与权限语义，不复制、执行或分发下载的脚本，不处理 DRM 或购买流程。站点内容与签名地址不进入仓库。
 - New XTOON 按本次自研 JS 要求，依据 [newxtoon5.com](https://newxtoon5.com/) 的公开列表、搜索、`/comics/{id}/chapters` JSON 和阅读页独立实现 `src/newxtoon/extension.js`，版权归 NodeLane Comics 项目及贡献者，GPL-3.0-only。已检索 Keiyoushi 同名实现作协议核对，未复制其代码或打包 APK。站点的韩文条漫、一般／BL·GL／成人分类与公开免费正文作为卡片资料依据；仅引用 [favicon.ico](https://newxtoon5.com/favicon.ico)，图标和漫画内容权利归各自权利人，不随插件分发。测试样本均为合成数据。
-- 禁漫天堂按本次本地 JS 要求，参考 [Keiyoushi Jinmantiantang](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/zh/jinmantiantang)，固定提交 `b0353107338f4d7eb110a70f0c5ff83f83f75fba`：`Jinmantiantang.kt` 的 API 路径、签名、AES-ECB 与节点，`Dto.kt` 的作品／章节字段与日期语义，`ScrambledImageInterceptor.kt` 的条带参数和 GIF 行为。上游版权归 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者，[许可为 Apache-2.0](https://github.com/keiyoushi/extensions-source/blob/b0353107338f4d7eb110a70f0c5ff83f83f75fba/LICENSE)。本仓库依据协议和真实响应独立实现 MProvider 数据校验与返回格式，GPL-3.0-only；未复制上游源码或打包 APK／运行库。上游 `build.gradle.kts` 的 `NSFW` 标记作为成人标记依据；图标只引用同一固定提交的 `res/mipmap-xhdpi/ic_launcher.png`，权利归原权利人。其他卡片分类与收费保持未标注。样本为合成数据，真实响应、图片及令牌不随包分发。
 
 ## 开发依赖
 

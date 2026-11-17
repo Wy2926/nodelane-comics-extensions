@@ -1,1 +1,0 @@
-{"code":200,"data":{"id":500001,"series_id":"500000","scramble_id":"220980","total_page":3,"images":[{"page":1,"image":"https://cdn.example.test/any/path/00001.webp?token=fixture"},{"page":2,"image":"https://cdn.example.test/any/path/00001.webp?token=fixture"},{"page":3,"image":"http://another.example.test/00003.jpg"}]}}

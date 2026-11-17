@@ -46,6 +46,36 @@ test('Comix upgrades the same ID using the exact upstream APK and preserves its 
   await assert.rejects(build({directory}), /上游摘要/);
 });
 
+test('JM upgrades JS to the original APK without replacing the ID or GPL archive', async t => {
+  const directory = await fixture(t), source = path.join(directory, 'src/jinmantiantang');
+  const oldSource = path.join(root, 'repo/sources/jinmantiantang/0.1.0');
+  await cp(oldSource, source, {recursive:true});
+  await publish(await build({directory}), {directory});
+  const archive = path.join(directory, 'repo/sources/jinmantiantang/0.1.0');
+  const oldCode = await readFile(path.join(archive, 'extension.js'));
+  const oldLicense = await readFile(path.join(archive, 'LICENSE'));
+  await cp(path.join(root, 'src/jinmantiantang'), source, {recursive:true});
+  const manifest = path.join(source, 'manifest.json');
+  await writeFile(manifest, JSON.stringify({...await json(manifest), enabled:true}));
+  const built = await build({directory}), native = built.artifacts.find(a => a.entry.id === 86001014);
+  assert.equal(native.entry.version, '0.2.0');
+  assert.equal(native.entry.sourceCodeLanguage, 2);
+  assert.equal(native.entry.sourceCodeUrl, 'packages/jinmantiantang/0.2.0.apk');
+  assert.deepEqual(JSON.parse(native.entry.additionalParams), {mihonSourceId:'6286738698187452081'});
+  assert.deepEqual(native.entry.nodelane.requires, []);
+  assert.equal(native.entry.nodelane.sha256, 'd3678778088c3e126f7ceef1d47de1c175b2a7df60260dd725adbbfb22a5fac9');
+  assert.deepEqual(native.bytes, await readFile(path.join(source, 'extension.apk')));
+  await publish(built, {directory}); await publish(built, {directory});
+  assert.deepEqual(await readFile(path.join(archive, 'extension.js')), oldCode);
+  assert.deepEqual(await readFile(path.join(archive, 'LICENSE')), oldLicense);
+  assert.equal(native.entry.nodelane.license, 'Apache-2.0');
+  assert.deepEqual(await readFile(path.join(directory, 'repo/sources/jinmantiantang/0.2.0/LICENSE')),
+    await readFile(path.join(root, 'src/jinmantiantang/LICENSE')));
+  assert.equal((await json(path.join(directory, 'repo/index.json'))).find(e => e.id === 86001014).version, '0.2.0');
+  await publish(built, {directory, channel:'stable'});
+  await preparePages({directory});
+});
+
 test('native packages require a fixed source identity and unchanged artifact', async () => {
   const repo = await json(path.join(root, 'repository.json'));
   const m = await json(path.join(root, 'repo/sources/comix/0.3.0/manifest.json'));
