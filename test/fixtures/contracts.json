@@ -1,5 +1,38 @@
 [
   {
+    "slug": "jinmantiantang",
+    "name": "native MD5 and AES-ECB decode encrypted UTF-8 API data",
+    "setup": "Date.now = () => 1800000000000;",
+    "method": "search",
+    "args": ["fixture", 1],
+    "responses": [{"bodyFile":"jinmantiantang-list.json"}],
+    "expect": {"count":1,"name":"Fixture & 测试 🌊","next":false}
+  },
+  {
+    "slug": "jinmantiantang",
+    "name": "full API catalog preserves special chapters and unknown dates",
+    "method": "detail",
+    "args": ["https://18comic.vip/album/500000/"],
+    "responses": [{"bodyFile":"jinmantiantang-album.json"}],
+    "expect": {"count":2,"name":"Fixture & 测试 🌊","author":"作者","status":"ongoing","hasCover":true,"uploadDates":["2023-11-14",null]}
+  },
+  {
+    "slug": "jinmantiantang",
+    "name": "strip operation survives QuickJS and native page serialization",
+    "method": "pages",
+    "args": ["https://18comic.vip/photo/500001?album_id=500000"],
+    "responses": [{"bodyFile":"jinmantiantang-pages.json"}],
+    "expect": {"count":3,"processing":"strip-reverse-v1","referer":"https://18comic.vip/","urls":["https://cdn.example.test/any/path/00001.webp?token=fixture","https://cdn.example.test/any/path/00001.webp?token=fixture","http://another.example.test/00003.jpg"]}
+  },
+  {
+    "slug": "jinmantiantang",
+    "name": "corrupt encrypted response fails instead of becoming an empty list",
+    "method": "popular",
+    "args": [1],
+    "responses": [{"jsonBody":{"code":200,"data":"broken"}}],
+    "expectError": "JM:decode"
+  },
+  {
     "slug": "newxtoon",
     "name": "Korean search, native DOM excludes advertisement cards",
     "method": "search",

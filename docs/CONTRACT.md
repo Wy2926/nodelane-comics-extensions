@@ -101,6 +101,8 @@ App 将缺失资料、未知收费枚举和不支持的版本视为未标注，�
 | `Client` | 可用方法为 `get(url, headers)`、`head(url, headers)`、`post(url, headers, body)`；响应含 `statusCode`、`headers`、文本 `body`，JSON 由插件解析 |
 | `Document(html)` | 提供 CSS `select/selectFirst`、文本与属性读取等解析接口，不执行网页脚本 |
 | 设备 WebView | App 提供可见验证入口及 `evaluateJavascriptViaWebview(url, headers, scripts, time)` 临时网页接口，管理设备端 Cookie／UA；站点可在网页内运行自身验证，插件等待状态并取回结果 |
+| `md5(text)` | 需 `crypto.md5.v1`，同步返回 UTF-8 文本的 32 位小写十六进制 MD5 |
+| `decryptAESECB(encrypted, keyHex)` | 需 `crypto.aes-ecb.v1`，同步解码 Base64 密文，密钥为 16／24／32 字节的十六进制字符串；AES-ECB／PKCS7，返回 UTF-8 文本，错误抛出，不返回原密文 |
 
 既有 JS 可调用 `evaluateJavascriptViaWebview(url, headers, scripts, time)` 执行临时隐藏网页脚本，`scripts` 为脚本字符串数组，`time` 单位为秒。页面以 `window.flutter_inappwebview.callHandler('setResponse', JSON.stringify(value))` 返回字符串，插件再解析。等待真实页面就绪，成功或超时后释放页面；不能假定隐藏页与可见浏览器共享验证状态，也不能把 Node 模拟执行当作设备验证通过。
 
@@ -121,3 +123,11 @@ App 将缺失资料、未知收费枚举和不支持的版本视为未标注，�
 `seedMasks` 是响应标识到无符号 32 位整数掩码的映射，最多 8 项；键为 1–32 位小写十六进制字符串。App 读取图片响应的 `X-Scramble-Algo/Grid/Seed/Hash`，按算法 3（xorshift32／Fisher-Yates）还原图块并保留网格外边缘像素；未知协议明确失败。
 
 处理上限为每张 12 MiB、800 万像素、256 块、单帧。App 负责有限队列与解码，缓存键包含处理参数，成功后才缓存或保存；阅读、下载和翻译共用还原后的原图。新增图片算法需要 App 提供对应能力，插件只声明参数。
+
+横向条带倒序使用 `requires: ["image.strip-reverse.v1"]`，页面声明：
+
+```json
+{"type":"strip-reverse-v1","rows":10,"skipGif":true}
+```
+
+`rows` 为 1–256 的整数。设高度为 `h`、条带基本高度为 `floor(h / rows)`，余数属于输入最下方条带；将条带自底向顶排列，首条保留余数，不翻转条带内部像素。不依赖响应自定义头；域名、章节编号与条带数量算法由插件决定。沿用上面的处理预算；`skipGif: true` 时可识别的 GIF 原字节透传，保留动画、不做像素还原。处理参数和 GIF 行为均进入缓存身份；下载保留输出的 PNG／GIF 扩展名。

@@ -10,7 +10,7 @@ export const json = async file => JSON.parse(await readFile(file, 'utf8'));
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const slugPattern = /^[a-z][a-z0-9-]{1,39}$/;
 const capabilities = new Set(['popular', 'latest', 'search', 'details', 'pages']);
-const hostCapabilities = new Set(['image.tile-shuffle.v1']);
+const hostCapabilities = new Set(['image.tile-shuffle.v1', 'image.strip-reverse.v1', 'crypto.md5.v1', 'crypto.aes-ecb.v1']);
 const catalogValues = {
   regions: ['jp', 'kr', 'cn', 'hk_tw', 'western', 'other'],
   formats: ['page', 'vertical', 'strip'],
