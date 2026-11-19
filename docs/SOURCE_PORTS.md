@@ -10,6 +10,8 @@
 | 4 | MangaDex | 多语免费目录，英语和多语来源均有可读样本 | [原包多语来源](../src/mangadex/)；App 列表 HTTP 403 待排查 |
 | 5 | MangaSushi | 英文免费日漫，有公开译组目录 | [原包来源](../src/mangasushi/) |
 | 6 | MangaDNA | 英文免费条漫，补充韩漫／国漫覆盖 | [原包来源](../src/mangadna/)；App 章尾跳转待验收 |
-| 后续 | 漫画猫、少年ジャンプ＋、WEBTOON | 中文目录与有免费章节的日／英／繁中平台 | 先验无需购买的章节，混合收费按站点单独标注 |
+| 7 | 漫画猫（00jf） | 简中免费、国／日／韩漫，现有浏览器协议可独立移植 | [JS 来源](../src/jf00/) |
+| 下一批 | 少年ジャンプ＋、WEBTOON、MANGA Plus | 日／英／繁中等有免费章节的平台 | 先验公开章节，核对地区、外链和混合收费 |
+| 候补 | Comic Seasons、Feel Web | 浏览器版标注免费，有与 Young Jump 同系列的上游扩展 | 核对本站目录、免费话及实际图像，再逐站分配 ID |
 
-逐站实现与本地验证随本站提交；验收范围只维护在 `src/<slug>/README.md`。
+逐站验收范围见 `src/<slug>/README.md`。试用待验收来源可运行 `npm run build`，再用 `python -m http.server 8787 --bind 127.0.0.1 --directory .build` 提供本地目录；以开发版 App 的 `NODELANE_CATALOG_URL` 指向该服务的 `/index.json`。Android 模拟器可用 `adb reverse tcp:8787 tcp:8787` 访问。

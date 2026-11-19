@@ -1,5 +1,20 @@
 [
   {
+    "slug":"jf00","name":"Self-link Next on the terminal result is not another page",
+    "method":"search","args":["星海",1],"responses":[{"bodyFile":"jf00-search.html"}],
+    "expect":{"count":1,"name":"星海","next":false,"query":{"key":"星海"}}
+  },
+  {
+    "slug":"jf00","name":"Full catalog preserves same-name specials and unknown upload dates",
+    "method":"detail","args":["https://www.00jf.com/comic_42.html"],"responses":[{"bodyFile":"jf00-detail.html"}],
+    "expect":{"count":3,"name":"星海","author":"一木","status":"ongoing","uploadDates":[null,null,null]}
+  },
+  {
+    "slug":"jf00","name":"Anonymous reader checks breadcrumb identity and keeps duplicate page slots",
+    "method":"pages","args":["https://www.00jf.com/chapter_42_2.html?part=1"],"responses":[{"bodyFile":"jf00-reader.html"}],
+    "expect":{"count":2,"urls":["https://images.example.test/slot?x=1&y=2","https://images.example.test/slot?x=1&y=2"],"referer":"https://www.00jf.com/"}
+  },
+  {
     "slug": "mangapill", "name": "Previous alone is the last search page",
     "method": "search", "args": ["Sky & Sea",2], "nativeFilters": true,
     "responses": [{"bodyFile":"mangapill-search.html"}],

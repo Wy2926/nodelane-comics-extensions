@@ -207,6 +207,7 @@ Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开
 
 ## 新实现的协议参考
 
+- **漫画猫（00jf）**：移植 [node-comics 的 jf00 站点实现](https://github.com/Wy2926/node-comics/tree/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/jf00) 中的地址、搜索、目录与公开阅读协议（`definition.ts`、`search.ts`、`network.ts`、`html.ts`）。NodeLane Comics 及贡献者，GPL-3.0-only。卡片依据[网站分类](https://www.00jf.com/category/)中的国漫、日漫、韩漫和同人、浏览器站点定义及首页的免费阅读说明。图标只引用[源站标识](https://www.00jf.com/template/pc/zizhi001/img/logo.png)；不打包网站脚本或图片。
 - **MangaPill**：移植 [node-comics 的 MangaPill 适配](https://github.com/Wy2926/node-comics/tree/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangapill)（`definition.ts`、`search.ts`、`network.ts`）。NodeLane Comics 及贡献者，GPL-3.0-only。按[源站搜索表单](https://mangapill.com/search)核对类型、状态、题材和翻页；图标仅引用源站。英文免费页漫、同人及地区分类依据浏览器站点记录、公开正文与分类表单；成人标记依据 [Keiyoushi 1.6.1 的 MIXED 声明](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/en/mangapill)。该 APK 仅作实测对照，未复制 Kotlin 代码。
 - Comix 图片还原参数依据同一 `node-comics` 提交中的 `images.ts`，SHA-256 `3a7eedd0c9a8fbf1a14e67f89285d71f71dfc2e40d60fa3ce67e66ce0ad92113`。本插件仅声明已知算法与种子掩码，通用像素置换由 App 独立实现，不复制浏览器 Canvas／Blob 运行时。
 - S2READ 依据 [s2read.com](https://s2read.com/) 当前原始响应与同一提交的 `sites/s2manga/README.md`（SHA-256 `ceaaf52a083fec840cb29fc18cac59f42bf813d8a3a338d3c341d77a82667ced`）及 `shared/madara/search.ts`（SHA-256 `3676260b1908a7d30a020d04ead94c6ff1715d43671dde9801ce160cdebb81fb`）核对协议，独立实现 Mangayomi DOM 适配器，未复制共享引擎代码。网站 HTML 和图片未进入发布包。
