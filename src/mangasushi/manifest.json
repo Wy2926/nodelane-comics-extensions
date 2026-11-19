@@ -1,0 +1,30 @@
+{
+  "slug": "mangasushi",
+  "id": 86001020,
+  "name": "MangaSushi",
+  "baseUrl": "https://mangasushi.org",
+  "lang": "en",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 2,
+  "appMinVerReq": "0.1.3",
+  "typeSource": "single",
+  "isNsfw": false,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/f1bd88dacd89dfe644369c397efedf79965bf4c0/src/en/mangasushi/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "英文免费日漫；列表、Madara 章节目录与正文使用原版扩展。",
+  "catalogMetadata": {"schema":1,"regions":["jp"],"formats":["page"],"pricing":"free"},
+  "license": "Apache-2.0",
+  "files": ["extension.apk"],
+  "additionalParams": "{\"mihonSourceId\":\"3606721916149050760\"}",
+  "upstream": {
+    "version": "1.6.62",
+    "commit": "f1bd88dacd89dfe644369c397efedf79965bf4c0",
+    "url": "https://github.com/keiyoushi/extensions/releases/download/f1bd88d/tachiyomi-en.mangasushi-v1.6.62.apk",
+    "sha256": "7047862512d956be57770ff1b6aff8b39ee188843471fa3a7ac9e6889d7c69e7",
+    "size": 97470
+  },
+  "requestHosts": ["mangasushi.org"],
+  "requires": [],
+  "capabilities": ["popular", "latest", "search", "details", "pages"],
+  "enabled": false
+}
