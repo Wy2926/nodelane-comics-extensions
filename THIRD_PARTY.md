@@ -24,6 +24,7 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 | --- | --- | --- |
 | となりのヤングジャンプ | [Keiyoushi Tonari no Young Jump 1.6.2](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/tonarinoyoungjump)、[LICENSE](src/tonarinoyj/LICENSE) | 上游 SAFE；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/tonarinoyj/definition.ts)及公开连载支持日漫、免费页漫标注。 |
 | 拷贝漫画 | [Keiyoushi Copy Manga 1.6.1](https://github.com/keiyoushi/extensions-source/tree/d0478bb62bbc485753d2830102aef4e1b87cb336/src/zh/kaobeimanhua)、[LICENSE](src/mangacopy/LICENSE) | 上游 MIXED；[两个浏览器入口的同站记录](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangacopy/definition.ts)列明免费、日漫／韩漫与同人，页漫正文已抽查。 |
+| MangaDex | [Keiyoushi MangaDex 1.6.4](https://github.com/keiyoushi/extensions-source/tree/d9420cd1c66ecd3385946b616aacfcf8f6314f70/src/all/mangadex)、[LICENSE](src/mangadex/LICENSE) | 上游 MIXED；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangadex/definition.ts)和公开目录涵盖日／韩／国漫、条漫与同人，站内免费阅读。 |
 
 ## Hachiraw JS 实现
 
