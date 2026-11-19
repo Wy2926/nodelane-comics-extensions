@@ -49,6 +49,14 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 
 ## 接口参考
 
+### Omega Scans JS 移植
+
+依据 [Keiyoushi Omega Scans](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/en/omegascans) 与同次构建的 [HeanCMS](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/lib-multisrc/heancms)。对照的[原包 1.6.53](https://github.com/keiyoushi/extensions/releases/download/b035310-1/tachiyomi-en.omegascans-v1.6.53.apk) 上游 ID 为 `1534451209269193504`，SHA-256 `405d40a314450170447daefdcb0f3be21ac81440cc1d7d94ff361fefa1526985`，仅用于验证。
+
+`OmegaScans.kt`、`HeanCms.kt`、`HeanCmsDto.kt`、`HeanCmsFilters.kt` 提供列表参数、作品与章节身份、分类、上传时间、付费章可见性及图片协议。原版权归 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者；原 Apache-2.0 许可全文保留在 [`extension.js`](src/omegascans/extension.js) 中，随包分发。NodeLane 改用 MProvider，按实际响应核对目录归属、总数和正文；修改按 GPL-3.0-only 分发，不含 APK 或其运行库。
+
+成人标记与[引用的图标](https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/en/omegascans/res/mipmap-xhdpi/ic_launcher.png)来自同一固定提交。分类与收费依据站点的 Doujinshi 标签、公开条漫正文及免费／付费章节；题材 ID 取自 [公开标签 API](https://api.omegascans.org/tags)。图标和作品权利归原权利人，均不打包。
+
 ### WeLoveManga（Weloma）JS 实现
 
 参考 [Keiyoushi WeLoveManga](https://github.com/keiyoushi/extensions-source/blob/5240ce7bec6e0dfbc871318f19884961bc1032e9/src/ja/rawlh/src/eu/kanade/tachiyomi/extension/ja/rawlh/WeLoveManga.kt) 与同一提交的 [FMReader](https://github.com/keiyoushi/extensions-source/blob/5240ce7bec6e0dfbc871318f19884961bc1032e9/lib-multisrc/fmreader/src/eu/kanade/tachiyomi/multisrc/fmreader/FMReader.kt)，固定提交 `5240ce7bec6e0dfbc871318f19884961bc1032e9`。原版权为 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者，Apache-2.0 全文保留在 `src/weloma/extension.js`，随单文件包分发。

@@ -1,0 +1,7 @@
+{
+  "meta": {"current_page":1, "last_page":1, "total":2},
+  "data": [
+    {"id":42, "series_slug":"paper-moon", "title":"Paper Moon", "thumbnail":"/covers/moon.jpg", "badge":"DOUJINSHI"},
+    {"id":57, "series_slug":"another-moon", "title":"Paper Moon", "thumbnail":"", "badge":"Manga"}
+  ]
+}

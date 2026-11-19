@@ -437,6 +437,54 @@
     }
   },
   {
+    "id": 86001015,
+    "name": "Omega Scans",
+    "baseUrl": "https://omegascans.org",
+    "apiUrl": "https://api.omegascans.org",
+    "lang": "en",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "isNsfw": true,
+    "hasCloudflare": true,
+    "isFullData": false,
+    "typeSource": "single",
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/en/omegascans/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "英文漫画；热门、最新、搜索筛选及免费章节阅读。来源设置可显示付费章。连续下滑切章停在上一章时请改用翻页模式；iOS 和真机待验收。",
+    "catalogMetadata": {
+      "schema": 1,
+      "formats": [
+        "vertical"
+      ],
+      "creations": [
+        "fan"
+      ],
+      "pricing": "partial"
+    },
+    "sourceCodeUrl": "../packages/omegascans/0.1.0.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "omegascans",
+      "sha256": "b0b2207f94feb7edf59b77585ffa581ef473470d5482c821b85d12920ae7aabb",
+      "size": 22254,
+      "requestHosts": [
+        "omegascans.org",
+        "api.omegascans.org"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
     "id": 86001007,
     "name": "Raw Otaku",
     "baseUrl": "https://rawotaku.com",

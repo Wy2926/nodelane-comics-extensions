@@ -1,0 +1,6 @@
+{
+  "id":42, "series_slug":"paper-moon", "title":"Paper Moon", "thumbnail":"/covers/moon.jpg",
+  "author":"A. Writer", "studio":"Paper Studio", "status":"Ongoing", "tags":[{"name":"Drama"}],
+  "description":"<p>Paper &amp; ink.</p><p>Second paragraph.</p>", "alternative_names":"Paper Moon | Lunar Paper",
+  "release_schedule":{"fri":true}, "release_year":"2024", "rating":4.5, "ratings_count":2, "meta":{"chapters_count":"4"}
+}

@@ -1,5 +1,47 @@
 [
   {
+    "slug": "omegascans",
+    "name": "native filters encode a query against the comic catalog",
+    "method": "search",
+    "args": ["Moon & 星+", 1],
+    "nativeFilters": true,
+    "responses": [{"bodyFile":"omegascans-list.json"}],
+    "expect": {"count":2,"next":false,"name":"Paper Moon","query":{"query_string":"Moon & 星+","orderBy":"total_views","series_type":"Comic","tags_ids":"[]"}}
+  },
+  {
+    "slug": "omegascans",
+    "name": "source controls expose HeanCMS filters and the paid chapter visibility switch",
+    "method": "filters",
+    "args": [],
+    "responses": [],
+    "expect": {"count":3,"types":["status","sort","genres"],"options":[5,4,5],"preferences":1}
+  },
+  {
+    "slug": "omegascans",
+    "name": "complete catalog before applying visibility, preserve original upload dates",
+    "method": "detail",
+    "args": ["https://omegascans.org/series/paper-moon#42"],
+    "setup": "SharedPreferences.prototype.get = key => key === 'pref_show_paid_chap';",
+    "responses": [{"bodyFile":"omegascans-detail.json"},{"bodyFile":"omegascans-list.json"},{"bodyFile":"omegascans-chapters-1.json"},{"bodyFile":"omegascans-chapters-2.json"}],
+    "expect": {"count":3,"name":"Paper Moon","author":"A. Writer","hasCover":true,"uploadDates":["2024-03-01","2024-02-29",null]}
+  },
+  {
+    "slug": "omegascans",
+    "name": "image slots keep order, query and reader headers",
+    "method": "pages",
+    "args": ["https://omegascans.org/series/paper-moon/chapter-1-5#103"],
+    "responses": [{"bodyFile":"omegascans-pages.json"}],
+    "expect": {"count":4,"referer":"https://omegascans.org/","urls":["https://cdn.example.test/p%201.webp?size=full&v=2","https://cdn.example.test/p%201.webp?size=full&v=2","https://api.omegascans.org/scans/last.jpg","http://other.example.test/p4"]}
+  },
+  {
+    "slug": "omegascans",
+    "name": "anonymous paid reader reports restricted access",
+    "method": "pages",
+    "args": ["https://omegascans.org/series/paper-moon/special-2#104"],
+    "responses": [{"jsonBody":{"paywall":true,"series":{"id":42,"series_slug":"paper-moon"},"chapter":{"id":104,"chapter_slug":"special-2","price":5}}}],
+    "expectError": "Omega:paid"
+  },
+  {
     "slug": "newxtoon",
     "name": "Korean search, native DOM excludes advertisement cards",
     "method": "search",

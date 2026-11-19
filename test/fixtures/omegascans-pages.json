@@ -1,0 +1,6 @@
+{
+  "chapter": {
+    "id":103, "chapter_slug":"chapter-1-5", "series_id":42, "series":{"id":42,"series_slug":"paper-moon"},
+    "chapter_data":{"images":["//cdn.example.test/p 1.webp?size=full&v=2","//cdn.example.test/p 1.webp?size=full&v=2","scans/last.jpg","http://other.example.test/p4"]}
+  }
+}
