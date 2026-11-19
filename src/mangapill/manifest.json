@@ -1,0 +1,23 @@
+{
+  "slug": "mangapill",
+  "id": 86001016,
+  "name": "MangaPill",
+  "baseUrl": "https://mangapill.com",
+  "lang": "en",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "typeSource": "single",
+  "isNsfw": true,
+  "iconUrl": "https://mangapill.com/static/favicon/apple-touch-icon.png",
+  "notes": "英文免费漫画；热门、最近更新及分页筛选搜索。",
+  "catalogMetadata": {"schema":1,"regions":["jp","cn"],"formats":["page"],"creations":["fan"],"pricing":"free"},
+  "license": "GPL-3.0-only",
+  "files": ["extension.js"],
+  "entryClass": "SourceExtension",
+  "requestHosts": ["mangapill.com"],
+  "requires": [],
+  "capabilities": ["popular", "latest", "search", "details", "pages"],
+  "enabled": false
+}

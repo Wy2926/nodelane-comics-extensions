@@ -1,6 +1,6 @@
 # 插件维护与分发
 
-新增或修复网站使用 [nodelane-source-adapter 技能](../.agents/skills/nodelane-source-adapter/SKILL.md)。接口与数据格式只在 [CONTRACT.md](CONTRACT.md) 定义；本站支持范围和验证边界放 `src/<slug>/README.md`。
+新增或修复网站使用 [nodelane-source-adapter 技能](../.agents/skills/nodelane-source-adapter/SKILL.md)。浏览器来源的优先顺序见[移植队列](SOURCE_PORTS.md)。接口与数据格式只在 [CONTRACT.md](CONTRACT.md) 定义；本站支持范围和验证边界放 `src/<slug>/README.md`。
 
 ## 目录与检查
 

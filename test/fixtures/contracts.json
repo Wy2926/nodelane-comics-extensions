@@ -1,5 +1,29 @@
 [
   {
+    "slug": "mangapill", "name": "Previous alone is the last search page",
+    "method": "search", "args": ["Sky & Sea",2], "nativeFilters": true,
+    "responses": [{"bodyFile":"mangapill-search.html"}],
+    "expect": {"count":1,"name":"Sky & Sea","next":false,"query":{"q":"Sky & Sea","page":"2"}}
+  },
+  {
+    "slug": "mangapill", "name": "Missing Manga report button is not a next page",
+    "method": "search", "args": ["none",1],
+    "responses": [{"body":"<html><body><form><input name=q value=none></form><div class='flex flex-col gap-3 items-center'><div class='text-center'>No results found</div><a class='btn btn-sm' href='/mangas/missing'>Report Missing Manga</a></div><div class='grid justify-end'></div><div class='flex justify-center'></div></body></html>"}],
+    "expect": {"count":0,"next":false}
+  },
+  {
+    "slug": "mangapill", "name": "Details retain title, cover, status and special chapters",
+    "method": "detail", "args": ["https://mangapill.com/manga/42/sky"],
+    "responses": [{"bodyFile":"mangapill-detail.html"}],
+    "expect": {"count":3,"name":"Sky & Sea","hasCover":true,"status":"completed"}
+  },
+  {
+    "slug": "mangapill", "name": "Reader counts page slots including repeated images",
+    "method": "pages", "args": ["https://mangapill.com/chapters/42-10/first"],
+    "responses": [{"bodyFile":"mangapill-reader.html"}],
+    "expect": {"count":2,"urls":["https://images.example.test/page?a=1&b=2","https://images.example.test/page?a=1&b=2"],"referer":"https://mangapill.com/"}
+  },
+  {
     "slug": "omegascans",
     "name": "native filters encode a query against the comic catalog",
     "method": "search",
