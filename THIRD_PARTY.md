@@ -16,6 +16,14 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 
 已撤下的 JS `0.1.0` 仍保留 [源码、GPL-3.0-only 许可及协议参考声明](repo/sources/jinmantiantang/0.1.0/)，不改标为 Apache-2.0。站点内容、真实响应、Cookie 和签名图片地址不随插件分发。
 
+## 浏览器来源对应的 Keiyoushi 原包
+
+以下各包均原样分发。版权归 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者；每站目录中的 `LICENSE` 保留 Apache-2.0 全文，`manifest.json` 固定原包下载地址、源码提交、大小、SHA-256 及上游来源 ID。图标仅引用对应提交中的资源。浏览器版 GPL 代码未编入这些 APK。
+
+| 站点 | 固定源码与许可 | 卡片资料依据 |
+| --- | --- | --- |
+| となりのヤングジャンプ | [Keiyoushi Tonari no Young Jump 1.6.2](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/tonarinoyoungjump)、[LICENSE](src/tonarinoyj/LICENSE) | 上游 SAFE；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/tonarinoyj/definition.ts)及公开连载支持日漫、免费页漫标注。 |
+
 ## Hachiraw JS 实现
 
 改编自 [Wy2926/node-comics 的 Hachiraw 适配](https://github.com/Wy2926/node-comics/tree/04f40749ce9a69a798459764c2c994ebd5024404/apps/extension/src/sources/sites/hachiraw)，固定提交 `04f40749ce9a69a798459764c2c994ebd5024404`。版权归 NodeLane Comics 项目及贡献者，GPL-3.0-only，全文见本仓库 LICENSE。保留作品／章节身份、隐藏完整目录、正文导航与总页数、搜索分页校验，改为 MProvider 和设备 WebView 原生 DOM；不复制浏览器运行时，不依赖同级仓库。
