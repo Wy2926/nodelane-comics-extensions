@@ -1,5 +1,6 @@
 import {cp, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {root, json, digest, validateCatalogMetadata} from './catalog.mjs';
 
 export async function preparePages({directory = root, out = path.join(directory, '.pages')} = {}) {
@@ -35,6 +36,6 @@ export async function preparePages({directory = root, out = path.join(directory,
   return out;
 }
 
-if (process.argv[1] === new URL(import.meta.url).pathname) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   console.log(`已生成发布目录：${await preparePages()}`);
 }

@@ -193,7 +193,11 @@ test('Pages preserves plain channel catalogs and archives; damaged packages cann
   const directory = await fixture(t), built = await build({directory});
   await publish(built, {directory});
   await publish(built, {directory, channel: 'stable'});
-  const out = await preparePages({directory});
+  const scripts = path.join(directory, 'release scripts');
+  await cp(path.join(root, 'scripts'), scripts, {recursive:true});
+  const result = spawnSync(process.execPath, [path.join(scripts, 'pages.mjs')], {encoding:'utf8'});
+  assert.equal(result.status, 0, result.stderr);
+  const out = path.join(directory, '.pages');
   for (const channel of ['stable', 'testing']) {
     for (const name of ['index.json', 'repo.json']) {
       assert.deepEqual(await json(path.join(out, channel, name)), await json(path.join(directory, 'repo', channel, name)));
