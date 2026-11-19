@@ -1,0 +1,47 @@
+{
+  "slug": "jf00",
+  "id": 86001022,
+  "name": "漫画猫",
+  "baseUrl": "https://www.00jf.com",
+  "lang": "zh",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "typeSource": "single",
+  "iconUrl": "https://www.00jf.com/template/pc/zizhi001/img/logo.png",
+  "notes": "简体中文漫画。热门推荐、最新更新、分页搜索、完整静态目录与公开正文。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "cn",
+      "jp",
+      "kr"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "fan"
+    ],
+    "pricing": "free"
+  },
+  "license": "GPL-3.0-only",
+  "files": [
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "www.00jf.com"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

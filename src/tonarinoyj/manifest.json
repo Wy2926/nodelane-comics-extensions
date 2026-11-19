@@ -7,7 +7,7 @@
   "version": "0.1.0",
   "itemType": 0,
   "sourceCodeLanguage": 2,
-  "appMinVerReq": "0.1.3",
+  "appMinVerReq": "0.1.4",
   "typeSource": "single",
   "isNsfw": false,
   "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/tonarinoyoungjump/res/mipmap-xhdpi/ic_launcher.png",
@@ -26,5 +26,5 @@
   "requestHosts": ["tonarinoyj.jp"],
   "requires": [],
   "capabilities": ["popular", "latest", "search", "details", "pages"],
-  "enabled": false
+  "enabled": true
 }

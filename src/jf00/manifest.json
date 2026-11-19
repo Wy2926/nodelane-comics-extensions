@@ -18,5 +18,5 @@
   "requestHosts": ["www.00jf.com"],
   "requires": [],
   "capabilities": ["popular", "latest", "search", "details", "pages"],
-  "enabled": false
+  "enabled": true
 }

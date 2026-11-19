@@ -6,4 +6,4 @@ Keiyoushi 1.6.1 原包在 MuMu 将搜索末页的 Previous 和空结果的 Repor
 
 Node 和 App QuickJS／DOM 有合成契约；真实 HTTP 已核对两页搜索、空结果、筛选和《Dragon Ball》520 条目录，并获取相邻两章的首尾图片。
 
-MuMu Android 12 x86_64 已从本地目录安装 JS 包，搜索并打开《Dragon Ball》，从第一章第 36 页切至第二章；回到桌面再打开仍为 `8 / 14`。iOS、ARM 真机、断网重试与离线下载待验收。
+MuMu Android 12 x86_64 已从本地目录安装 JS 包，搜索并打开《Dragon Ball》，从第一章第 36 页切至第二章；回到桌面再打开仍为 `8 / 14`。断网打开第 191 章会显示重试；联网后点重试，首图可读并能翻到 `14 / 14`。iOS、ARM 真机与离线下载待验收。

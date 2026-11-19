@@ -16,6 +16,18 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 
 已撤下的 JS `0.1.0` 仍保留 [源码、GPL-3.0-only 许可及协议参考声明](repo/sources/jinmantiantang/0.1.0/)，不改标为 Apache-2.0。站点内容、真实响应、Cookie 和签名图片地址不随插件分发。
 
+## 浏览器来源对应的 Keiyoushi 原包
+
+以下各包均原样分发。版权归 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者；每站目录中的 `LICENSE` 保留 Apache-2.0 全文，`manifest.json` 固定原包下载地址、源码提交、大小、SHA-256 及上游来源 ID。图标仅引用对应提交中的资源。浏览器版 GPL 代码未编入这些 APK。
+
+| 站点 | 固定源码与许可 | 卡片资料依据 |
+| --- | --- | --- |
+| となりのヤングジャンプ | [Keiyoushi Tonari no Young Jump 1.6.2](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/tonarinoyoungjump)、[LICENSE](src/tonarinoyj/LICENSE) | 上游 SAFE；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/tonarinoyj/definition.ts)及公开连载支持日漫、免费页漫标注。 |
+| 拷贝漫画 | [Keiyoushi Copy Manga 1.6.1](https://github.com/keiyoushi/extensions-source/tree/d0478bb62bbc485753d2830102aef4e1b87cb336/src/zh/kaobeimanhua)、[LICENSE](src/mangacopy/LICENSE) | 上游 MIXED；[两个浏览器入口的同站记录](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangacopy/definition.ts)列明免费、日漫／韩漫与同人，页漫正文已抽查。 |
+| MangaDex | [Keiyoushi MangaDex 1.6.4](https://github.com/keiyoushi/extensions-source/tree/d9420cd1c66ecd3385946b616aacfcf8f6314f70/src/all/mangadex)、[LICENSE](src/mangadex/LICENSE) | 上游 MIXED；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangadex/definition.ts)和公开目录涵盖日／韩／国漫、条漫与同人，站内免费阅读。 |
+| MangaSushi | [Keiyoushi Mangasushi 1.6.62](https://github.com/keiyoushi/extensions-source/tree/f1bd88dacd89dfe644369c397efedf79965bf4c0/src/en/mangasushi)、[LICENSE](src/mangasushi/LICENSE) | 上游 SAFE；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangasushi/definition.ts)及实测公开章节支持英文免费日漫、页漫标注。 |
+| MangaDNA | [Keiyoushi MangaDNA 1.6.2](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/all/mangadna)、[LICENSE](src/mangadna/LICENSE) | 上游 MIXED；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangadna/definition.ts)与公开正文支持免费、韩漫／国漫和条漫标注。 |
+
 ## Hachiraw JS 实现
 
 改编自 [Wy2926/node-comics 的 Hachiraw 适配](https://github.com/Wy2926/node-comics/tree/04f40749ce9a69a798459764c2c994ebd5024404/apps/extension/src/sources/sites/hachiraw)，固定提交 `04f40749ce9a69a798459764c2c994ebd5024404`。版权归 NodeLane Comics 项目及贡献者，GPL-3.0-only，全文见本仓库 LICENSE。保留作品／章节身份、隐藏完整目录、正文导航与总页数、搜索分页校验，改为 MProvider 和设备 WebView 原生 DOM；不复制浏览器运行时，不依赖同级仓库。
@@ -195,6 +207,8 @@ Read Comics Online 源站 favicon 受 CF 验证影响，故引用上游已公开
 
 ## 新实现的协议参考
 
+- **漫画猫（00jf）**：移植 [node-comics 的 jf00 站点实现](https://github.com/Wy2926/node-comics/tree/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/jf00) 中的地址、搜索、目录与公开阅读协议（`definition.ts`、`search.ts`、`network.ts`、`html.ts`）。NodeLane Comics 及贡献者，GPL-3.0-only。卡片依据[网站分类](https://www.00jf.com/category/)中的国漫、日漫、韩漫和同人、浏览器站点定义及首页的免费阅读说明。图标只引用[源站标识](https://www.00jf.com/template/pc/zizhi001/img/logo.png)；不打包网站脚本或图片。
+- **MangaPill**：移植 [node-comics 的 MangaPill 适配](https://github.com/Wy2926/node-comics/tree/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangapill)（`definition.ts`、`search.ts`、`network.ts`）。NodeLane Comics 及贡献者，GPL-3.0-only。按[源站搜索表单](https://mangapill.com/search)核对类型、状态、题材和翻页；图标仅引用源站。英文免费页漫、同人及地区分类依据浏览器站点记录、公开正文与分类表单；成人标记依据 [Keiyoushi 1.6.1 的 MIXED 声明](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/en/mangapill)。该 APK 仅作实测对照，未复制 Kotlin 代码。
 - Comix 图片还原参数依据同一 `node-comics` 提交中的 `images.ts`，SHA-256 `3a7eedd0c9a8fbf1a14e67f89285d71f71dfc2e40d60fa3ce67e66ce0ad92113`。本插件仅声明已知算法与种子掩码，通用像素置换由 App 独立实现，不复制浏览器 Canvas／Blob 运行时。
 - S2READ 依据 [s2read.com](https://s2read.com/) 当前原始响应与同一提交的 `sites/s2manga/README.md`（SHA-256 `ceaaf52a083fec840cb29fc18cac59f42bf813d8a3a338d3c341d77a82667ced`）及 `shared/madara/search.ts`（SHA-256 `3676260b1908a7d30a020d04ead94c6ff1715d43671dde9801ce160cdebb81fb`）核对协议，独立实现 Mangayomi DOM 适配器，未复制共享引擎代码。网站 HTML 和图片未进入发布包。
 - RIDI 依据 [官方站点](https://ridibooks.com/) 的公开 HTML、只读 GraphQL 和阅读器响应独立实现。参考官方前端版本 `b28d6b` 的 [目录查询](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/chunks/03ezojnr9-n3s.js)（SHA-256 `40a28b9fa5eb0480ff2ae336a63a711bdb9d12fa552c88365d040d485cf7946b`）、[搜索查询](https://static.ridicdn.net/books-frontend/p/b28d6b/_next/static/chunks/0vui-y-2njyvl.js)（`e9d9bd7300436063ced97a7ac4bca2e40fe7cc282b6118406a2a600384271895`），以及阅读器版本 `e8fef6` 的 [index-CErQqw3J.js](https://static.ridicdn.net/web-viewer/p/e8fef6/assets/index-CErQqw3J.js)（`0292a67b41233bed5475fc99ba984f40155ec92e6971016835e5b1de9365fce1`）。官方脚本未声明开源许可，仅核对字段、请求路径与权限语义，不复制、执行或分发下载的脚本，不处理 DRM 或购买流程。站点内容与签名地址不进入仓库。

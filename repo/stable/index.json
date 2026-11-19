@@ -279,6 +279,55 @@
     }
   },
   {
+    "id": 86001022,
+    "name": "漫画猫",
+    "baseUrl": "https://www.00jf.com",
+    "lang": "zh",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "typeSource": "single",
+    "iconUrl": "https://www.00jf.com/template/pc/zizhi001/img/logo.png",
+    "notes": "简体中文漫画。热门推荐、最新更新、分页搜索、完整静态目录与公开正文。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "cn",
+        "jp",
+        "kr"
+      ],
+      "formats": [
+        "page",
+        "vertical"
+      ],
+      "creations": [
+        "fan"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "../packages/jf00/0.1.0.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "jf00",
+      "sha256": "28576f661e9cee52306aa3d0a47e34282e5a9d5e2a7d4e80c91fb2a8fc130095",
+      "size": 8269,
+      "requestHosts": [
+        "www.00jf.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
     "id": 86001014,
     "name": "禁漫天堂",
     "baseUrl": "https://18comic.vip",
@@ -386,6 +435,254 @@
         "pages"
       ],
       "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001018,
+    "name": "拷贝漫画",
+    "baseUrl": "https://www.mangacopy.com",
+    "apiUrl": "https://api.copy4000.com",
+    "lang": "zh",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 2,
+    "appMinVerReq": "0.1.4",
+    "typeSource": "single",
+    "isNsfw": true,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/d0478bb62bbc485753d2830102aef4e1b87cb336/src/zh/kaobeimanhua/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "拷贝漫画中文源。各镜像共用一个来源，热门、最新、搜索、目录和正文由原版扩展读取。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp",
+        "kr"
+      ],
+      "formats": [
+        "page"
+      ],
+      "creations": [
+        "fan"
+      ],
+      "pricing": "free"
+    },
+    "additionalParams": "{\"mihonSourceId\":\"4455255049118963922\"}",
+    "sourceCodeUrl": "../packages/mangacopy/0.1.0.apk",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "mangacopy",
+      "sha256": "2826d9c5a4f8bb185dc30f85c235d0c7482c8f76673cac2c185756d888117621",
+      "size": 111847,
+      "requestHosts": [
+        "www.mangacopy.com",
+        "api.copy4000.com",
+        "www.copy4000.com",
+        "www.copy5000.com",
+        "www.copy20.com",
+        "www.copymanga.fun"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "Apache-2.0"
+    }
+  },
+  {
+    "id": 86001019,
+    "name": "MangaDex",
+    "baseUrl": "https://mangadex.org",
+    "apiUrl": "https://api.mangadex.org",
+    "lang": "all",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 2,
+    "appMinVerReq": "0.1.4",
+    "typeSource": "single",
+    "isNsfw": true,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/d9420cd1c66ecd3385946b616aacfcf8f6314f70/src/all/mangadex/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "MangaDex 多语言来源；章节按各译本保留，语言标在译组栏，站内图按原版扩展加载。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp",
+        "kr",
+        "cn"
+      ],
+      "formats": [
+        "page",
+        "vertical"
+      ],
+      "creations": [
+        "fan"
+      ],
+      "pricing": "free"
+    },
+    "additionalParams": "{\"mihonSourceId\":\"6404943692147160087\"}",
+    "sourceCodeUrl": "../packages/mangadex/0.1.0.apk",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "mangadex",
+      "sha256": "611bd20d91cdd4152b6d976081cc0cd4651208f7a153ddbef133f4ebba1688c3",
+      "size": 103358,
+      "requestHosts": [
+        "mangadex.org",
+        "api.mangadex.org",
+        "uploads.mangadex.org"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "Apache-2.0"
+    }
+  },
+  {
+    "id": 86001021,
+    "name": "MangaDNA",
+    "baseUrl": "https://mangadna.com",
+    "lang": "en",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 2,
+    "appMinVerReq": "0.1.4",
+    "typeSource": "single",
+    "isNsfw": true,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/all/mangadna/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "英文免费韩漫、国漫与条漫；使用原版扩展的英语来源。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "kr",
+        "cn"
+      ],
+      "formats": [
+        "vertical"
+      ],
+      "pricing": "free"
+    },
+    "additionalParams": "{\"mihonSourceId\":\"5181311401760417052\"}",
+    "sourceCodeUrl": "../packages/mangadna/0.1.0.apk",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "mangadna",
+      "sha256": "e1932d88d90b4beb46cbb1ca6fc8f71119fd1d1b085c3b854645671574fef3bd",
+      "size": 58819,
+      "requestHosts": [
+        "mangadna.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "Apache-2.0"
+    }
+  },
+  {
+    "id": 86001016,
+    "name": "MangaPill",
+    "baseUrl": "https://mangapill.com",
+    "lang": "en",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.1.0",
+    "typeSource": "single",
+    "isNsfw": true,
+    "iconUrl": "https://mangapill.com/static/favicon/apple-touch-icon.png",
+    "notes": "英文免费漫画；热门、最近更新及分页筛选搜索。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp",
+        "cn"
+      ],
+      "formats": [
+        "page"
+      ],
+      "creations": [
+        "fan"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "../packages/mangapill/0.1.0.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "mangapill",
+      "sha256": "5c04055707fd91c47115e9a603e6947eb206b95d3ed26080a11ff9ababf3ab67",
+      "size": 8798,
+      "requestHosts": [
+        "mangapill.com"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001020,
+    "name": "MangaSushi",
+    "baseUrl": "https://mangasushi.org",
+    "lang": "en",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 2,
+    "appMinVerReq": "0.1.3",
+    "typeSource": "single",
+    "isNsfw": false,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/f1bd88dacd89dfe644369c397efedf79965bf4c0/src/en/mangasushi/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "英文免费日漫；列表、Madara 章节目录与正文使用原版扩展。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "pricing": "free"
+    },
+    "additionalParams": "{\"mihonSourceId\":\"3606721916149050760\"}",
+    "sourceCodeUrl": "../packages/mangasushi/0.1.0.apk",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "mangasushi",
+      "sha256": "7047862512d956be57770ff1b6aff8b39ee188843471fa3a7ac9e6889d7c69e7",
+      "size": 97470,
+      "requestHosts": [
+        "mangasushi.org"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "Apache-2.0"
     }
   },
   {
@@ -693,6 +990,51 @@
         "pages"
       ],
       "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001017,
+    "name": "となりのヤングジャンプ",
+    "baseUrl": "https://tonarinoyj.jp",
+    "lang": "ja",
+    "version": "0.1.0",
+    "itemType": 0,
+    "sourceCodeLanguage": 2,
+    "appMinVerReq": "0.1.4",
+    "typeSource": "single",
+    "isNsfw": false,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/tonarinoyoungjump/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "集英社日语漫画；原版 GigaViewer 扩展读取连载目录和公开章节。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "pricing": "free"
+    },
+    "additionalParams": "{\"mihonSourceId\":\"5726629019734498294\"}",
+    "sourceCodeUrl": "../packages/tonarinoyj/0.1.0.apk",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "tonarinoyj",
+      "sha256": "36132120d8b4fb0006e1dec4100aac39c8bab49c3ae053bf83f47180bfaa5f4b",
+      "size": 59555,
+      "requestHosts": [
+        "tonarinoyj.jp"
+      ],
+      "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "Apache-2.0"
     }
   },
   {

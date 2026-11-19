@@ -1,0 +1,50 @@
+{
+  "slug": "mangadna",
+  "id": 86001021,
+  "name": "MangaDNA",
+  "baseUrl": "https://mangadna.com",
+  "lang": "en",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 2,
+  "appMinVerReq": "0.1.4",
+  "typeSource": "single",
+  "isNsfw": true,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/all/mangadna/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "英文免费韩漫、国漫与条漫；使用原版扩展的英语来源。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "kr",
+      "cn"
+    ],
+    "formats": [
+      "vertical"
+    ],
+    "pricing": "free"
+  },
+  "license": "Apache-2.0",
+  "files": [
+    "extension.apk"
+  ],
+  "additionalParams": "{\"mihonSourceId\":\"5181311401760417052\"}",
+  "upstream": {
+    "version": "1.6.2",
+    "commit": "b0353107338f4d7eb110a70f0c5ff83f83f75fba",
+    "url": "https://github.com/keiyoushi/extensions/releases/download/b035310-0/tachiyomi-all.mangadna-v1.6.2.apk",
+    "sha256": "e1932d88d90b4beb46cbb1ca6fc8f71119fd1d1b085c3b854645671574fef3bd",
+    "size": 58819
+  },
+  "requestHosts": [
+    "mangadna.com"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

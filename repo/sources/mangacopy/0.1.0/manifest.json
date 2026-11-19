@@ -1,0 +1,59 @@
+{
+  "slug": "mangacopy",
+  "id": 86001018,
+  "name": "拷贝漫画",
+  "baseUrl": "https://www.mangacopy.com",
+  "apiUrl": "https://api.copy4000.com",
+  "lang": "zh",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 2,
+  "appMinVerReq": "0.1.4",
+  "typeSource": "single",
+  "isNsfw": true,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/d0478bb62bbc485753d2830102aef4e1b87cb336/src/zh/kaobeimanhua/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "拷贝漫画中文源。各镜像共用一个来源，热门、最新、搜索、目录和正文由原版扩展读取。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp",
+      "kr"
+    ],
+    "formats": [
+      "page"
+    ],
+    "creations": [
+      "fan"
+    ],
+    "pricing": "free"
+  },
+  "license": "Apache-2.0",
+  "files": [
+    "extension.apk"
+  ],
+  "additionalParams": "{\"mihonSourceId\":\"4455255049118963922\"}",
+  "upstream": {
+    "version": "1.6.1",
+    "commit": "d0478bb62bbc485753d2830102aef4e1b87cb336",
+    "url": "https://github.com/keiyoushi/extensions/releases/download/d0478bb/tachiyomi-zh.kaobeimanhua-v1.6.1.apk",
+    "sha256": "2826d9c5a4f8bb185dc30f85c235d0c7482c8f76673cac2c185756d888117621",
+    "size": 111847
+  },
+  "requestHosts": [
+    "www.mangacopy.com",
+    "api.copy4000.com",
+    "www.copy4000.com",
+    "www.copy5000.com",
+    "www.copy20.com",
+    "www.copymanga.fun"
+  ],
+  "requires": [],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

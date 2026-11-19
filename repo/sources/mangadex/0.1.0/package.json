@@ -1,0 +1,54 @@
+{
+  "id": 86001019,
+  "name": "MangaDex",
+  "baseUrl": "https://mangadex.org",
+  "apiUrl": "https://api.mangadex.org",
+  "lang": "all",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 2,
+  "appMinVerReq": "0.1.4",
+  "typeSource": "single",
+  "isNsfw": true,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/d9420cd1c66ecd3385946b616aacfcf8f6314f70/src/all/mangadex/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "MangaDex 多语言来源；章节按各译本保留，语言标在译组栏，站内图按原版扩展加载。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp",
+      "kr",
+      "cn"
+    ],
+    "formats": [
+      "page",
+      "vertical"
+    ],
+    "creations": [
+      "fan"
+    ],
+    "pricing": "free"
+  },
+  "additionalParams": "{\"mihonSourceId\":\"6404943692147160087\"}",
+  "sourceCodeUrl": "packages/mangadex/0.1.0.apk",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "mangadex",
+    "sha256": "611bd20d91cdd4152b6d976081cc0cd4651208f7a153ddbef133f4ebba1688c3",
+    "size": 103358,
+    "requestHosts": [
+      "mangadex.org",
+      "api.mangadex.org",
+      "uploads.mangadex.org"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "Apache-2.0"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": 86001017,
+  "name": "となりのヤングジャンプ",
+  "baseUrl": "https://tonarinoyj.jp",
+  "lang": "ja",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 2,
+  "appMinVerReq": "0.1.4",
+  "typeSource": "single",
+  "isNsfw": false,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/tonarinoyoungjump/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "集英社日语漫画；原版 GigaViewer 扩展读取连载目录和公开章节。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp"
+    ],
+    "formats": [
+      "page"
+    ],
+    "pricing": "free"
+  },
+  "additionalParams": "{\"mihonSourceId\":\"5726629019734498294\"}",
+  "sourceCodeUrl": "packages/tonarinoyj/0.1.0.apk",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "tonarinoyj",
+    "sha256": "36132120d8b4fb0006e1dec4100aac39c8bab49c3ae053bf83f47180bfaa5f4b",
+    "size": 59555,
+    "requestHosts": [
+      "tonarinoyj.jp"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "Apache-2.0"
+  }
+}

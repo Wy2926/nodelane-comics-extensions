@@ -8,7 +8,7 @@
   "version": "0.1.0",
   "itemType": 0,
   "sourceCodeLanguage": 2,
-  "appMinVerReq": "0.1.3",
+  "appMinVerReq": "0.1.4",
   "typeSource": "single",
   "isNsfw": true,
   "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/d0478bb62bbc485753d2830102aef4e1b87cb336/src/zh/kaobeimanhua/res/mipmap-xhdpi/ic_launcher.png",
@@ -27,5 +27,5 @@
   "requestHosts": ["www.mangacopy.com","api.copy4000.com","www.copy4000.com","www.copy5000.com","www.copy20.com","www.copymanga.fun"],
   "requires": [],
   "capabilities": ["popular", "latest", "search", "details", "pages"],
-  "enabled": false
+  "enabled": true
 }
