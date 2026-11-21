@@ -10,7 +10,7 @@ import {rollback} from '../scripts/rollback.mjs';
 async function fixture(t) {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'nodelane-catalog-'));
   t.after(() => rm(dir, {recursive:true, force:true}));
-  for (const f of ['src', 'repository.json', 'LICENSE', 'THIRD_PARTY.md']) await cp(path.join(root,f), path.join(dir,f), {recursive:true});
+  for (const f of ['src', 'shared', 'repository.json', 'LICENSE', 'THIRD_PARTY.md']) await cp(path.join(root,f), path.join(dir,f), {recursive:true});
   return dir;
 }
 
@@ -111,6 +111,21 @@ test('unaccepted sources are testable locally but stay out of release catalogs',
   assert.ok(!release.entries.some(e => e.nodelane.slug === 's2read'));
   await publish(release, {directory});
   assert.ok(!(await json(path.join(directory,'repo/index.json'))).some(e => e.nodelane.slug === 's2read'));
+});
+test('a shared JS port can be restored without the original shared directory', async t => {
+  const directory=await fixture(t), slug='feelweb', file=path.join(directory,'src',slug,'manifest.json');
+  const manifest={...await json(file),enabled:true};
+  await writeFile(file,JSON.stringify(manifest));
+  const built=await build({directory}), port=built.artifacts.find(a=>a.manifest.slug===slug);
+  await publish(built,{directory});
+  await rm(path.join(directory,'shared'),{recursive:true});
+  const archive=path.join(directory,'repo/sources',slug,manifest.version);
+  const restored=spawnSync(process.execPath,[path.join(archive,'rebuild.mjs')],{encoding:'utf8'});
+  assert.equal(restored.status,0,restored.stderr);
+  assert.deepEqual(await readFile(path.join(archive,'plugin.js')),port.bytes);
+  assert.match(port.bytes.toString(),/Apache License/);
+  const recovered=await rollback(slug,manifest.version,'1.0.0','testing',directory);
+  assert.equal(recovered.find(e=>e.id===manifest.id).sourceCodeLanguage,1);
 });
 test('invalid ID, version, paths and host capabilities fail before publication', async () => {
   const repo = await json(path.join(root,'repository.json'));

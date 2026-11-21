@@ -1,5 +1,25 @@
 [
   {
+    "slug":"shonenjumpplus","name":"Japanese serial list accepts both series thumbnails and bare episode links",
+    "method":"popular","args":[1],"responses":[{"bodyFile":"gigaviewer-jump.html"}],"expect":{"count":2}
+  },
+  {
+    "slug":"comicseasons","name":"Read all episode pages and volumes before exposing a work",
+    "method":"detail","args":["https://comic-seasons.com/series/9200000000000000001/first_episode"],
+    "setup":"SharedPreferences.prototype.get = async () => false;",
+    "responses":[{"bodyFile":"gigaviewer-series.json"},
+      {"jsonBody":[{"readable_product_id":"302","viewer_uri":"/episode/302","title":"番外","purchase_info":{"can_read":false,"unavailable":true}}]},
+      {"jsonBody":[{"readable_product_id":"300","viewer_uri":"/episode/300","title":"番外","display_open_at":"2025-07-12T12:00:00Z","purchase_info":{"can_read":true,"unavailable":false}}]},
+      {"jsonBody":[{"readable_product_id":"300","viewer_uri":"/volume/300","title":"一巻","purchase_info":{"can_read":false,"unavailable":false}}]}],
+    "expect":{"count":3,"name":"空の旅","author":"月","hasCover":true,"uploadDates":[null,"2025-07-12",null]}
+  },
+  {
+    "slug":"feelweb","name":"DOM reader keeps repeated image slots and passes the aligned transpose to App",
+    "method":"pages","args":["https://feelweb.jp/episode/300#series=9200000000000000001"],
+    "responses":[{"bodyFile":"gigaviewer-reader.html"}],
+    "expect":{"count":2,"urls":["https://example.test/p?a=1&b=2","https://example.test/p?a=1&b=2"],"referer":"https://feelweb.jp/episode/300","processing":"tile-transpose-v1"}
+  },
+  {
     "slug":"jf00","name":"Self-link Next on the terminal result is not another page",
     "method":"search","args":["星海",1],"responses":[{"bodyFile":"jf00-search.html"}],
     "expect":{"count":1,"name":"星海","next":false,"query":{"key":"星海"}}

@@ -28,6 +28,16 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 | MangaSushi | [Keiyoushi Mangasushi 1.6.62](https://github.com/keiyoushi/extensions-source/tree/f1bd88dacd89dfe644369c397efedf79965bf4c0/src/en/mangasushi)、[LICENSE](src/mangasushi/LICENSE) | 上游 SAFE；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangasushi/definition.ts)及实测公开章节支持英文免费日漫、页漫标注。 |
 | MangaDNA | [Keiyoushi MangaDNA 1.6.2](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/all/mangadna)、[LICENSE](src/mangadna/LICENSE) | 上游 MIXED；[浏览器站点定义](https://github.com/Wy2926/node-comics/blob/9af732af4e3d7eb8d042db1c5f3877844086c6df/apps/extension/src/sources/sites/mangadna/definition.ts)与公开正文支持免费、韩漫／国漫和条漫标注。 |
 
+## GigaViewer 三站 JS 移植
+
+移植 [Keiyoushi GigaViewer](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/lib-multisrc/gigaviewer) 的 `GigaViewer.kt`、`Queries.kt`、`Dto.kt` 及下列各站的列表、筛选与权限语义；`ImageInterceptor.kt` 用于核对分块参数。原版权归 2015 Javier Tomás 与 Keiyoushi/Tachiyomi 贡献者，[Apache-2.0 全文](shared/gigaviewer-license.js)随各 JS 包分发。NodeLane 使用 MProvider、游标搜索与完整目录检查，修改以 GPL-3.0-only 分发；APK 仅作对照，未打包。图标只引用同一源码提交的资源，三站上游均标记 SAFE。
+
+| 站点源码 | 实测参照原包（SHA-256） | 卡片资料依据 |
+| --- | --- | --- |
+| [少年ジャンプ＋](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/shonenjumpplus) | [1.6.3](https://github.com/keiyoushi/extensions/releases/download/b035310-2/tachiyomi-ja.shonenjumpplus-v1.6.3.apk) `8b0d338d322eb56e20ad1549e7469e73041e5ecb87c45a8cb7dde96b346b4af5` | [官网适配卡](https://comics.nodelane.net/sites/#site-shonenjumpplus-shonenjumpplus)与[源站](https://shonenjumpplus.com/)的公开、付费章节：日漫页漫，部分收费。 |
+| [Seasons](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/comicseasons) | [1.6.2](https://github.com/keiyoushi/extensions/releases/download/b035310-2/tachiyomi-ja.comicseasons-v1.6.2.apk) `bbf79cb5925979167b415744e34dc1071013f2aae8f02dda9af0074bb421ad97` | [官网适配卡](https://comics.nodelane.net/sites/#site-comicseasons-comicseasons)及[源站](https://comic-seasons.com/)的免费声明、小说改编介绍与公开页漫。 |
+| [FEEL web](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/feelweb) | [1.6.2](https://github.com/keiyoushi/extensions/releases/download/b035310-2/tachiyomi-ja.feelweb-v1.6.2.apk) `c0c34ef6aacd05e78853d7e040eaf70f7522f234750fdd41f6c7a7811bcf19f5` | [官网适配卡](https://comics.nodelane.net/sites/#site-feelweb-feelweb)与[源站](https://feelweb.jp/)的免费声明、日语刊物及公开页漫。 |
+
 ## Hachiraw JS 实现
 
 改编自 [Wy2926/node-comics 的 Hachiraw 适配](https://github.com/Wy2926/node-comics/tree/04f40749ce9a69a798459764c2c994ebd5024404/apps/extension/src/sources/sites/hachiraw)，固定提交 `04f40749ce9a69a798459764c2c994ebd5024404`。版权归 NodeLane Comics 项目及贡献者，GPL-3.0-only，全文见本仓库 LICENSE。保留作品／章节身份、隐藏完整目录、正文导航与总页数、搜索分页校验，改为 MProvider 和设备 WebView 原生 DOM；不复制浏览器运行时，不依赖同级仓库。

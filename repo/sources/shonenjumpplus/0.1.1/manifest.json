@@ -1,0 +1,46 @@
+{
+  "slug": "shonenjumpplus",
+  "id": 86001023,
+  "name": "少年ジャンプ＋",
+  "baseUrl": "https://shonenjumpplus.com",
+  "lang": "ja",
+  "version": "0.1.1",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.2.0",
+  "typeSource": "single",
+  "isNsfw": false,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/shonenjumpplus/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "集英社日语连载；可读公开话，付费话与单行本按源站权限开放。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp"
+    ],
+    "formats": [
+      "page"
+    ],
+    "pricing": "partial"
+  },
+  "license": "GPL-3.0-only",
+  "files": [
+    "gigaviewer-license.js",
+    "gigaviewer.js",
+    "extension.js"
+  ],
+  "entryClass": "SourceExtension",
+  "requestHosts": [
+    "shonenjumpplus.com"
+  ],
+  "requires": [
+    "image.tile-transpose.v1"
+  ],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}

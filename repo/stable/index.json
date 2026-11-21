@@ -113,6 +113,55 @@
     }
   },
   {
+    "id": 86001024,
+    "name": "Seasons",
+    "baseUrl": "https://comic-seasons.com",
+    "lang": "ja",
+    "version": "0.1.2",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.2.0",
+    "typeSource": "single",
+    "isNsfw": false,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/comicseasons/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "文藝春秋的免费日语页漫，含小说改编作品。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "creations": [
+        "adaptation"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "../packages/comicseasons/0.1.2.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "comicseasons",
+      "sha256": "5899ed450d7e27437e5b8b7dd8b1a3319d4c149f17df33564cc391e67c9a16b8",
+      "size": 24205,
+      "requestHosts": [
+        "comic-seasons.com"
+      ],
+      "requires": [
+        "image.tile-transpose.v1"
+      ],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
     "id": 86001001,
     "name": "Comix",
     "baseUrl": "https://comix.to",
@@ -161,6 +210,52 @@
       ],
       "requires": [
         "image.tile-shuffle.v1"
+      ],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001025,
+    "name": "FEEL web",
+    "baseUrl": "https://feelweb.jp",
+    "lang": "ja",
+    "version": "0.1.1",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.2.0",
+    "typeSource": "single",
+    "isNsfw": false,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/feelweb/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "日语免费页漫，含 FEEL YOUNG 等刊物；已结束公开的章节仍受源站限制。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "pricing": "free"
+    },
+    "sourceCodeUrl": "../packages/feelweb/0.1.1.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "feelweb",
+      "sha256": "3f5befec5537857e849a372c5d876fe65ed40154d06f82a73f69dec5438984b1",
+      "size": 23502,
+      "requestHosts": [
+        "feelweb.jp"
+      ],
+      "requires": [
+        "image.tile-transpose.v1"
       ],
       "capabilities": [
         "popular",
@@ -982,6 +1077,52 @@
         "s2read.com"
       ],
       "requires": [],
+      "capabilities": [
+        "popular",
+        "latest",
+        "search",
+        "details",
+        "pages"
+      ],
+      "license": "GPL-3.0-only"
+    }
+  },
+  {
+    "id": 86001023,
+    "name": "少年ジャンプ＋",
+    "baseUrl": "https://shonenjumpplus.com",
+    "lang": "ja",
+    "version": "0.1.1",
+    "itemType": 0,
+    "sourceCodeLanguage": 1,
+    "appMinVerReq": "0.2.0",
+    "typeSource": "single",
+    "isNsfw": false,
+    "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/shonenjumpplus/res/mipmap-xhdpi/ic_launcher.png",
+    "notes": "集英社日语连载；可读公开话，付费话与单行本按源站权限开放。",
+    "catalogMetadata": {
+      "schema": 1,
+      "regions": [
+        "jp"
+      ],
+      "formats": [
+        "page"
+      ],
+      "pricing": "partial"
+    },
+    "sourceCodeUrl": "../packages/shonenjumpplus/0.1.1.js",
+    "nodelane": {
+      "schema": 1,
+      "repositoryId": "net.nodelane.extensions",
+      "slug": "shonenjumpplus",
+      "sha256": "0e264a82496236a5b9a7fcafe746a1a2034ae6c39bb842f40055645ba4cc5bd7",
+      "size": 24388,
+      "requestHosts": [
+        "shonenjumpplus.com"
+      ],
+      "requires": [
+        "image.tile-transpose.v1"
+      ],
       "capabilities": [
         "popular",
         "latest",

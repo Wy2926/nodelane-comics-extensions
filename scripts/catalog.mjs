@@ -10,7 +10,7 @@ export const json = async file => JSON.parse(await readFile(file, 'utf8'));
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const slugPattern = /^[a-z][a-z0-9-]{1,39}$/;
 const capabilities = new Set(['popular', 'latest', 'search', 'details', 'pages']);
-const hostCapabilities = new Set(['image.tile-shuffle.v1', 'image.strip-reverse.v1', 'crypto.md5.v1', 'crypto.aes-ecb.v1']);
+const hostCapabilities = new Set(['image.tile-shuffle.v1', 'image.tile-transpose.v1', 'image.strip-reverse.v1', 'crypto.md5.v1', 'crypto.aes-ecb.v1']);
 const catalogValues = {
   regions: ['jp', 'kr', 'cn', 'hk_tw', 'western', 'other'],
   formats: ['page', 'vertical', 'strip'],
@@ -60,7 +60,7 @@ export function validateManifest(m, slug, repo) {
   } else {
     check(m.license === 'GPL-3.0-only', 'JavaScript 插件分发许可为 GPL-3.0-only');
     check(Array.isArray(m.files) && m.files.length > 0 && new Set(m.files).size === m.files.length &&
-      m.files.every(f => /^[a-z][a-z0-9-]*\.js$/.test(f)), '构建文件必须是本站目录内的独立文件');
+      m.files.every(f => /^[a-z][a-z0-9-]*\.js$/.test(f)), '构建文件必须为独立 JS 文件名');
     check(/^[A-Za-z_$][\w$]*$/.test(m.entryClass), '入口类不合法');
   }
   const url = new URL(m.baseUrl);
@@ -86,7 +86,13 @@ export async function build({directory = root, out = path.join(directory, '.buil
     validateManifest(m, slug, repo);
     if (m.enabled === false && !includeDisabled) continue;
     const native = m.sourceCodeLanguage === 2;
-    const files = await Promise.all(m.files.map(file => readFile(path.join(dir, file))));
+    const files = await Promise.all(m.files.map(async file => {
+      try { return await readFile(path.join(dir, file)); }
+      catch (error) {
+        if (native || error.code !== 'ENOENT') throw error;
+        return readFile(path.join(directory, 'shared', file));
+      }
+    }));
     const bytes = native ? files[0] : Buffer.from(
       `// SPDX-License-Identifier: ${m.license}\n// NodeLane ${slug}; corresponding source: sources/${slug}/${m.version}/\n` +
       'const DefaultExtension = (() => {\n' + files.join('\n') + `\nreturn ${m.entryClass};\n})();\n`);

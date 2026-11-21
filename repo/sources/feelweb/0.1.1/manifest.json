@@ -1,0 +1,46 @@
+{
+  "slug": "feelweb",
+  "id": 86001025,
+  "name": "FEEL web",
+  "baseUrl": "https://feelweb.jp",
+  "lang": "ja",
+  "version": "0.1.1",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.2.0",
+  "typeSource": "single",
+  "isNsfw": false,
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/ja/feelweb/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "日语免费页漫，含 FEEL YOUNG 等刊物；已结束公开的章节仍受源站限制。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "jp"
+    ],
+    "formats": [
+      "page"
+    ],
+    "pricing": "free"
+  },
+  "license": "GPL-3.0-only",
+  "files": [
+    "gigaviewer-license.js",
+    "gigaviewer.js",
+    "extension.js"
+  ],
+  "entryClass": "GigaViewer",
+  "requestHosts": [
+    "feelweb.jp"
+  ],
+  "requires": [
+    "image.tile-transpose.v1"
+  ],
+  "capabilities": [
+    "popular",
+    "latest",
+    "search",
+    "details",
+    "pages"
+  ],
+  "enabled": true
+}
