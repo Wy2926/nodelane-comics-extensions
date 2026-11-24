@@ -37,7 +37,18 @@ npm run release -- stable
 
 发布前整批校验版本、身份和摘要；同版本包不可覆盖。仅 `catalogMetadata`、`isNsfw` 可在不改包版本的情况下更新，首次源码归档保持不变。包、源码及许可先写入，渠道索引最后原子替换；失败可重试，不删除已写入的不可变文件。若遗留 `repo/.publish-lock`，确认原进程结束后再移除锁。
 
-提交、推送与发布按本次授权执行。推送 `main` 会触发现有 GitHub Actions，检查后将 `npm run pages` 生成的 `.pages/` 部署到 Pages；PR 只检查。提交发布内容时带齐源码、`repo/` 产物和许可，并检查 `git diff -- repo/stable/index.json repo/testing/index.json`。只改文档不需要运行 `release` 或改变目录。
+提交发布内容时带齐源码、`repo/` 产物和许可，并检查 `git diff -- repo/stable/index.json repo/testing/index.json`。只改文档不需要运行 `release` 或改变目录。
+
+### Cloudflare Pages 托管
+
+源码保留在 GitHub。推送 `main` 或在 `main` 手动运行工作流时，GitHub Actions 检查通过后用 Wrangler 将 `npm run pages` 生成的 `.pages/` 直接上传到 Cloudflare Pages。PR 只检查和生成目录。提交、推送与部署按本次授权执行。
+
+首次切换顺序：
+
+1. 在目标 Cloudflare 账号创建 **Direct Upload** 类型的 Pages 项目 `nodelane-comics-extensions`，生产分支设为 `main`。也可在已登录 Wrangler 的终端运行 `npx wrangler@4 pages project create nodelane-comics-extensions --production-branch=main`。
+2. 在 GitHub 仓库的 **Settings → Secrets and variables → Actions** 设置 `CLOUDFLARE_ACCOUNT_ID` 和 `CLOUDFLARE_API_TOKEN`；令牌只需目标账号的 **Cloudflare Pages: Edit** 权限。
+3. 首次部署后，在项目的 `*.pages.dev` 地址检查 `/stable/index.json` 和 `/testing/index.json`。按索引相对地址下载插件，确认无跳转且 SHA-256 与索引一致。
+4. 在 Pages 项目的 **Custom domains** 添加 `comics-extensions.nodelane.net`，按提示把原 GitHub Pages 的 DNS 记录切到项目的 `*.pages.dev`。待域名启用后，通过正式域名重复上述检查，再停用旧 GitHub Pages。若切换失败，先还原原 DNS 记录。
 
 ## 恢复与迁移
 
