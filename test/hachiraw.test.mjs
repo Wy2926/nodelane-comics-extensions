@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {loadPlugin} from '../scripts/runtime.mjs';
-import {runPage} from './helpers/hachiraw-page.mjs';
+import {runPage} from './helpers/webview-page.mjs';
 
 const origin = 'https://hachiraw.net', work = origin + '/manga/sample-book';
 const detail = await readFile(new URL('./fixtures/hachiraw-detail.html', import.meta.url), 'utf8');

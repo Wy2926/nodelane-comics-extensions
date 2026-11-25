@@ -71,6 +71,12 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 
 ## 接口参考
 
+### 嬉皮漫畫 JS 来源
+
+[`src/hipmh/`](src/hipmh/) 依据[源站](https://m.hipmh.com/)公开的漫画和搜索接口、作品目录与[网站阅读器](https://reader.hipmh.top/)的 DOM 实现。正文取阅读器完成选线、解码后的 `data-total-images`、`data-index` 和 `data-src`；网站脚本和图片不随插件分发。JS 代码归 NodeLane Comics 项目及贡献者，GPL-3.0-only。
+
+实测对照为 [Keiyoushi Xipi Manhua 1.6.3](https://github.com/keiyoushi/extensions/releases/download/b4f9106-3/tachiyomi-zh.xipimanhua-v1.6.3.apk)，[对应源码及 Apache-2.0 许可](https://github.com/keiyoushi/extensions-source/tree/b4f9106a5994790caef12a7744c85fb43c9b9249/src/zh/xipimanhua)，上游 ID `10879178251255350`，APK SHA-256 `c9458294f2acaa69b707d9047fe0e9cbc8f5cbd2d722e0adcba74a31336ade2a`。仅作对照，未移植 Kotlin 解码器或打包 APK。成人标记依据上游 `MIXED`；地区依据[探索分类](https://m.hipmh.com/explore)，免费与条漫依据首页「免費漫畫」资料及匿名公开条漫。图标仅引用[源站 favicon](https://m.hipmh.com/favicon-96x96.png)，权利归原权利人。
+
 ### Omega Scans JS 移植
 
 依据 [Keiyoushi Omega Scans](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/src/en/omegascans) 与同次构建的 [HeanCMS](https://github.com/keiyoushi/extensions-source/tree/b0353107338f4d7eb110a70f0c5ff83f83f75fba/lib-multisrc/heancms)。对照的[原包 1.6.53](https://github.com/keiyoushi/extensions/releases/download/b035310-1/tachiyomi-en.omegascans-v1.6.53.apk) 上游 ID 为 `1534451209269193504`，SHA-256 `405d40a314450170447daefdcb0f3be21ac81440cc1d7d94ff361fefa1526985`，仅用于验证。

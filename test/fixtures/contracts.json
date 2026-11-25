@@ -1,5 +1,25 @@
 [
   {
+    "slug":"hipmh","name":"Search preserves the keyword and collapses slug aliases on the requested page",
+    "method":"search","args":["星 & 海+",2],
+    "responses":[{"jsonBody":{"code":200,"data":{"page":2,"total":22,"total_pages":2,"data":[
+      {"id":"bTo0Mg-star","title":"星海","vertical_image_url":"/a.webp"},
+      {"id":"bTo0Mg-other-slug","title":"星海"}]}}}],
+    "expect":{"count":1,"name":"星海","next":false,"query":{"q":"星 & 海+","page":"2","page_size":"20"}}
+  },
+  {
+    "slug":"hipmh","name":"The complete catalog retains special chapters and uses source publication dates",
+    "method":"detail","args":["https://m.hipmh.com/works/bTo0Mg-star"],
+    "responses":[{"jsonBody":{"code":200,"data":{"id":42,"title":"星海","authors":[{"name":"月"}],
+      "status":"ongoing","vertical_image_url":"/cover.webp","total_chapters":3}}},
+      {"jsonBody":{"code":200,"data":{"page":1,"total_pages":2,"total":3,"items":[
+        {"hid":"bTo0Mi1jOjk-NDI6My4wMA","title":"番外","created_at":"2026-04-03T12:00:00.123456Z"},
+        {"hid":"bTo0Mi1jOjg-NDI6Mi4wMA","title":"番外","updated_at":"2026-05-01T12:00:00Z"}]}}},
+      {"jsonBody":{"code":200,"data":{"page":2,"total_pages":2,"total":3,"items":[
+        {"hid":"bTo0Mi1jOjc-NDI6MC41MA","title":"序","created_at":"2026-04-01T12:00:00Z"}]}}}],
+    "expect":{"count":3,"name":"星海","author":"月","hasCover":true,"uploadDates":["2026-04-03",null,"2026-04-01"]}
+  },
+  {
     "slug":"shonenjumpplus","name":"Japanese serial list accepts both series thumbnails and bare episode links",
     "method":"popular","args":[1],"responses":[{"bodyFile":"gigaviewer-jump.html"}],"expect":{"count":2}
   },

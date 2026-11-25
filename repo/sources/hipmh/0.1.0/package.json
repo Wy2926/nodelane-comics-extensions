@@ -1,0 +1,49 @@
+{
+  "id": 86001027,
+  "name": "嬉皮漫畫",
+  "baseUrl": "https://m.hipmh.com",
+  "apiUrl": "https://hipapi1.s3file.top",
+  "lang": "zh",
+  "version": "0.1.0",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "typeSource": "single",
+  "isNsfw": true,
+  "iconUrl": "https://m.hipmh.com/favicon-96x96.png",
+  "notes": "人氣榜、最近更新與分頁搜尋；無關鍵字時可篩選。正文使用網站閱讀器的圖片清單。",
+  "catalogMetadata": {
+    "schema": 1,
+    "regions": [
+      "cn",
+      "kr",
+      "jp"
+    ],
+    "formats": [
+      "vertical"
+    ],
+    "pricing": "free"
+  },
+  "sourceCodeUrl": "packages/hipmh/0.1.0.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "hipmh",
+    "sha256": "5b2051eb8765fc0b08eb922f528a9496ed2826ac959bfb98eb727046df374e2a",
+    "size": 11471,
+    "requestHosts": [
+      "m.hipmh.com",
+      "hipapi1.s3file.top",
+      "reader.hipmh.top"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}

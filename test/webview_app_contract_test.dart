@@ -45,6 +45,17 @@ void main() {
     });
   }
 
+  Future<String> runPage(List<dynamic> args, Map<String, dynamic> fixture) async {
+    final fixtures = Platform.environment['NODELANE_PLUGIN_FIXTURES']!;
+    final process = await Process.start('node', ['$fixtures/../helpers/webview-page.mjs', '--stdin']);
+    process.stdin.write(jsonEncode({'script': (args[2] as List).single, 'url': args[0], ...fixture}));
+    await process.stdin.close();
+    final output = await utf8.decoder.bind(process.stdout).join();
+    final errors = await utf8.decoder.bind(process.stderr).join();
+    expect(await process.exitCode, 0, reason: errors);
+    return output;
+  }
+
   test('real QuickJS serializes the complete page program through the existing host bridge', () async {
     final service = create();
     var calls = 0;
@@ -140,18 +151,7 @@ void main() {
     await host((args) async {
       expect(args[0], 'https://hachiraw.net/manga/sample-book');
       expect(args[3], 35);
-      final process = await Process.start('node', [
-        '$fixtures/../helpers/hachiraw-page.mjs', '--stdin',
-      ]);
-      process.stdin.write(jsonEncode({
-        'script': (args[2] as List).single,
-        'url': args[0], 'html': detailHtml, 'reader': readerHtml,
-      }));
-      await process.stdin.close();
-      final output = await utf8.decoder.bind(process.stdout).join();
-      final errors = await utf8.decoder.bind(process.stderr).join();
-      expect(await process.exitCode, 0, reason: errors);
-      return output;
+      return runPage(args, {'html': detailHtml, 'reader': readerHtml});
     });
     const work = 'https://hachiraw.net/manga/sample-book';
     final detail = await service.getDetail(work);
@@ -164,5 +164,20 @@ void main() {
     expect(pages.first.url, pages.last.url);
     expect(pages.first.headers!['Referer'], 'https://hachiraw.net/');
     expect(pages.first.headers!['User-Agent'], 'Fixture device WebView');
+  });
+  test('Hipmh reads the public reader’s ordered lazy slots through the App bridge', () async {
+    final service = create('hipmh');
+    final fixtures = Platform.environment['NODELANE_PLUGIN_FIXTURES']!;
+    final html = File('$fixtures/hipmh-reader.html').readAsStringSync();
+    const reader = 'https://reader.hipmh.top/';
+    const chapter = '${reader}chapter/bTo0Mi1jOjc-NDI6MC41MA';
+    await host((args) async {
+      expect(args[0], chapter);
+      return runPage(args, {'html': html, 'delayedBridge': true});
+    });
+    final pages = await service.getPageList(chapter);
+    expect(pages.map((p) => p.url), ['https://example.test/page?quality=2&v=1',
+      'https://example.test/page?quality=2&v=1', '${reader}other/last.webp']);
+    expect(pages.last.headers?['Referer'], reader);
   });
 }

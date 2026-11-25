@@ -2,7 +2,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import {parseHTML, DOMParser} from 'linkedom';
 
-// Execute the same serialized program produced by Node or the App's QuickJS bridge.
+// Execute the same serialized page program produced by Node or the App's QuickJS bridge.
 export async function runPage(script, {html, reader = html, url, status = 200, challenge = false, wait = false, delayedBridge = false}) {
     const {document} = parseHTML(html);
     document.readyState = 'complete';
