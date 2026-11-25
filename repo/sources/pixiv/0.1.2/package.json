@@ -1,0 +1,47 @@
+{
+  "id": 86001026,
+  "name": "Pixiv",
+  "baseUrl": "https://www.pixiv.net",
+  "apiUrl": "",
+  "lang": "all",
+  "version": "0.1.2",
+  "itemType": 0,
+  "sourceCodeLanguage": 1,
+  "appMinVerReq": "0.1.0",
+  "isNsfw": true,
+  "hasCloudflare": false,
+  "isFullData": false,
+  "typeSource": "single",
+  "iconUrl": "https://raw.githubusercontent.com/keiyoushi/extensions-source/b4f9106a5994790caef12a7744c85fb43c9b9249/src/all/pixiv/res/mipmap-xhdpi/ic_launcher.png",
+  "notes": "漫画日榜、最新、标签搜索或粘贴投稿／系列网址。登录请使用 App 浏览器；可见性以 Pixiv 返回的结果为准。",
+  "catalogMetadata": {
+    "schema": 1,
+    "formats": [
+      "page"
+    ],
+    "creations": [
+      "fan"
+    ],
+    "pricing": "free"
+  },
+  "sourceCodeUrl": "packages/pixiv/0.1.2.js",
+  "nodelane": {
+    "schema": 1,
+    "repositoryId": "net.nodelane.extensions",
+    "slug": "pixiv",
+    "sha256": "9ba7f7b5c970985f9efa09ed10c8a5a83201376ee17c408c9e591aa72635f3cf",
+    "size": 9113,
+    "requestHosts": [
+      "www.pixiv.net"
+    ],
+    "requires": [],
+    "capabilities": [
+      "popular",
+      "latest",
+      "search",
+      "details",
+      "pages"
+    ],
+    "license": "GPL-3.0-only"
+  }
+}

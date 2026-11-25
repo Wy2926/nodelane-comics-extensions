@@ -20,6 +20,40 @@
     "expect":{"count":3,"name":"星海","author":"月","hasCover":true,"uploadDates":["2026-04-03",null,"2026-04-01"]}
   },
   {
+    "slug":"pixiv","name":"Mobile ranking excludes masked works and animations, preserving ranked order",
+    "method":"popular","args":[2],
+    "responses":[{"jsonBody":{"error":false,"body":{"ranking":[{"illustId":"81"},{"illustId":"82"},{"illustId":"83"},{"illustId":"84"}]}}},
+      {"jsonBody":{"error":false,"body":{"illust_details":[{"id":"84","type":"2"},{"id":"83","is_masked":true},{"id":"82","type":"1","title":"Second"},{"id":"81","type":"1","title":"First"}]}}}],
+    "expect":{"count":2,"name":"First","next":true}
+  },
+  {
+    "slug":"pixiv","name":"Tag search keeps a series once, ignores the ad slot, respects the anonymous last page",
+    "method":"search","args":["空 & 星",2],
+    "responses":[{"jsonBody":{"error":false,"body":{"lastPage":2,"illusts":[
+      {"id":"81","type":"1","user_id":"30","series":{"id":"12","user_id":"30","title":"星図"}},
+      {"is_ad_container":1},{"id":"80","type":"1","user_id":"30","series":{"id":"12","user_id":"30","title":"星図"}},
+      {"id":"79","type":"0","title":"空"}]}}}],
+    "expect":{"count":2,"name":"星図","next":false,"query":{"word":"空 & 星","p":"2","s_mode":"s_tag"}}
+  },
+  {
+    "slug":"pixiv","name":"Series catalog follows membership order rather than thumbnail order across pages",
+    "method":"detail","args":["https://www.pixiv.net/user/30/series/12"],
+    "responses":[{"jsonBody":{"error":false,"body":{"page":{"seriesId":12,"total":3,"series":[{"workId":"81"},{"workId":"80"}]},
+      "illustSeries":[{"id":"12","userId":"30","title":"星図","description":"空<br>星","url":"https://example.test/cover"}],
+      "users":[{"userId":"30","name":"月"}],"thumbnails":{"illust":[{"id":"80","userId":"30","title":"番外"},{"id":"81","userId":"30","title":"番外","createDate":"2025-01-02T12:00:00Z"}]}}}},
+      {"jsonBody":{"error":false,"body":{"page":{"seriesId":12,"total":3,"series":[{"workId":"79"}]},
+      "illustSeries":[{"id":"12","userId":"30","title":"星図"}],"thumbnails":{"illust":[]}}}},
+      {"jsonBody":{"error":false,"body":{"id":"79","userId":"30","title":"序","createDate":"2024-12-31T12:00:00Z"}}}],
+    "expect":{"count":3,"name":"星図","author":"月","hasCover":true,"uploadDates":["2025-01-02",null,"2024-12-31"]}
+  },
+  {
+    "slug":"pixiv","name":"Static artwork reads original images with Referer and keeps duplicate slots",
+    "method":"pages","args":["https://www.pixiv.net/artworks/81#series=12&user=30"],
+    "responses":[{"jsonBody":{"error":false,"body":{"id":"81","userId":"30","seriesNavData":{"seriesId":"12"},"illustType":1,"pageCount":3}}},
+      {"jsonBody":{"error":false,"body":[{"urls":{"original":"https://first.example.test/image?size=full&v=2"}},{"urls":{"original":"https://first.example.test/image?size=full&v=2"}},{"urls":{"original":"https://other.example.test/last.png"}}]}}],
+    "expect":{"count":3,"referer":"https://www.pixiv.net/","urls":["https://first.example.test/image?size=full&v=2","https://first.example.test/image?size=full&v=2","https://other.example.test/last.png"]}
+  },
+  {
     "slug":"shonenjumpplus","name":"Japanese serial list accepts both series thumbnails and bare episode links",
     "method":"popular","args":[1],"responses":[{"bodyFile":"gigaviewer-jump.html"}],"expect":{"count":2}
   },
