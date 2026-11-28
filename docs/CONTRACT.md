@@ -24,6 +24,19 @@ App 在 QuickJS 中实例化 `DefaultExtension extends MProvider`，通过 `this
 | `getFilterList()` | 可选 | 筛选定义数组，默认 `[]` |
 | `getSourcePreferences()` | 可选 | 来源设置定义数组，默认 `[]` |
 
+### 浏览器漫画预览
+
+JS 来源可在 `capabilities` 声明 `browser.manga-preview.v1`。同包保留普通来源入口，旧 App 忽略此可选展示功能，不必加到 `requires`。
+
+| 入口 | 运行位置与输入 |
+| --- | --- |
+| `browserMangaPreview({document, url, anchor})` | 独立的类方法，宿主仅将该方法送入当前顶层文档，可读已渲染的 DOM。`anchor === null` 表示识别当前页；否则是实际长按的链接，`url` 是它的目标。方法必须自包含，不能引用模块闭包、`this.source` 或 `Client`，不需要抓取或改写页面。 |
+| `async resolveBrowserManga(url)` | 可选的 QuickJS 回退。长按时无可用卡片，或从其他网站长按本站链接，只传目标 URL，沿用 `Client`。非作品链接直接返回 `null`，勿调用会拉取完整目录的 `getDetail`。 |
+
+两个入口均返回 `{name, link, imageUrl?, author?, status?, chapterName?}` 或 `null`。`link` 为目标来源的完整作品 URL，应与搜索／详情中的作品身份一致；章节须确认所属作品，`chapterName` 可选。封面为有效 HTTP(S) 地址，状态沿用详情枚举。未识别返回 `null`，网络／解析故障抛错。来源不能读取或修改书架及进度；加入书架和打开阅读器由宿主响应用户点按。
+
+宿主仅派给已安装启用且与目标 `baseUrl` 的 HTTPS origin 精确匹配的唯一预览来源；`requestHosts` 不授权读取页面。跨站链接不提供发起页 DOM、网址或文字。标签操作由 App 响应用户手势，来源不持有原生标签句柄。切页、切后台或关闭气泡后丢弃迟到结果。
+
 ## 数据格式
 
 | 对象 | 字段 |
@@ -75,7 +88,7 @@ App 在 QuickJS 中实例化 `DefaultExtension extends MProvider`，通过 `this
 | `isNsfw` | 可选布尔值；`true` 展示 18+ 并参与成人来源过滤，缺失不表示全年龄认证 |
 | `nodelane` | `schema: 1`，以及 `repositoryId`、`slug`、`sha256`、`size`、`requestHosts`、`capabilities`、`requires`、`license` |
 
-`capabilities` 声明插件功能：`popular/latest/search/details/pages`，应与实现一致；它不会自动实现方法或控制 UI。`requires` 声明额外主机能力，App 通过只读 `NodeLane.capabilities` 提供可用能力；缺少依赖时拒绝安装或更新。基础版本号不能替代能力检查。
+`capabilities` 声明插件功能：`popular/latest/search/details/pages` 以及可选的[浏览器预览](#浏览器漫画预览)，应与实现一致。`requires` 声明额外主机依赖，App 通过只读 `NodeLane.capabilities` 提供可用能力；缺少依赖时拒绝安装或更新。基础版本号不能替代能力检查。
 
 App 核对仓库与来源身份、下载地址、兼容性、包大小及 SHA-256；包上限 1 MiB，初始化成功才保存，失败保留已安装版本及关联数据。正式与本地目录均为 JSON 来源数组；正式目录通过 HTTPS 分发，插件摘要用于内容完整性检查。新增主机能力需使用有版本的能力名；站点解析规则和已有能力的参数变化由插件更新。
 

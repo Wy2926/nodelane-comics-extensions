@@ -39,6 +39,61 @@ class SourceExtension extends MProvider {
   get supportsLatest() { return true; }
   getHeaders() { return {Referer:ORIGIN + '/'}; }
   getSourcePreferences() { return []; }
+  browserMangaPreview({document: doc, url, anchor}) {
+    // 当前文档和 URL 回退共用识别规则；后者使用 QuickJS 的 Document。
+    const one = selector => doc.querySelector ? doc.querySelector(selector) : doc.selectFirst(selector);
+    const attr = (el, key) => el?.attr ? el.attr(key) : el?.getAttribute(key);
+    const label = el => (el?.textContent ?? el?.text ?? '').replace(/\s+/g, ' ').trim();
+    const identity = href => /^(?:https:\/\/mangapill\.com)?(\/(manga|chapters)\/([1-9]\d*)(?:-(\d+))?(?:\/[\w.-]+)?\/?(?:\?[^#\s]*)?)(?:#.*)?$/.exec(href);
+    const target = identity(url);
+    if (!target || (target[2] === 'chapters') !== !!target[4]) return null;
+    const workUrl = path => 'https://mangapill.com' + path;
+    const cover = value => {
+      if (!value) return undefined;
+      if (doc.baseURI) return new URL(value, doc.baseURI).href;
+      // QuickJS 没有浏览器 URL；回退入口会用已有图片解析器补全相对地址。
+      return value;
+    };
+    const canonical = identity(attr(one('link[rel=canonical]'), 'href'));
+    if (anchor) {
+      // 最新章节卡的封面指向章节、书名指向作品；只在命中卡内按作品 ID 对齐。
+      const card = anchor.closest('.grid > div, .featured-grid > div');
+      const links = [...(card?.querySelectorAll('a[href]') ?? [anchor])].filter(a =>
+        identity(attr(a,'href'))?.[3] === target[3]);
+      const book = links.find(a => identity(attr(a,'href'))[2] === 'manga' && label(a.querySelector('.line-clamp-2')));
+      if (book) {
+        const img = links.map(a => a.querySelector('img')).find(Boolean);
+        const chapter = target[2] === 'chapters' && links.find(a => a.href === anchor.href && label(a));
+        return {name:label(book.querySelector('.line-clamp-2')), link:workUrl(identity(attr(book,'href'))[1]),
+          imageUrl:cover(attr(img,'data-src') || attr(img,'src')), chapterName:chapter ? label(chapter) : undefined};
+      }
+      if (target[2] === 'manga') return null;
+    }
+    if (!canonical || canonical[3] !== target[3] || !anchor && canonical[2] !== target[2]) return null;
+    const title = label(one('h1')), img = attr(one('meta[property="og:image"]'), 'content');
+    if (canonical[2] === 'manga') {
+      if (!title || anchor && !anchor.closest('#chapters [data-filter-list]')) return null;
+      const fields = doc.querySelectorAll ? [...doc.querySelectorAll('.grid > div > label')] : doc.select('.grid > div > label');
+      const field = key => label(fields.find(el => label(el) === key)?.nextElementSibling);
+      return {name:title, link:workUrl(canonical[1]), imageUrl:cover(img), author:field('Author') || undefined,
+        status:({'publishing':0, 'finished':1, 'on hiatus':2, 'discontinued':3})[field('Status')] ?? 5,
+        chapterName:anchor ? label(anchor) : undefined};
+    }
+    if (anchor || canonical[4] !== target[4]) return null;
+    const work = identity(attr(one('#js-chapter-selector-modal a[data-hotkey=m]'), 'href'));
+    const heading = /^(.+?)\s+((?:Group \d+\s+)?Chapter .+)$/i.exec(title);
+    return work?.[2] === 'manga' && work[3] === target[3] && heading
+      ? {name:heading[1], chapterName:heading[2], link:workUrl(work[1]), imageUrl:cover(img)} : null;
+  }
+  async resolveBrowserManga(url) {
+    let loc;
+    try { loc = locationOf(url, url.startsWith(ORIGIN + '/chapters/')); } catch (_) { return null; }
+    const doc = await this.document(loc.url);
+    const data = this.browserMangaPreview({document:doc, url:loc.url});
+    check(data, '作品摘要缺失或归属不符');
+    if (data.imageUrl) data.imageUrl = image(data.imageUrl, loc.url);
+    return data;
+  }
   getFilterList() {
     return [...Object.entries(choices).map(([type, opts]) => ({type, name:type === 'type' ? '类型' : '状态', type_name:'SelectFilter', state:0,
       values:['', ...opts].map(value => ({name:value || '全部', value, type_name:'SelectOption'}))})),

@@ -9,8 +9,9 @@ export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 export const json = async file => JSON.parse(await readFile(file, 'utf8'));
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const slugPattern = /^[a-z][a-z0-9-]{1,39}$/;
-const capabilities = new Set(['popular', 'latest', 'search', 'details', 'pages']);
-const hostCapabilities = new Set(['image.tile-shuffle.v1', 'image.tile-transpose.v1', 'image.strip-reverse.v1', 'crypto.md5.v1', 'crypto.aes-ecb.v1']);
+const browserPreview = 'browser.manga-preview.v1';
+const capabilities = new Set(['popular', 'latest', 'search', 'details', 'pages', browserPreview]);
+const hostCapabilities = new Set(['image.tile-shuffle.v1', 'image.tile-transpose.v1', 'image.strip-reverse.v1', 'crypto.md5.v1', 'crypto.aes-ecb.v1', browserPreview]);
 const catalogValues = {
   regions: ['jp', 'kr', 'cn', 'hk_tw', 'western', 'other'],
   formats: ['page', 'vertical', 'strip'],
@@ -68,6 +69,7 @@ export function validateManifest(m, slug, repo) {
   check(Array.isArray(m.requestHosts) && m.requestHosts.includes(url.hostname) &&
     m.requestHosts.every(h => /^[a-z0-9]+([.-][a-z0-9]+)*\.[a-z]{2,}$/.test(h)), '必须明确声明精确请求主机');
   check(Array.isArray(m.capabilities) && m.capabilities.length > 0 && m.capabilities.every(c => capabilities.has(c)), '能力声明无效');
+  check(!m.capabilities.includes(browserPreview) || m.sourceCodeLanguage === 1, '网页摘要入口仅适用于 JS 来源');
   check(Array.isArray(m.requires) && m.requires.every(c => hostCapabilities.has(c)), '未知主机能力');
   check(m.isNsfw === undefined || typeof m.isNsfw === 'boolean', '成人标记必须为布尔值');
   validateCatalogMetadata(m.catalogMetadata);

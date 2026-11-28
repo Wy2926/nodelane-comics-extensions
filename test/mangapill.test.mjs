@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
+import vm from 'node:vm';
+import {parseHTML} from 'linkedom';
 import {mockPlugin} from './helpers/runtime.mjs';
 
 const origin = 'https://mangapill.com', book = origin + '/manga/42/sky', chapter = origin + '/chapters/42-10/first';
@@ -9,6 +11,31 @@ const [list, detail, reader] = await Promise.all(['search','detail','reader'].ma
 const run = (...bodies) => mockPlugin('mangapill', (_, n) => {
   const body = bodies[n-1]; assert.ok(body, 'unexpected request');
   return typeof body === 'string' ? {statusCode:200, body} : body;
+});
+
+test('browser entry reads the pressed card or chapter owner without the provider or any network', async () => {
+  const {plugin} = await run();
+  function preview(html, url, selector) {
+    const {document} = parseHTML(html);
+    Object.defineProperty(document, 'baseURI', {value:origin + '/'});
+    const anchor = selector ? document.querySelector(selector) : null;
+    return vm.runInNewContext(`({${plugin.browserMangaPreview}}).browserMangaPreview({document,url,anchor})`,
+      {document, url, anchor, URL});
+  }
+  const other = '<div><a href="/manga/99/other"><div class="line-clamp-2">Other</div></a></div>';
+  const card = preview(list.replace('<div><a href=', other + '<div><a href='), book, 'a[href="/manga/42/sky"]');
+  assert.equal(card.name, 'Sky & Sea');
+  assert.equal(card.imageUrl, 'https://covers.example.test/sky');
+  const featured = `<div class="featured-grid"><div><a href="${chapter}"><img src="/sky.jpg"></a>
+    <a href="${chapter}">#0</a><a href="${book}"><div class="line-clamp-2">Sky</div></a></div></div>`;
+  const latest = preview(featured, chapter, 'a');
+  assert.deepEqual([latest.name,latest.link,latest.chapterName,latest.imageUrl], ['Sky',book,'#0',origin+'/sky.jpg']);
+  const ch = preview(detail, chapter, 'a[href="/chapters/42-10/first"]');
+  assert.deepEqual([ch.link,ch.chapterName,ch.status], [book,'Chapter 0',1]);
+  const page = preview(reader.replace('<img src="/banner">','<h1>Sky &amp; Sea Group 2 Chapter 0</h1>'), chapter);
+  assert.deepEqual([page.name,page.link,page.chapterName], ['Sky & Sea',origin+'/manga/42','Group 2 Chapter 0']);
+  assert.equal(preview(detail, origin+'/search?q=sky'), null);
+  assert.equal(await plugin.resolveBrowserManga(origin+'/account'), null);
 });
 
 test('MangaPill uses the directional pager, not arbitrary buttons; preserves repeated genre filters', async () => {

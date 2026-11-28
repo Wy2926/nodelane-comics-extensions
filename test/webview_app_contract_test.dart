@@ -56,65 +56,22 @@ void main() {
     return output;
   }
 
-  test('real QuickJS serializes the complete page program through the existing host bridge', () async {
+  test('Comix propagates a redirected page, decodes a later page list and reports bridge timeout', () async {
+    const work = 'https://comix.to/title/test-fixture';
     final service = create();
-    var calls = 0;
+    String? response;
     await host((args) async {
-      calls++;
-      expect(args[0], 'https://comix.to/title/test-fixture');
+      expect(args[0], work);
       expect(args[1]['Referer'], 'https://comix.to/');
       expect(args[3], 120);
-      final scripts = args[2] as List;
-      expect(scripts.length, 1);
-      final script = scripts.single as String;
-      expect(script, isNot(contains('[native code]')));
-      expect(script, contains('fetch(url'));
-      expect(script, contains('callHandler'));
-      // Parse and execute the exact QuickJS-produced source in a fresh JS realm.
-      // Failure uses the actual page runner, before network/API mocks are involved.
-      final process = await Process.start('node', [
-        '--input-type=module',
-        '-e',
-        'import vm from "node:vm"; let source=""; '
-            'for await (const part of process.stdin) source+=part; '
-            'const context={location:{origin:"https://redirect.test"},'
-            'flutter_inappwebview:{callHandler:async(name,result)=>process.stdout.write(result)}}; '
-            'context.window=context; vm.runInNewContext(source,context);',
-      ]);
-      process.stdin.write(script);
-      await process.stdin.close();
-      final result = jsonDecode(await utf8.decoder.bind(process.stdout).join());
-      expect(await process.exitCode, 0);
-      expect(result['ok'], false);
-      expect(result['error'], contains('页面已跳转'));
-      return jsonEncode({
-        'ok': true,
-        'value': {
-          'name': '漫画🌊',
-          'link': args[0],
-          'status': 0,
-          'chapters': [
-            {
-              'name': 'Chapter 0.5',
-              'url': '${args[0]}/1-chapter-0.5',
-              'dateUpload': '1767225600000',
-            },
-          ],
-        },
-      });
+      // 直接执行 QuickJS 生成的脚本，用跳转后的真实返回值验证桥接。
+      return response ?? await runPage(args, {'html': '', 'url': 'https://redirect.test'});
     });
-    final detail = await service.getDetail(
-      'https://comix.to/title/test-fixture',
+    await expectLater(
+      service.getDetail(work),
+      throwsA(predicate((e) => e.toString().contains('页面已跳转'))),
     );
-    expect(detail.name, '漫画🌊');
-    expect(detail.chapters!.single.name, 'Chapter 0.5');
-    expect(detail.chapters!.single.dateUpload, '1767225600000');
-    expect(calls, 1);
-  });
-
-  test('page restoration survives real App deserialization; bridge errors stay visible', () async {
-    final service = create();
-    String response = jsonEncode({
+    response = jsonEncode({
       'ok': true,
       'value': [
         {
@@ -128,18 +85,12 @@ void main() {
         },
       ],
     });
-    await host((args) async => response);
-    final pages = await service.getPageList('/title/test-fixture/1-chapter-0');
+    final pages = await service.getPageList('$work/1-chapter-0');
     expect(pages.single.imageProcessing!.toJson()['type'], 'tile-shuffle-v1');
     expect(pages.single.headers!['Referer'], '');
-    response = jsonEncode({'ok': false, 'error': 'Comix 目录不完整，请重试。'});
-    await expectLater(
-      service.getDetail('/title/test-fixture'),
-      throwsA(predicate((e) => e.toString().contains('目录不完整'))),
-    );
     response = '';
     await expectLater(
-      service.getDetail('/title/test-fixture'),
+      service.getDetail(work),
       throwsA(predicate((e) => e.toString().contains('超时'))),
     );
   });

@@ -1,5 +1,11 @@
 [
   {
+    "slug":"mangapill","name":"URL-only preview reads a summary without requiring a chapter catalog",
+    "method":"browserPreview","args":["https://mangapill.com/manga/42/sky"],
+    "responses":[{"body":"<html><head><link rel='canonical' href='/manga/42/sky'><meta property='og:image' content='/cover'></head><body><h1>Sky &amp; Sea</h1><div class='grid'><div><label>Status</label><div>finished</div></div></div></body></html>"}],
+    "expect":{"name":"Sky & Sea","link":"https://mangapill.com/manga/42/sky","imageUrl":"https://mangapill.com/cover","status":1}
+  },
+  {
     "slug":"hipmh","name":"Search preserves the keyword and collapses slug aliases on the requested page",
     "method":"search","args":["星 & 海+",2],
     "responses":[{"jsonBody":{"code":200,"data":{"page":2,"total":22,"total_pages":2,"data":[
