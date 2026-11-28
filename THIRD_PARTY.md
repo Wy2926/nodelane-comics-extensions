@@ -71,6 +71,12 @@ NodeLane 分发版本 `0.2.0` 使用 Keiyoushi Jinmantiantang **1.6.64** 原包�
 
 ## 接口参考
 
+### BatCave JS 来源
+
+[`src/batcave/`](src/batcave/) 移植 [NodeLane 浏览器版 BatCave](https://github.com/Wy2926/node-comics/tree/fc8f5a2bc7b17f2f2814b29e8a1a2dea614d8f29/apps/extension/src/sources/sites/batcave) 的作品／阅读地址、搜索、内嵌目录、正文页数和父作品识别规则。原代码归 NodeLane Comics 项目及贡献者，GPL-3.0-only；App 版使用 MProvider，另实现长按卡片与 URL 摘要，不打包浏览器运行时。
+
+热门排序表单、最新选择器、章节后缀和异步阅读接口依据 [Keiyoushi BatCave 1.6.14 源码](https://github.com/keiyoushi/extensions-source/tree/14e223961447ab0b21634d78ced6e49300613704/src/en/batcave)；其 `SAFE` 标记和图标来自同一提交。原版权归 Keiyoushi/Tachiyomi 贡献者，复用仓库已有的 [Apache-2.0 许可文本](shared/gigaviewer-license.js) 随 JS 分发。[原版 APK](https://github.com/keiyoushi/extensions/releases/download/14e2239/tachiyomi-en.batcave-v1.6.14.apk) 仅作对照，上游来源 ID `7422099479605463706`，SHA-256 `0fd9f79fa5e24c24eaa5e91dcd3d238406f323d86db4e010e93c714c0cf1e13d`。英文免费欧美页漫依据浏览器版站点资料、[源站目录](https://batcave.biz/comix/)和公开阅读器。
+
 ### 嬉皮漫畫 JS 来源
 
 [`src/hipmh/`](src/hipmh/) 依据[源站](https://m.hipmh.com/)公开的漫画和搜索接口、作品目录与[网站阅读器](https://reader.hipmh.top/)的 DOM 实现。正文取阅读器完成选线、解码后的 `data-total-images`、`data-index` 和 `data-src`；网站脚本和图片不随插件分发。JS 代码归 NodeLane Comics 项目及贡献者，GPL-3.0-only。

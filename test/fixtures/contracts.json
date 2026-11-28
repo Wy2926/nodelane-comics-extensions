@@ -1,5 +1,27 @@
 [
   {
+    "slug":"batcave","name":"Bare work URL returns a preview without loading or parsing a catalog",
+    "method":"browserPreview","args":["https://batcave.biz/42-sky-/-sea.html"],
+    "responses":[{"body":"<html><head><link rel='canonical' href='/42-sky-/-sea.html'></head><body><header class='page__header'><h1>Sky &amp; Sea</h1></header><div class='page__poster'><img src='/cover.webp'></div></body></html>"}],
+    "expect":{"name":"Sky & Sea","link":"https://batcave.biz/42-sky-/-sea.html","imageUrl":"https://batcave.biz/cover.webp"}
+  },
+  {
+    "slug":"batcave","name":"Reader URL and detail use the same work identity",
+    "method":"browserPreview","args":["https://batcave.biz/reader/42/71?edition=one"],
+    "responses":[{"bodyFile":"batcave-reader.html"}],
+    "expect":{"name":"Sky & Sea","link":"https://batcave.biz/42-sky-/-sea.html","chapterName":"Annual"}
+  },
+  {
+    "slug":"batcave","name":"Full embedded catalog preserves special issues beyond the displayed page",
+    "method":"detail","args":["https://batcave.biz/42-sky-/-sea.html"],"responses":[{"bodyFile":"batcave-detail.html"}],
+    "expect":{"count":3,"name":"Sky & Sea","hasCover":true,"author":"Moon","status":"completed","uploadDates":["2026-04-02",null,null]}
+  },
+  {
+    "slug":"batcave","name":"Embedded reader honors page count instead of returning the trailing ad",
+    "method":"pages","args":["https://batcave.biz/reader/42/71?edition=one"],"responses":[{"bodyFile":"batcave-reader.html"}],
+    "expect":{"count":2,"urls":["https://img.example.test/page?edition=one","https://img.example.test/page?edition=one"],"referer":"https://batcave.biz/"}
+  },
+  {
     "slug":"mangapill","name":"URL-only preview reads a summary without requiring a chapter catalog",
     "method":"browserPreview","args":["https://mangapill.com/manga/42/sky"],
     "responses":[{"body":"<html><head><link rel='canonical' href='/manga/42/sky'><meta property='og:image' content='/cover'></head><body><h1>Sky &amp; Sea</h1><div class='grid'><div><label>Status</label><div>finished</div></div></div></body></html>"}],
